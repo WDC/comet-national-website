@@ -1,0 +1,120 @@
+---
+const cards = [
+  {
+    eyebrow: "You only pay for",
+    title: "The space you use.",
+    body: "Partial flatbed and Volume LTL — billed for the linear feet your freight occupies. No phantom Density Minimum or Linear Foot charges. We walked away from that game.",
+    href: "/services/flatbed-ltl",
+    cta: "How Flatbed LTL works",
+  },
+  {
+    eyebrow: "One call.",
+    title: "Every mode.",
+    body: "Flatbed, dry van, reefer, hotshot, transload, cross-dock, warehouse. One Atlanta team that has done all of it since 1970.",
+    href: "/services",
+    cta: "See every service",
+  },
+  {
+    eyebrow: "When disaster strikes",
+    title: "We pick up the call.",
+    body: "Distressed load recovery is the 911 freight brokers don't take. Restack, rewrap, document, deliver. We make the bad day shorter.",
+    href: "/services/distressed-load-recovery",
+    cta: "Distressed-load recovery",
+  },
+];
+---
+<section class="diff section section-inverse">
+  <div class="container-content">
+    <p class="eyebrow">03 · The Comet difference</p>
+    <h2 class="diff__heading display">Trucking is commodity. We aren't.</h2>
+
+    <ul class="diff__cards">
+      {cards.map((c, i) => (
+        <li class="diff__card reveal" data-reveal style={`--reveal-delay: ${i * 100}ms`}>
+          <span class="mono diff__num">0{i + 1}</span>
+          <p class="diff__eyebrow">{c.eyebrow}</p>
+          <h3 class="diff__title">{c.title}</h3>
+          <p class="diff__body">{c.body}</p>
+          <a href={c.href} class="diff__cta link-arrow">{c.cta} <span class="arrow" aria-hidden="true">→</span></a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .diff__heading {
+    font-size: var(--t-h1);
+    line-height: 1;
+    margin-top: var(--s-3);
+    margin-bottom: var(--s-12);
+    max-width: 18ch;
+    color: var(--c-bg);
+  }
+  .diff__cards {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+  .diff__card {
+    background: var(--c-navy-deep);
+    padding: var(--s-8);
+    display: grid;
+    grid-template-rows: auto auto auto 1fr auto;
+    gap: var(--s-3);
+    transition: background var(--d-base) var(--ease-out), transform var(--d-base) var(--ease-out);
+    position: relative;
+  }
+  .diff__card:hover {
+    background: var(--c-navy);
+    transform: translateY(-2px);
+  }
+  .diff__card::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 2px;
+    background: var(--c-accent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform var(--d-base) var(--ease-out);
+  }
+  .diff__card:hover::before { transform: scaleX(1); }
+  .diff__num {
+    color: var(--c-accent);
+    font-size: var(--t-eyebrow);
+    letter-spacing: var(--ls-wider);
+  }
+  .diff__eyebrow {
+    font-size: var(--t-small);
+    letter-spacing: var(--ls-wide);
+    color: rgba(255, 255, 255, 0.6);
+  }
+  .diff__title {
+    font-size: 1.875rem;
+    line-height: 1;
+    letter-spacing: var(--ls-tight);
+    color: var(--c-bg);
+  }
+  .diff__body {
+    color: rgba(255, 255, 255, 0.72);
+    line-height: 1.55;
+  }
+  .diff__cta {
+    color: var(--c-accent);
+    font-family: var(--ff-display);
+    font-weight: 600;
+    letter-spacing: var(--ls-snug);
+    font-size: var(--t-small);
+  }
+  .diff__cta:hover { color: var(--c-accent-hover); }
+
+  @media (max-width: 880px) {
+    .diff__cards { grid-template-columns: 1fr; }
+  }
+</style>

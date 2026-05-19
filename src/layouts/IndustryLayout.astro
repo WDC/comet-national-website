@@ -1,0 +1,227 @@
+---
+import BaseLayout from "./BaseLayout.astro";
+import Button from "@components/ui/Button.astro";
+import HowItWorksFlow from "@components/animations/HowItWorksFlow.astro";
+import { SITE } from "@lib/site";
+import { type IndustryItem, getService } from "@lib/services";
+
+interface Props {
+  industry: IndustryItem;
+  pageTitle?: string;
+  pageDescription: string;
+}
+const { industry, pageTitle, pageDescription } = Astro.props;
+const title = pageTitle ?? `${industry.title} Freight | ${SITE.name}`;
+---
+<BaseLayout title={title} description={pageDescription} ogType="website">
+  <article class="ind">
+    <header class="ind__hero section-tight">
+      <div class="container-content ind__hero-inner">
+        <nav aria-label="Breadcrumb" class="ind__crumbs mono">
+          <a href="/">Home</a>
+          <span aria-hidden="true">/</span>
+          <a href="/industries">Industries</a>
+          <span aria-hidden="true">/</span>
+          <span>{industry.title}</span>
+        </nav>
+
+        <div class="ind__hero-grid">
+          <div>
+            <p class="eyebrow">Industry · Built around how you buy</p>
+            <h1 class="ind__headline display reveal" data-reveal>{industry.title}</h1>
+            {industry.equityLine && (
+              <p class="ind__equity display reveal" data-reveal style="--reveal-delay: 120ms">
+                {industry.equityLine}
+              </p>
+            )}
+            {industry.heroLede && (
+              <p class="ind__lede reveal" data-reveal style="--reveal-delay: 240ms">
+                {industry.heroLede}
+              </p>
+            )}
+            {industry.buyer && (
+              <p class="ind__buyer mono reveal" data-reveal style="--reveal-delay: 320ms">
+                For: {industry.buyer}
+              </p>
+            )}
+            <div class="ind__cta reveal" data-reveal style="--reveal-delay: 400ms">
+              <Button href="/get-a-quote" size="lg">Get a Quote</Button>
+              <a class="ind__phone mono" href={`tel:${SITE.phoneE164}`}>or call {SITE.phone}</a>
+            </div>
+          </div>
+          <aside class="ind__art">
+            <slot name="hero-art" />
+          </aside>
+        </div>
+      </div>
+    </header>
+
+    <div class="container-content ind__body">
+      <slot />
+
+      <!-- Services band: composed for this industry -->
+      <section class="ind__services" data-reveal>
+        <p class="eyebrow">Services we recombine for {industry.title.toLowerCase()}</p>
+        <h2 class="ind__h2 display">The modes this industry actually buys.</h2>
+        <ul class="ind__services-list reveal-stagger" data-reveal>
+          {industry.serviceSlugs.map((slug) => {
+            const s = getService(slug);
+            if (!s) return null;
+            return (
+              <li>
+                <a href={`/services/${s.slug}`}>
+                  <span class="ind__services-title display">{s.title}</span>
+                  <span class="ind__services-blurb">{s.blurb}</span>
+                  <span class="ind__services-cta">Explore service <span class="arrow" aria-hidden="true">→</span></span>
+                </a>
+              </li>
+            );
+          })}
+        </ul>
+      </section>
+
+      <section class="ind__how" data-reveal>
+        <p class="eyebrow">How it works</p>
+        <h2 class="ind__h2 display">Quote. Schedule. Rest easy.</h2>
+        <HowItWorksFlow />
+      </section>
+
+      <section class="ind__final-cta section-tight" data-reveal>
+        <h2 class="ind__h2 display">Tell us about the freight.</h2>
+        <p class="ind__final-body">
+          The quote form takes a minute. The right answer often takes less.
+        </p>
+        <Button href="/get-a-quote" size="lg">Get a Quote</Button>
+      </section>
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .ind__hero {
+    background: var(--c-bg-elevated);
+    border-bottom: 1px solid var(--c-line);
+  }
+  .ind__crumbs {
+    display: flex;
+    gap: var(--s-2);
+    font-size: var(--t-eyebrow);
+    color: var(--c-ink-muted);
+    letter-spacing: var(--ls-wider);
+    text-transform: uppercase;
+    margin-bottom: var(--s-8);
+  }
+  .ind__crumbs a { color: inherit; }
+  .ind__crumbs a:hover { color: var(--c-accent); }
+  .ind__hero-grid {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: var(--s-10);
+    align-items: center;
+  }
+  .ind__headline {
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    line-height: 1;
+    margin-top: var(--s-3);
+    max-width: 14ch;
+  }
+  .ind__equity {
+    margin-top: var(--s-5);
+    font-size: clamp(1.25rem, 2vw, 1.75rem);
+    line-height: 1.2;
+    color: var(--c-accent);
+    font-weight: 600;
+    max-width: 30ch;
+  }
+  .ind__lede {
+    margin-top: var(--s-5);
+    color: var(--c-ink-muted);
+    max-width: 56ch;
+    font-size: 1.0625rem;
+    line-height: 1.55;
+  }
+  .ind__buyer {
+    margin-top: var(--s-5);
+    font-size: var(--t-small);
+    color: var(--c-ink-muted);
+    letter-spacing: var(--ls-wide);
+  }
+  .ind__cta {
+    margin-top: var(--s-8);
+    display: flex;
+    align-items: center;
+    gap: var(--s-5);
+    flex-wrap: wrap;
+  }
+  .ind__phone { color: var(--c-ink-muted); }
+
+  .ind__art {
+    background: var(--c-bg);
+    padding: var(--s-6);
+    border: 1px solid var(--c-line);
+    border-radius: var(--r-md);
+  }
+
+  .ind__body {
+    padding-block: var(--s-16);
+    display: grid;
+    gap: var(--s-20);
+  }
+  .ind__h2 {
+    font-size: var(--t-h1);
+    line-height: 1;
+    margin-top: var(--s-3);
+    margin-bottom: var(--s-8);
+    max-width: 24ch;
+  }
+
+  .ind__services-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1px;
+    background: var(--c-line);
+    border: 1px solid var(--c-line);
+  }
+  .ind__services-list li { background: var(--c-bg); }
+  .ind__services-list a {
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    gap: var(--s-3);
+    padding: var(--s-6);
+    color: var(--c-ink);
+    min-height: 160px;
+  }
+  .ind__services-list a:hover { background: var(--c-bg-elevated); }
+  .ind__services-title { font-size: 1.375rem; line-height: 1.1; }
+  .ind__services-blurb { font-size: var(--t-small); color: var(--c-ink-muted); line-height: 1.5; }
+  .ind__services-cta {
+    color: var(--c-accent);
+    font-family: var(--ff-display);
+    font-weight: 600;
+    font-size: var(--t-small);
+    letter-spacing: var(--ls-snug);
+  }
+
+  .ind__final-cta {
+    text-align: center;
+    background: var(--c-navy-deep);
+    color: var(--c-bg);
+    padding: var(--s-16);
+    border-radius: var(--r-md);
+  }
+  .ind__final-cta .ind__h2 { color: var(--c-bg); margin-inline: auto; }
+  .ind__final-body {
+    color: rgba(255, 255, 255, 0.72);
+    margin-bottom: var(--s-6);
+    max-width: 50ch;
+    margin-inline: auto;
+  }
+
+  @media (max-width: 880px) {
+    .ind__hero-grid { grid-template-columns: 1fr; }
+    .ind__services-list { grid-template-columns: 1fr; }
+  }
+</style>

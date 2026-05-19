@@ -1,0 +1,57 @@
+---
+/**
+ * Prompt 8 — Distressed load recovery.
+ * Tilted pallet stack with pulsing warning. Then straightens, wrap line draws,
+ * warning fades, checkmark appears.
+ */
+---
+<div class="distressed-viz" data-anim>
+  <svg viewBox="0 0 360 240" role="img" aria-label="Animated distressed load being restacked, rewrapped, and recovered">
+    <!-- Flatbed deck -->
+    <rect x="20" y="170" width="320" height="14" fill="var(--c-line)" />
+    <line x1="20" y1="170" x2="340" y2="170" stroke="var(--c-navy)" stroke-width="1.5" />
+
+    <!-- Pallet stack — starts tilted, animates to upright -->
+    <g class="tilt-pallets" transform="translate(150 170)">
+      <rect x="-40" y="-40" width="80" height="14" fill="var(--c-accent)" />
+      <rect x="-38" y="-58" width="76" height="14" fill="var(--c-accent)" opacity="0.92" />
+      <rect x="-36" y="-76" width="72" height="14" fill="var(--c-accent)" opacity="0.85" />
+      <rect x="-34" y="-94" width="68" height="14" fill="var(--c-accent)" opacity="0.78" />
+    </g>
+
+    <!-- Wrap line — draws around the upright stack at the end -->
+    <g class="wrap-group" transform="translate(150 170)">
+      <rect class="draw" x="-42" y="-100" width="84" height="86"
+            fill="none" stroke="var(--c-ink)" stroke-width="1.25"
+            stroke-dasharray="340" stroke-dashoffset="340"
+            style="--draw-length: 340; --draw-delay: 1600ms" />
+    </g>
+
+    <!-- Warning triangle — pulses, then fades -->
+    <g class="pulse-warn" transform="translate(150 70)">
+      <path d="M0 -20 L18 14 L-18 14 Z" fill="var(--c-warn)" />
+      <text x="0" y="9" text-anchor="middle" fill="var(--c-bg)" font-family="var(--ff-display)" font-weight="700" font-size="18">!</text>
+    </g>
+
+    <!-- Check (appears at end) -->
+    <g class="appear-check" transform="translate(150 70)">
+      <circle r="20" fill="var(--c-success)" />
+      <path d="M-9 0 L-3 6 L9 -6" stroke="var(--c-bg)" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" />
+    </g>
+
+    <!-- Label -->
+    <text x="180" y="222" text-anchor="middle" font-family="var(--ff-mono)" font-size="10" fill="var(--c-ink-muted)" letter-spacing="0.16em">
+      RESTACK · REWRAP · RECOVER
+    </text>
+  </svg>
+</div>
+
+<style>
+  .distressed-viz svg { width: 100%; height: auto; display: block; max-width: 460px; margin-inline: auto; }
+  @media (prefers-reduced-motion: reduce) {
+    .tilt-pallets { transform: translate(150px, 170px) !important; }
+    .pulse-warn { opacity: 0 !important; }
+    .appear-check { opacity: 1 !important; }
+    .wrap-group .draw { stroke-dashoffset: 0 !important; }
+  }
+</style>

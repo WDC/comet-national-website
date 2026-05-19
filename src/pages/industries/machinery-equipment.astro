@@ -1,0 +1,106 @@
+---
+export const prerender = true;
+import IndustryLayout from "@layouts/IndustryLayout.astro";
+import HeavyHaul from "@components/animations/HeavyHaul.astro";
+import { INDUSTRIES } from "@lib/services";
+
+const industry = INDUSTRIES.find((i) => i.slug === "machinery-equipment")!;
+const description =
+  "Machinery & equipment freight from an Atlanta carrier with five decades of heavy-haul experience. Step-deck, double-drop, RGN, permits, pilots, and same-shift distressed-load recovery.";
+---
+<IndustryLayout
+  industry={industry}
+  pageTitle="Machinery & Equipment Freight | Heavy Haul, Open Deck | Comet National"
+  pageDescription={description}
+>
+  <HeavyHaul slot="hero-art" />
+
+  <section data-reveal>
+    <p class="eyebrow">What you call us for</p>
+    <h2 class="ind-h2 display">The heavy-iron freight problems that don't end well in the wrong hands.</h2>
+    <p class="ind-lede">
+      Equipment freight has consequences — for the asset, the timeline, and
+      the customer waiting on the other end. These are the situations our
+      heavy-haul dispatchers handle every week.
+    </p>
+    <ul class="ind-grid reveal-stagger" data-reveal>
+      {industry.challenges?.map(({ challenge, answer }) => (
+        <li>
+          <strong class="display">{challenge}</strong>
+          <span>{answer}</span>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <section data-reveal>
+    <p class="eyebrow">What we move</p>
+    <h2 class="ind-h2 display">Presses, gensets, transformers, yellow iron.</h2>
+    <p class="ind-lede">
+      The freight that needs a deck low enough, a chain strong enough, and
+      a driver who's done it before. We've been the carrier behind the
+      assets that don't tolerate a second try.
+    </p>
+    <ul class="ind-cargo reveal-stagger" data-reveal>
+      {industry.cargoExamples?.map((item) => (
+        <li><span class="ind-cargo__tick">·</span>{item}</li>
+      ))}
+    </ul>
+  </section>
+
+  <section data-reveal>
+    <p class="eyebrow">Why Comet for machinery & equipment</p>
+    <h2 class="ind-h2 display">The carrier other brokers call when the load gets serious.</h2>
+    <p class="ind-lede">{industry.whyComet}</p>
+  </section>
+</IndustryLayout>
+
+<style>
+  .ind-h2 { font-size: var(--t-h2); line-height: 1.05; margin-top: var(--s-3); margin-bottom: var(--s-5); max-width: 30ch; }
+  .ind-lede { color: var(--c-ink-muted); max-width: 64ch; font-size: 1.0625rem; line-height: 1.55; }
+
+  .ind-grid {
+    list-style: none;
+    padding: 0;
+    margin: var(--s-6) 0 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--c-line);
+    border: 1px solid var(--c-line);
+  }
+  .ind-grid li {
+    background: var(--c-bg);
+    padding: var(--s-5);
+    display: grid;
+    gap: var(--s-2);
+  }
+  .ind-grid strong { font-size: 1.0625rem; color: var(--c-ink); }
+  .ind-grid span { font-size: var(--t-small); color: var(--c-ink-muted); line-height: 1.5; }
+
+  .ind-cargo {
+    list-style: none;
+    padding: 0;
+    margin: var(--s-6) 0 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--s-3);
+  }
+  .ind-cargo li {
+    padding: var(--s-3) var(--s-4);
+    border: 1px solid var(--c-line);
+    font-family: var(--ff-mono);
+    font-size: var(--t-small);
+    color: var(--c-ink);
+  }
+  .ind-cargo__tick {
+    color: var(--c-accent);
+    margin-right: var(--s-2);
+    font-weight: bold;
+  }
+
+  @media (max-width: 760px) {
+    .ind-grid { grid-template-columns: 1fr; }
+    .ind-cargo { grid-template-columns: 1fr 1fr; }
+  }
+</style>

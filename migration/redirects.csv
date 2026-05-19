@@ -1,0 +1,22 @@
+legacy_host,legacy_path,new_path,status,notes
+# Source of truth for legacy → new URL mapping. scripts/build-redirects.ts reads this to generate vercel.json.
+# Path is the path on legacy_host. new_path is on cometnational.com.
+# status: 301 (permanent). Future per-post blog rows get appended after the Phase 0 crawl.
+flatbedltl.com,/,/services/flatbed-ltl,301,Root → primary service
+flatbedltl.com,/what-we-do,/services/flatbed-ltl,301,Per PLAN.md §1
+flatbedltl.com,/how-everybody-wins,/why-comet/everyone-wins,301,Per PLAN.md §1
+flatbedltl.com,/blog/:slug,/insights/:slug,301,Blog catch-all — replace with per-post after crawl
+flatbedltl.com,/services,/services,301,
+flatbedltl.com,/contact,/contact,301,
+flatbedltl.com,/(.*),/services/flatbed-ltl,301,Unmapped catch-all
+transload911.com,/,/services/transloading,301,Root → primary service
+transload911.com,/services,/services,301,Per PLAN.md §1
+transload911.com,/transloading,/services/transloading,301,
+transload911.com,/cross-docking,/services/cross-docking,301,
+transload911.com,/distressed-load-recovery,/services/distressed-load-recovery,301,
+transload911.com,/warehousing,/services/warehousing-fulfillment,301,
+transload911.com,/blog/:slug,/insights/:slug,301,Blog catch-all — replace with per-post after crawl
+transload911.com,/contact,/contact,301,
+transload911.com,/(.*),/services/transloading,301,Unmapped catch-all
+cometnational.com,/old-services,/services,301,Legacy URL on primary domain (example — replace after crawl)
+www.cometnational.com,/(.*),/$1,301,WWW → apex (handled at the domain level too)

@@ -1,0 +1,93 @@
+---
+import CoverageReveal from "@components/animations/CoverageReveal.astro";
+---
+<section class="coverage-section section">
+  <div class="container-content coverage-section__inner">
+    <div class="coverage-section__copy">
+      <p class="eyebrow">06 · Coverage</p>
+      <h2 class="coverage-section__title display">
+        Atlanta-rooted. Continental reach.
+      </h2>
+      <p class="coverage-section__lead">
+        Our 4138 Arcadia Industrial Circle facility is the hub. Lanes run east to west,
+        north to south, and across the Canadian border. We ship anything to anywhere.
+      </p>
+      <ul class="coverage-section__stats mono reveal-stagger" data-reveal>
+        <li><span class="coverage-section__stat-num">48</span> <span>states</span></li>
+        <li><span class="coverage-section__stat-num">+</span> <span>southern Canada</span></li>
+        <li><span class="coverage-section__stat-num">24/7</span> <span>distressed-load dispatch</span></li>
+      </ul>
+      <a href="/why-comet/coverage-map" class="coverage-section__cta link-arrow">See the full coverage map <span class="arrow" aria-hidden="true">→</span></a>
+    </div>
+
+    <div class="coverage-section__visual">
+      <CoverageReveal />
+    </div>
+  </div>
+</section>
+
+<style>
+  .coverage-section__inner {
+    display: grid;
+    grid-template-columns: 0.9fr 1.3fr;
+    gap: var(--s-12);
+    align-items: center;
+  }
+  .coverage-section__title {
+    font-size: var(--t-h1);
+    line-height: 1.02;
+    margin-top: var(--s-3);
+    max-width: 14ch;
+  }
+  .coverage-section__lead {
+    margin-top: var(--s-5);
+    color: var(--c-ink-muted);
+    max-width: 44ch;
+  }
+  .coverage-section__stats {
+    list-style: none;
+    margin: var(--s-8) 0 var(--s-6);
+    padding: 0;
+    display: grid;
+    gap: var(--s-3);
+    font-size: var(--t-small);
+  }
+  .coverage-section__stats li {
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    gap: var(--s-3);
+    align-items: baseline;
+    border-top: 1px solid var(--c-line);
+    padding-top: var(--s-3);
+  }
+  .coverage-section__stat-num {
+    font-family: var(--ff-display);
+    font-weight: 700;
+    font-size: 1.5rem;
+    color: var(--c-ink);
+    letter-spacing: var(--ls-tight);
+  }
+  .coverage-section__cta {
+    color: var(--c-accent);
+    font-family: var(--ff-display);
+    font-weight: 600;
+    font-size: var(--t-small);
+    letter-spacing: var(--ls-snug);
+    display: inline-flex;
+    align-items: baseline;
+    gap: 4px;
+    transition: color var(--d-fast) var(--ease-out);
+  }
+  .coverage-section__cta:hover { color: var(--c-accent-hover); }
+  .coverage-section__stats li {
+    transition: padding-left var(--d-fast) var(--ease-out), border-color var(--d-fast) var(--ease-out);
+  }
+  .coverage-section__stats li:hover {
+    padding-left: 4px;
+    border-top-color: var(--c-accent);
+  }
+  @media (max-width: 960px) {
+    .coverage-section__inner { grid-template-columns: 1fr; gap: var(--s-6); }
+    .coverage-section__visual { order: -1; }
+  }
+</style>

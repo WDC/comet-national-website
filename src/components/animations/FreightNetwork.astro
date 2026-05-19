@@ -1,0 +1,124 @@
+---
+/**
+ * Prompt 1 — Hero freight network.
+ * Stylized US outline. Lines draw from Atlanta to 7 hubs, then dots travel.
+ * Pure SVG + CSS. Reduced-motion: lines render in their drawn state, no travel.
+ */
+interface Props {
+  class?: string;
+}
+const { class: className = "" } = Astro.props;
+
+// hub coords on a 800x440 viewBox roughly approximating US lower-48
+const ATL = { x: 555, y: 285 };
+const HUBS = [
+  { name: "Seattle", x: 130, y: 95 },
+  { name: "Los Angeles", x: 145, y: 270 },
+  { name: "Dallas", x: 415, y: 320 },
+  { name: "Chicago", x: 510, y: 195 },
+  { name: "New York", x: 680, y: 180 },
+  { name: "Miami", x: 640, y: 380 },
+  { name: "Denver", x: 305, y: 220 },
+];
+---
+<svg
+  class={`freight-network ${className}`}
+  viewBox="0 0 800 440"
+  role="img"
+  aria-label="Animated freight network with Atlanta hub connecting to seven major US cities"
+  preserveAspectRatio="xMidYMid meet"
+>
+  <!-- Simplified US outline -->
+  <path
+    class="us-outline"
+    d="M75 130 L95 95 L150 70 L210 55 L265 50 L325 55 L385 60 L445 65 L500 65 L545 70 L590 75 L640 75 L690 80 L725 90 L755 110 L770 140 L770 175 L750 200 L740 220 L735 245 L728 270 L725 295 L715 320 L695 345 L670 365 L640 380 L600 388 L560 390 L520 388 L475 380 L425 370 L380 360 L335 350 L290 340 L245 325 L205 310 L165 290 L130 265 L100 235 L80 200 L70 165 Z"
+    fill="none"
+    stroke="var(--c-line)"
+    stroke-width="1.25"
+    stroke-linejoin="round"
+  />
+
+  <!-- Connecting lines from Atlanta -->
+  {HUBS.map((h, i) => {
+    const dx = h.x - ATL.x;
+    const dy = h.y - ATL.y;
+    const length = Math.round(Math.sqrt(dx * dx + dy * dy));
+    return (
+      <line
+        x1={ATL.x}
+        y1={ATL.y}
+        x2={h.x}
+        y2={h.y}
+        stroke="var(--c-accent)"
+        stroke-width="1.5"
+        stroke-linecap="round"
+        class="draw"
+        style={`--draw-length: ${length}; --draw-delay: ${300 + i * 120}ms`}
+      />
+    );
+  })}
+
+  <!-- Hub dots -->
+  {HUBS.map((h, i) => (
+    <circle
+      cx={h.x}
+      cy={h.y}
+      r="3.5"
+      fill="var(--c-accent)"
+      class="reveal"
+      style={`--reveal-delay: ${600 + i * 120}ms`}
+      data-reveal
+    />
+  ))}
+
+  <!-- Atlanta hub (pulsing larger) -->
+  <g transform={`translate(${ATL.x}, ${ATL.y})`}>
+    <circle r="9" fill="none" stroke="var(--c-accent)" stroke-width="1.25" class="pulse" opacity="0.55" />
+    <circle r="5" fill="var(--c-accent)" />
+    <circle r="2" fill="var(--c-navy-deep)" />
+  </g>
+
+  <!-- Traveling dots along each line -->
+  {HUBS.map((h, i) => {
+    const dx = h.x - ATL.x;
+    const dy = h.y - ATL.y;
+    return (
+      <circle
+        r="2.5"
+        fill="var(--c-accent)"
+        class="travel"
+        style={`
+          offset-path: path('M${ATL.x} ${ATL.y} l${dx} ${dy}');
+          --travel-duration: ${2.2 + (i % 3) * 0.6}s;
+          --travel-delay: ${1400 + i * 200}ms;
+        `}
+      />
+    );
+  })}
+
+  <!-- Atlanta label -->
+  <g transform={`translate(${ATL.x + 12}, ${ATL.y + 4})`}>
+    <text font-family="var(--ff-mono)" font-size="11" fill="var(--c-ink-muted)" letter-spacing="0.1em">
+      ATL · HQ
+    </text>
+  </g>
+</svg>
+
+<style>
+  .freight-network {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .freight-network .draw {
+      stroke-dashoffset: 0 !important;
+    }
+    .freight-network .travel {
+      display: none;
+    }
+    .freight-network .pulse {
+      animation: none;
+    }
+  }
+</style>

@@ -1,0 +1,19 @@
+---
+import StatCountUp from "@components/animations/StatCountUp.astro";
+---
+<section class="stat-section section-tight">
+  <div class="container-content">
+    <p class="eyebrow stat-section__eyebrow">08 · By the numbers</p>
+    <StatCountUp />
+  </div>
+</section>
+
+<style>
+  .stat-section {
+    background: var(--c-bg-elevated);
+    border-block: 1px solid var(--c-line);
+  }
+  .stat-section__eyebrow {
+    margin-bottom: var(--s-8);
+  }
+</style>

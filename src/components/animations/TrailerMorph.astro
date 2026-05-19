@@ -1,0 +1,109 @@
+---
+/**
+ * Prompt 4 — Mode selector / trailer morph.
+ * 4 trailer states (flatbed, dry van, reefer, hotshot) cross-fade in a loop.
+ * Pure CSS animation. Hover the parent or focus a state button to lock in.
+ */
+---
+<div class="trailer-morph">
+  <svg viewBox="0 0 360 140" class="trailer-svg" role="img" aria-label="Animated truck trailer cycling through flatbed, dry van, refrigerated and hotshot configurations">
+    <!-- Ground line -->
+    <line x1="10" y1="115" x2="350" y2="115" stroke="var(--c-line)" stroke-width="1" />
+
+    <!-- Cab (always visible) -->
+    <g class="cab">
+      <rect x="34" y="60" width="50" height="40" fill="none" stroke="var(--c-navy)" stroke-width="1.5" />
+      <rect x="38" y="64" width="20" height="14" fill="var(--c-navy)" />
+      <circle cx="50" cy="115" r="9" fill="none" stroke="var(--c-navy)" stroke-width="1.5" />
+      <circle cx="50" cy="115" r="3" fill="var(--c-navy)" />
+    </g>
+
+    <!-- State 1: Flatbed -->
+    <g class="trailer-state state-flatbed" style="animation-delay: 0s;">
+      <rect x="88" y="92" width="220" height="6" fill="var(--c-accent)" />
+      <!-- crate -->
+      <rect x="160" y="58" width="56" height="34" fill="none" stroke="var(--c-navy)" stroke-width="1.5" />
+      <line x1="160" y1="75" x2="216" y2="75" stroke="var(--c-navy)" stroke-width="1" />
+      <circle cx="115" cy="115" r="9" fill="none" stroke="var(--c-navy)" stroke-width="1.5" />
+      <circle cx="285" cy="115" r="9" fill="none" stroke="var(--c-navy)" stroke-width="1.5" />
+    </g>
+
+    <!-- State 2: Dry van -->
+    <g class="trailer-state state-van" style="animation-delay: 2s;">
+      <rect x="88" y="50" width="220" height="48" fill="none" stroke="var(--c-navy)" stroke-width="1.5" />
+      <line x1="88" y1="60" x2="308" y2="60" stroke="var(--c-navy)" stroke-width="0.75" opacity="0.6" />
+      <rect x="290" y="58" width="14" height="36" fill="none" stroke="var(--c-navy)" stroke-width="0.75" />
+      <circle cx="115" cy="115" r="9" fill="none" stroke="var(--c-navy)" stroke-width="1.5" />
+      <circle cx="285" cy="115" r="9" fill="none" stroke="var(--c-navy)" stroke-width="1.5" />
+    </g>
+
+    <!-- State 3: Reefer (with small snowflake) -->
+    <g class="trailer-state state-reefer" style="animation-delay: 4s;">
+      <rect x="88" y="50" width="220" height="48" fill="var(--c-accent)" opacity="0.08" stroke="var(--c-navy)" stroke-width="1.5" />
+      <rect x="88" y="40" width="36" height="12" fill="none" stroke="var(--c-navy)" stroke-width="1.25" />
+      <!-- snowflake -->
+      <g transform="translate(106 46)" stroke="var(--c-accent)" stroke-width="1.25" stroke-linecap="round">
+        <line x1="-4" y1="0" x2="4" y2="0" />
+        <line x1="0" y1="-4" x2="0" y2="4" />
+        <line x1="-3" y1="-3" x2="3" y2="3" />
+        <line x1="-3" y1="3" x2="3" y2="-3" />
+      </g>
+      <circle cx="115" cy="115" r="9" fill="none" stroke="var(--c-navy)" stroke-width="1.5" />
+      <circle cx="285" cy="115" r="9" fill="none" stroke="var(--c-navy)" stroke-width="1.5" />
+    </g>
+
+    <!-- State 4: Hotshot (shorter trailer) -->
+    <g class="trailer-state state-hotshot" style="animation-delay: 6s;">
+      <rect x="88" y="92" width="140" height="6" fill="var(--c-accent)" />
+      <rect x="120" y="68" width="40" height="24" fill="none" stroke="var(--c-navy)" stroke-width="1.5" />
+      <circle cx="115" cy="115" r="9" fill="none" stroke="var(--c-navy)" stroke-width="1.5" />
+      <circle cx="205" cy="115" r="9" fill="none" stroke="var(--c-navy)" stroke-width="1.5" />
+    </g>
+  </svg>
+
+  <!-- Mode chips below — clickable, routes to service -->
+  <div class="trailer-modes">
+    <a class="trailer-mode" href="/services/flatbed-ltl"><span>Flatbed</span></a>
+    <a class="trailer-mode" href="/services/dry-van-ltl"><span>Dry Van</span></a>
+    <a class="trailer-mode" href="/services/refrigerated"><span>Refrigerated</span></a>
+    <a class="trailer-mode" href="/services/hotshot"><span>Hotshot</span></a>
+  </div>
+</div>
+
+<style>
+  .trailer-morph {
+    display: grid;
+    gap: var(--s-6);
+  }
+  .trailer-svg {
+    width: 100%;
+    max-width: 520px;
+    height: auto;
+    margin-inline: auto;
+  }
+  .trailer-modes {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--s-2);
+  }
+  .trailer-mode {
+    display: block;
+    padding: var(--s-3) var(--s-3);
+    border: 1px solid var(--c-line);
+    border-radius: var(--r-sm);
+    text-align: center;
+    font-family: var(--ff-display);
+    font-weight: 600;
+    font-size: var(--t-small);
+    letter-spacing: var(--ls-snug);
+    transition: border-color var(--d-fast) var(--ease-out), color var(--d-fast) var(--ease-out);
+  }
+  .trailer-mode:hover {
+    border-color: var(--c-accent);
+    color: var(--c-accent);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .trailer-state { animation: none; opacity: 1; }
+    .state-van, .state-reefer, .state-hotshot { display: none; }
+  }
+</style>

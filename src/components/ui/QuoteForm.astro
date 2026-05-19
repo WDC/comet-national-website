@@ -1,0 +1,252 @@
+---
+import Button from "./Button.astro";
+
+const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY ?? "";
+---
+<form class="quote-form reveal-stagger" data-reveal action="/api/quote" method="POST" novalidate data-quote-form>
+  <fieldset class="quote-form__group">
+    <legend class="eyebrow">Company &amp; contact</legend>
+    <div class="quote-form__row">
+      <label>
+        <span>Company *</span>
+        <input name="company" type="text" required autocomplete="organization" />
+      </label>
+      <label>
+        <span>Your name *</span>
+        <input name="name" type="text" required autocomplete="name" />
+      </label>
+    </div>
+    <div class="quote-form__row">
+      <label>
+        <span>Phone *</span>
+        <input name="phone" type="tel" required autocomplete="tel" inputmode="tel" />
+      </label>
+      <label>
+        <span>Email *</span>
+        <input name="email" type="email" required autocomplete="email" inputmode="email" />
+      </label>
+    </div>
+  </fieldset>
+
+  <fieldset class="quote-form__group">
+    <legend class="eyebrow">Freight</legend>
+    <div class="quote-form__row">
+      <label>
+        <span>Freight type *</span>
+        <select name="freightType" required>
+          <option value="">Select…</option>
+          <option>Flatbed LTL (partial flatbed)</option>
+          <option>Dry Van LTL</option>
+          <option>Volume LTL / Partial</option>
+          <option>Full Truckload</option>
+          <option>Flatbed / Open Deck</option>
+          <option>Refrigerated</option>
+          <option>Hotshot / Expedited</option>
+          <option>Transloading</option>
+          <option>Cross-Docking</option>
+          <option>Distressed Load Recovery</option>
+          <option>Warehousing &amp; Fulfillment</option>
+          <option>Not sure — recommend</option>
+        </select>
+      </label>
+      <label>
+        <span>Ready date</span>
+        <input name="readyDate" type="date" />
+      </label>
+    </div>
+    <div class="quote-form__row">
+      <label>
+        <span>Origin (city, state/zip) *</span>
+        <input name="origin" type="text" required placeholder="e.g. Atlanta, GA 30047" />
+      </label>
+      <label>
+        <span>Destination (city, state/zip) *</span>
+        <input name="destination" type="text" required placeholder="e.g. Phoenix, AZ 85001" />
+      </label>
+    </div>
+    <div class="quote-form__row">
+      <label>
+        <span>Dimensions (LxWxH)</span>
+        <input name="dimensions" type="text" placeholder='e.g. 8&apos; x 4&apos; x 6&apos;' />
+      </label>
+      <label>
+        <span>Weight (lbs)</span>
+        <input name="weight" type="text" inputmode="numeric" />
+      </label>
+    </div>
+    <label class="quote-form__full">
+      <span>What's the load? (one line is fine)</span>
+      <textarea name="description" rows="3" placeholder="e.g. 4 pallets of generator parts, fragile, no liftgate at destination" />
+    </label>
+  </fieldset>
+
+  <!-- Honeypot -->
+  <input type="text" name="_botfield" tabindex="-1" autocomplete="off" class="quote-form__honeypot" aria-hidden="true" />
+
+  {turnstileSiteKey && (
+    <div class="quote-form__turnstile cf-turnstile" data-sitekey={turnstileSiteKey} data-theme="light"></div>
+  )}
+
+  <div class="quote-form__submit">
+    <Button type="submit" size="lg">Send the quote request</Button>
+    <p class="mono quote-form__small">No spam, ever. Direct to dispatch.</p>
+  </div>
+
+  <output class="quote-form__status" data-quote-status hidden></output>
+</form>
+
+{turnstileSiteKey && (
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+)}
+
+<script>
+  const form = document.querySelector<HTMLFormElement>("[data-quote-form]");
+  const status = document.querySelector<HTMLOutputElement>("[data-quote-status]");
+  const submitBtn = form?.querySelector<HTMLButtonElement>('button[type="submit"]');
+  const originalSubmitHTML = submitBtn?.innerHTML ?? "";
+  if (form && status) {
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const fd = new FormData(form);
+      const payload: Record<string, string> = {};
+      fd.forEach((v, k) => { payload[k] = typeof v === "string" ? v : ""; });
+
+      status.removeAttribute("hidden");
+      status.innerHTML = 'Sending<span class="dots-loader" aria-hidden="true"><span></span><span></span><span></span></span>';
+      status.className = "quote-form__status is-pending";
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.setAttribute("aria-busy", "true");
+        submitBtn.innerHTML = '<span class="spinner" aria-hidden="true"></span> Sending…';
+      }
+
+      try {
+        const res = await fetch(form.action, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+        const data = await res.json().catch(() => ({}));
+        if (res.ok) {
+          status.textContent = "Got it. Dispatch will be in touch within one business hour.";
+          status.className = "quote-form__status is-ok";
+          form.reset();
+        } else {
+          status.textContent = data?.error ?? "Couldn't send. Try calling us — fastest path.";
+          status.className = "quote-form__status is-err";
+        }
+      } catch {
+        status.textContent = "Network error. Please try again or call us.";
+        status.className = "quote-form__status is-err";
+      } finally {
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.removeAttribute("aria-busy");
+          submitBtn.innerHTML = originalSubmitHTML;
+        }
+      }
+    });
+  }
+</script>
+
+<style>
+  .quote-form {
+    display: grid;
+    gap: var(--s-8);
+    max-width: 760px;
+  }
+  .quote-form__group {
+    border: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: var(--s-4);
+  }
+  .quote-form__group legend {
+    margin-bottom: var(--s-2);
+    color: var(--c-accent);
+  }
+  .quote-form__row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--s-4);
+  }
+  .quote-form label, .quote-form__full {
+    display: grid;
+    gap: 6px;
+  }
+  .quote-form span {
+    font-family: var(--ff-mono);
+    font-size: var(--t-eyebrow);
+    color: var(--c-ink-muted);
+    letter-spacing: var(--ls-wide);
+    text-transform: uppercase;
+  }
+  .quote-form input,
+  .quote-form select,
+  .quote-form textarea {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid var(--c-line);
+    background: var(--c-bg-elevated);
+    border-radius: var(--r-sm);
+    font-size: 1rem;
+    font-family: inherit;
+    color: var(--c-ink);
+    transition:
+      border-color var(--d-fast) var(--ease-out),
+      box-shadow var(--d-fast) var(--ease-out),
+      transform var(--d-fast) var(--ease-out);
+  }
+  .quote-form input:hover:not(:focus),
+  .quote-form select:hover:not(:focus),
+  .quote-form textarea:hover:not(:focus) {
+    border-color: var(--c-ink-soft);
+  }
+  .quote-form input:focus,
+  .quote-form select:focus,
+  .quote-form textarea:focus {
+    outline: none;
+    border-color: var(--c-accent);
+    box-shadow: 0 0 0 3px rgba(245, 166, 35, 0.15);
+  }
+  .quote-form label > span {
+    transition: color var(--d-fast) var(--ease-out);
+  }
+  .quote-form button[aria-busy="true"] {
+    opacity: 0.85;
+    cursor: progress;
+  }
+  .quote-form textarea { resize: vertical; }
+
+  .quote-form__honeypot {
+    position: absolute !important;
+    left: -9999px !important;
+    width: 1px !important;
+    height: 1px !important;
+    opacity: 0 !important;
+    pointer-events: none;
+  }
+
+  .quote-form__submit {
+    display: flex;
+    align-items: center;
+    gap: var(--s-5);
+    flex-wrap: wrap;
+  }
+  .quote-form__small { color: var(--c-ink-muted); letter-spacing: var(--ls-wider); text-transform: uppercase; font-size: var(--t-eyebrow); }
+
+  .quote-form__status {
+    padding: var(--s-4);
+    border-left: 3px solid var(--c-line);
+    background: var(--c-bg-elevated);
+    font-size: var(--t-small);
+  }
+  .quote-form__status.is-pending { border-color: var(--c-ink-muted); color: var(--c-ink-muted); }
+  .quote-form__status.is-ok { border-color: var(--c-success); color: var(--c-success); background: rgba(47,125,59,0.06); }
+  .quote-form__status.is-err { border-color: var(--c-warn); color: var(--c-warn); background: rgba(200,51,26,0.06); }
+
+  @media (max-width: 600px) {
+    .quote-form__row { grid-template-columns: 1fr; }
+  }
+</style>

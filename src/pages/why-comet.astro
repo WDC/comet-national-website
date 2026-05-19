@@ -1,0 +1,509 @@
+---
+export const prerender = true;
+import BaseLayout from "@layouts/BaseLayout.astro";
+import Button from "@components/ui/Button.astro";
+import { SITE } from "@lib/site";
+
+const values = [
+  {
+    name: "Integrity",
+    body: "We say what we mean and do what we say. Every load, every time.",
+  },
+  {
+    name: "Excellence",
+    body: "Good enough never ships. We raise the bar on every move we make.",
+  },
+  {
+    name: "Teamwork",
+    body: "One team in Atlanta. One call solves the whole problem.",
+  },
+  {
+    name: "Growth",
+    body: "We've been growing since day one — our capabilities, our reach, and our people.",
+  },
+  {
+    name: "Trust",
+    body: "Earned load by load over decades. We protect your freight like it's our own.",
+  },
+  {
+    name: "Tenacity",
+    body: "When something goes sideways, we don't stop until it's right. No excuses.",
+  },
+];
+
+const differentiators = [
+  {
+    eyebrow: "One team.",
+    title: "Every mode.",
+    body: "Flatbed, dry van, reefer, hotshot, transload, cross-dock, warehousing. One Atlanta team that has done all of it since 1970. You call once. We handle the rest.",
+  },
+  {
+    eyebrow: "You only pay for",
+    title: "The space you use.",
+    body: "Partial flatbed and Volume LTL — billed for the linear feet your freight actually occupies. No phantom density minimums. No games.",
+  },
+  {
+    eyebrow: "When things go wrong",
+    title: "We pick up the call.",
+    body: "Distressed load recovery is the 911 freight brokers don't answer. We restack, rewrap, document, and deliver. We make the bad day shorter.",
+  },
+];
+---
+<BaseLayout
+  title={`Why Comet | ${SITE.name}`}
+  description={`Comet National has been Atlanta's most trusted transportation partner since ${SITE.foundingYear}. Learn about our mission, values, and why shippers choose us for every mode.`}
+>
+
+  <!-- ─── Hero ─── -->
+  <section class="why-hero section section-bar" data-reveal>
+    <div class="container-content">
+      <div class="reveal-stagger" data-reveal>
+        <p class="eyebrow">Why Comet</p>
+        <h1 class="why-hero__title display">
+          Your trusted transportation<br/>
+          <span class="why-hero__accent">solutions provider.</span>
+        </h1>
+        <p class="why-hero__lede">
+          Since {SITE.foundingYear}, Comet National has built its reputation one load at a time.
+          We're not a marketplace. We're not an algorithm. We're a team of people in Atlanta
+          who care deeply about freight, customers, and doing things right.
+        </p>
+        <div class="why-hero__actions">
+          <Button href="/get-a-quote" size="lg">Get a Quote</Button>
+          <Button href={`tel:${SITE.phoneE164}`} variant="ghost" size="lg">{SITE.phone}</Button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── Origin Story ─── -->
+  <section class="origin section" data-reveal>
+    <div class="container-content origin__inner">
+      <div class="origin__copy reveal-stagger" data-reveal>
+        <p class="eyebrow">01 · How it all started</p>
+        <h2 class="origin__title display">
+          Started from a bedroom.<br/>Built on reputation.
+        </h2>
+        <p class="origin__body">
+          Comet National began in September 1992 when founder John Souter left a career in
+          transportation determined to do things differently. He had seen how the industry
+          operated — the shortcuts, the indifference, the broken promises — and he believed
+          shippers deserved better.
+        </p>
+        <p class="origin__body">
+          What started in Snellville, GA with a single focus — be the most reliable, most
+          transparent freight partner a shipper could find — grew into a multi-mode operation
+          covering the entire country. The team changed. The building changed. The core
+          promise never did.
+        </p>
+      </div>
+      <div class="origin__aside reveal" data-reveal style="--reveal-delay: 200ms">
+        <div class="origin__stat-block">
+          <span class="origin__year display">1992</span>
+          <p class="origin__stat-label mono">Founded</p>
+        </div>
+        <div class="origin__divider"></div>
+        <div class="origin__stat-block">
+          <span class="origin__year display">ATL</span>
+          <p class="origin__stat-label mono">Dispatched from Atlanta, GA</p>
+        </div>
+        <div class="origin__divider"></div>
+        <div class="origin__stat-block">
+          <span class="origin__year display">48</span>
+          <p class="origin__stat-label mono">States served</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── Mission & Vision ─── -->
+  <section class="mv section section-inverse" data-reveal>
+    <div class="container-content">
+      <p class="eyebrow">02 · Purpose</p>
+      <h2 class="mv__heading display">What we stand for.</h2>
+
+      <div class="mv__grid reveal-stagger" data-reveal>
+        <div class="mv__card">
+          <span class="mv__label mono">Mission</span>
+          <blockquote class="mv__statement display">
+            "To consistently and professionally service the transportation needs of our customers."
+          </blockquote>
+          <p class="mv__subtext">
+            Not just move freight — service it. The distinction matters. It means we show up,
+            communicate, and never leave a shipper guessing.
+          </p>
+        </div>
+
+        <div class="mv__card mv__card--accent">
+          <span class="mv__label mono">Vision</span>
+          <blockquote class="mv__statement display">
+            "To be a highly-trusted solutions provider and advisor to our customers."
+          </blockquote>
+          <p class="mv__subtext">
+            Trusted advisors solve problems before they become crises. We earn that position
+            by knowing your freight as well as you do.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── Values ─── -->
+  <section class="vals section" data-reveal>
+    <div class="container-content">
+      <p class="eyebrow">03 · Our values</p>
+      <h2 class="vals__heading display">Six words.<br/>Everything we do.</h2>
+
+      <ul class="vals__grid reveal-stagger" data-reveal>
+        {values.map((v, i) => (
+          <li class="vals__card hover-lift">
+            <span class="mono vals__num">0{i + 1}</span>
+            <h3 class="vals__name display">{v.name}</h3>
+            <p class="vals__body">{v.body}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <!-- ─── Differentiators ─── -->
+  <section class="why-diff section section-inverse section-bar" data-reveal>
+    <div class="container-content">
+      <p class="eyebrow">04 · The Comet difference</p>
+      <h2 class="why-diff__heading display">Trucking is commodity.<br/>We aren't.</h2>
+
+      <ul class="why-diff__cards reveal-stagger" data-reveal>
+        {differentiators.map((d, i) => (
+          <li class="why-diff__card">
+            <span class="mono why-diff__num">0{i + 1}</span>
+            <p class="why-diff__eyebrow">{d.eyebrow}</p>
+            <h3 class="why-diff__title display">{d.title}</h3>
+            <p class="why-diff__body">{d.body}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <!-- ─── CTA ─── -->
+  <section class="why-cta section section-bar" data-reveal>
+    <div class="container-content why-cta__inner reveal-stagger" data-reveal>
+      <p class="eyebrow">05 · Get moving</p>
+      <h2 class="why-cta__title display">
+        Ready to work with a team<br/>
+        that <span class="why-cta__accent">actually shows up?</span>
+      </h2>
+      <p class="why-cta__body">
+        One call. Every mode. Atlanta-dispatched since 1992. Tell us what you need — we'll put
+        the right trailer under it.
+      </p>
+      <div class="why-cta__actions">
+        <Button href="/get-a-quote" size="lg">Get a Quote</Button>
+        <a class="why-cta__phone display" href={`tel:${SITE.phoneE164}`}>
+          or call <span class="why-cta__phone-num">{SITE.phone}</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+</BaseLayout>
+
+<style>
+  /* ─── Hero ─── */
+  .why-hero__title {
+    font-size: var(--t-h1);
+    line-height: 1;
+    margin-top: var(--s-3);
+    max-width: 24ch;
+  }
+  .why-hero__accent { color: var(--c-accent); }
+  .why-hero__lede {
+    margin-top: var(--s-6);
+    color: var(--c-ink-muted);
+    max-width: 56ch;
+    line-height: var(--lh-relaxed);
+  }
+  .why-hero__actions {
+    margin-top: var(--s-8);
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--s-3);
+  }
+
+  /* ─── Origin ─── */
+  .origin { background: var(--c-bg-elevated); border-block: 1px solid var(--c-line); }
+  .origin__inner {
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: var(--s-16);
+    align-items: start;
+  }
+  .origin__title {
+    font-size: var(--t-h2);
+    line-height: 1.05;
+    margin-top: var(--s-3);
+    margin-bottom: var(--s-6);
+    max-width: 22ch;
+  }
+  .origin__body {
+    color: var(--c-ink-muted);
+    line-height: var(--lh-relaxed);
+    max-width: 54ch;
+  }
+  .origin__body + .origin__body { margin-top: var(--s-4); }
+  .origin__aside {
+    display: flex;
+    flex-direction: column;
+    gap: var(--s-6);
+    padding: var(--s-8);
+    background: var(--c-bg);
+    border: 1px solid var(--c-line);
+    position: sticky;
+    top: calc(var(--s-16) + 80px);
+  }
+  .origin__stat-block { display: grid; gap: var(--s-1); }
+  .origin__year {
+    font-size: clamp(2rem, 3vw, 2.75rem);
+    line-height: 1;
+    color: var(--c-ink);
+    letter-spacing: var(--ls-tight);
+  }
+  .origin__stat-label {
+    font-size: var(--t-eyebrow);
+    letter-spacing: var(--ls-wider);
+    text-transform: uppercase;
+    color: var(--c-ink-soft);
+  }
+  .origin__divider {
+    height: 1px;
+    background: var(--c-line);
+  }
+
+  /* ─── Mission & Vision ─── */
+  .mv__heading {
+    font-size: var(--t-h1);
+    line-height: 1;
+    margin-top: var(--s-3);
+    margin-bottom: var(--s-12);
+    color: var(--c-bg);
+    max-width: 20ch;
+  }
+  .mv__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+  .mv__card {
+    background: var(--c-navy-deep);
+    padding: var(--s-10);
+    display: grid;
+    gap: var(--s-5);
+    align-content: start;
+    position: relative;
+    transition: background var(--d-base) var(--ease-out);
+  }
+  .mv__card::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 2px;
+    background: rgba(255,255,255,0.12);
+    transform: scaleX(1);
+    transition: background var(--d-base) var(--ease-out);
+  }
+  .mv__card--accent::before { background: var(--c-accent); }
+  .mv__card:hover { background: var(--c-navy); }
+  .mv__label {
+    font-size: var(--t-eyebrow);
+    letter-spacing: var(--ls-wider);
+    text-transform: uppercase;
+    color: var(--c-accent);
+  }
+  .mv__statement {
+    font-size: clamp(1.25rem, 1.5vw + 0.5rem, 1.875rem);
+    line-height: 1.2;
+    color: var(--c-bg);
+    margin: 0;
+    font-style: normal;
+  }
+  .mv__subtext {
+    color: rgba(255, 255, 255, 0.65);
+    line-height: var(--lh-relaxed);
+    font-size: var(--t-small);
+  }
+
+  /* ─── Values ─── */
+  .vals__heading {
+    font-size: var(--t-h2);
+    line-height: 1.05;
+    margin-top: var(--s-3);
+    margin-bottom: var(--s-12);
+    max-width: 16ch;
+  }
+  .vals__grid {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--s-4);
+  }
+  .vals__card {
+    background: var(--c-bg-elevated);
+    border: 1px solid var(--c-line);
+    padding: var(--s-8);
+    display: grid;
+    gap: var(--s-3);
+    align-content: start;
+    position: relative;
+    overflow: hidden;
+  }
+  .vals__card::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 2px;
+    background: var(--c-accent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform var(--d-base) var(--ease-out);
+  }
+  .vals__card:hover::before { transform: scaleX(1); }
+  .vals__num {
+    font-size: var(--t-eyebrow);
+    letter-spacing: var(--ls-wider);
+    color: var(--c-accent);
+  }
+  .vals__name {
+    font-size: var(--t-h3);
+    line-height: 1;
+    color: var(--c-ink);
+  }
+  .vals__body {
+    color: var(--c-ink-muted);
+    font-size: var(--t-small);
+    line-height: var(--lh-relaxed);
+  }
+
+  /* ─── Differentiators ─── */
+  .why-diff__heading {
+    font-size: var(--t-h1);
+    line-height: 1;
+    margin-top: var(--s-3);
+    margin-bottom: var(--s-12);
+    color: var(--c-bg);
+    max-width: 18ch;
+  }
+  .why-diff__cards {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+  .why-diff__card {
+    background: var(--c-navy-deep);
+    padding: var(--s-8);
+    display: grid;
+    grid-template-rows: auto auto auto 1fr;
+    gap: var(--s-3);
+    position: relative;
+    transition: background var(--d-base) var(--ease-out), transform var(--d-base) var(--ease-out);
+  }
+  .why-diff__card:hover { background: var(--c-navy); transform: translateY(-2px); }
+  .why-diff__card::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 2px;
+    background: var(--c-accent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform var(--d-base) var(--ease-out);
+  }
+  .why-diff__card:hover::before { transform: scaleX(1); }
+  .why-diff__num {
+    font-size: var(--t-eyebrow);
+    letter-spacing: var(--ls-wider);
+    color: var(--c-accent);
+  }
+  .why-diff__eyebrow {
+    font-size: var(--t-small);
+    letter-spacing: var(--ls-wide);
+    color: rgba(255, 255, 255, 0.6);
+  }
+  .why-diff__title {
+    font-size: 1.875rem;
+    line-height: 1;
+    letter-spacing: var(--ls-tight);
+    color: var(--c-bg);
+  }
+  .why-diff__body {
+    color: rgba(255, 255, 255, 0.72);
+    line-height: var(--lh-base);
+    font-size: var(--t-small);
+  }
+
+  /* ─── CTA ─── */
+  .why-cta__inner {
+    display: grid;
+    justify-items: start;
+    gap: var(--s-5);
+  }
+  .why-cta__title {
+    font-size: var(--t-h1);
+    line-height: 1;
+    margin-top: var(--s-3);
+    max-width: 24ch;
+  }
+  .why-cta__accent { color: var(--c-accent); }
+  .why-cta__body {
+    color: var(--c-ink-muted);
+    max-width: 52ch;
+    line-height: var(--lh-relaxed);
+  }
+  .why-cta__actions {
+    margin-top: var(--s-4);
+    display: flex;
+    gap: var(--s-6);
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .why-cta__phone {
+    font-weight: 600;
+    font-size: 1rem;
+    color: var(--c-ink-muted);
+    letter-spacing: var(--ls-snug);
+  }
+  .why-cta__phone-num {
+    color: var(--c-ink);
+    border-bottom: 1.5px solid var(--c-accent);
+    padding-bottom: 2px;
+    transition: color var(--d-fast) var(--ease-out), border-color var(--d-fast) var(--ease-out);
+  }
+  .why-cta__phone:hover .why-cta__phone-num {
+    color: var(--c-accent);
+    border-color: var(--c-accent-hover);
+  }
+
+  /* ─── Responsive ─── */
+  @media (max-width: 1024px) {
+    .origin__inner { grid-template-columns: 1fr; gap: var(--s-8); }
+    .origin__aside { position: static; flex-direction: row; flex-wrap: wrap; gap: var(--s-6); }
+    .origin__divider { display: none; }
+  }
+  @media (max-width: 880px) {
+    .mv__grid { grid-template-columns: 1fr; }
+    .why-diff__cards { grid-template-columns: 1fr; }
+    .vals__grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 560px) {
+    .vals__grid { grid-template-columns: 1fr; }
+    .why-cta__actions { flex-direction: column; align-items: flex-start; gap: var(--s-3); }
+  }
+</style>

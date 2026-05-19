@@ -1,0 +1,239 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "redirects": [
+    {
+      "source": "/",
+      "has": [
+        {
+          "type": "host",
+          "value": "flatbedltl.com"
+        }
+      ],
+      "destination": "https://cometnational.com/services/flatbed-ltl",
+      "permanent": true
+    },
+    {
+      "source": "/what-we-do",
+      "has": [
+        {
+          "type": "host",
+          "value": "flatbedltl.com"
+        }
+      ],
+      "destination": "https://cometnational.com/services/flatbed-ltl",
+      "permanent": true
+    },
+    {
+      "source": "/how-everybody-wins",
+      "has": [
+        {
+          "type": "host",
+          "value": "flatbedltl.com"
+        }
+      ],
+      "destination": "https://cometnational.com/why-comet/everyone-wins",
+      "permanent": true
+    },
+    {
+      "source": "/blog/:slug",
+      "has": [
+        {
+          "type": "host",
+          "value": "flatbedltl.com"
+        }
+      ],
+      "destination": "https://cometnational.com/insights/:slug",
+      "permanent": true
+    },
+    {
+      "source": "/services",
+      "has": [
+        {
+          "type": "host",
+          "value": "flatbedltl.com"
+        }
+      ],
+      "destination": "https://cometnational.com/services",
+      "permanent": true
+    },
+    {
+      "source": "/contact",
+      "has": [
+        {
+          "type": "host",
+          "value": "flatbedltl.com"
+        }
+      ],
+      "destination": "https://cometnational.com/contact",
+      "permanent": true
+    },
+    {
+      "source": "/(.*)",
+      "has": [
+        {
+          "type": "host",
+          "value": "flatbedltl.com"
+        }
+      ],
+      "destination": "https://cometnational.com/services/flatbed-ltl",
+      "permanent": true
+    },
+    {
+      "source": "/",
+      "has": [
+        {
+          "type": "host",
+          "value": "transload911.com"
+        }
+      ],
+      "destination": "https://cometnational.com/services/transloading",
+      "permanent": true
+    },
+    {
+      "source": "/services",
+      "has": [
+        {
+          "type": "host",
+          "value": "transload911.com"
+        }
+      ],
+      "destination": "https://cometnational.com/services",
+      "permanent": true
+    },
+    {
+      "source": "/transloading",
+      "has": [
+        {
+          "type": "host",
+          "value": "transload911.com"
+        }
+      ],
+      "destination": "https://cometnational.com/services/transloading",
+      "permanent": true
+    },
+    {
+      "source": "/cross-docking",
+      "has": [
+        {
+          "type": "host",
+          "value": "transload911.com"
+        }
+      ],
+      "destination": "https://cometnational.com/services/cross-docking",
+      "permanent": true
+    },
+    {
+      "source": "/distressed-load-recovery",
+      "has": [
+        {
+          "type": "host",
+          "value": "transload911.com"
+        }
+      ],
+      "destination": "https://cometnational.com/services/distressed-load-recovery",
+      "permanent": true
+    },
+    {
+      "source": "/warehousing",
+      "has": [
+        {
+          "type": "host",
+          "value": "transload911.com"
+        }
+      ],
+      "destination": "https://cometnational.com/services/warehousing-fulfillment",
+      "permanent": true
+    },
+    {
+      "source": "/blog/:slug",
+      "has": [
+        {
+          "type": "host",
+          "value": "transload911.com"
+        }
+      ],
+      "destination": "https://cometnational.com/insights/:slug",
+      "permanent": true
+    },
+    {
+      "source": "/contact",
+      "has": [
+        {
+          "type": "host",
+          "value": "transload911.com"
+        }
+      ],
+      "destination": "https://cometnational.com/contact",
+      "permanent": true
+    },
+    {
+      "source": "/(.*)",
+      "has": [
+        {
+          "type": "host",
+          "value": "transload911.com"
+        }
+      ],
+      "destination": "https://cometnational.com/services/transloading",
+      "permanent": true
+    },
+    {
+      "source": "/old-services",
+      "has": [
+        {
+          "type": "host",
+          "value": "cometnational.com"
+        }
+      ],
+      "destination": "https://cometnational.com/services",
+      "permanent": true
+    },
+    {
+      "source": "/(.*)",
+      "has": [
+        {
+          "type": "host",
+          "value": "www.cometnational.com"
+        }
+      ],
+      "destination": "https://cometnational.com/$1",
+      "permanent": true
+    }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)\\.(woff2|avif|webp|jpg|png|svg|css|js)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    },
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        },
+        {
+          "key": "Strict-Transport-Security",
+          "value": "max-age=63072000; includeSubDomains; preload"
+        },
+        {
+          "key": "Permissions-Policy",
+          "value": "camera=(), microphone=(), geolocation=()"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "SAMEORIGIN"
+        }
+      ]
+    }
+  ]
+}

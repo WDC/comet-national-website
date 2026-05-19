@@ -1,0 +1,95 @@
+---
+export const prerender = true;
+import ServicePillarLayout from "@layouts/ServicePillarLayout.astro";
+import { getService } from "@lib/services";
+
+const service = getService("volume-ltl")!;
+const description =
+  "Volume LTL (partial truckload) freight for the size that's too big for standard LTL but too small for a full trailer. Atlanta-based, US + Canada coverage, no phantom accessorial charges.";
+
+const relatedSlugs = ["flatbed-ltl", "full-truckload", "dry-van-ltl"];
+---
+<ServicePillarLayout
+  service={service}
+  pageTitle="Volume LTL Shipping (Partial Truckload) | Comet National"
+  pageDescription={description}
+  relatedSlugs={relatedSlugs}
+>
+  <div slot="hero-art" class="art-placeholder">
+    <svg viewBox="0 0 380 180" aria-hidden="true">
+      <rect x="20" y="50" width="320" height="80" fill="none" stroke="var(--c-navy)" stroke-width="1.5" />
+      <rect x="34" y="64" width="180" height="52" fill="var(--c-accent)" />
+      <pattern id="vd" patternUnits="userSpaceOnUse" width="6" height="6" patternTransform="rotate(45)">
+        <line x1="0" y1="0" x2="0" y2="6" stroke="var(--c-line)" stroke-width="1" />
+      </pattern>
+      <rect x="218" y="50" width="122" height="80" fill="url(#vd)" opacity="0.55" />
+      <circle cx="58" cy="140" r="9" fill="none" stroke="var(--c-navy)" stroke-width="1.25" />
+      <circle cx="302" cy="140" r="9" fill="none" stroke="var(--c-navy)" stroke-width="1.25" />
+      <text x="124" y="36" text-anchor="middle" font-family="var(--ff-display)" font-size="13" font-weight="700" fill="var(--c-ink)">PARTIAL TRAILER</text>
+      <text x="279" y="36" text-anchor="middle" font-family="var(--ff-mono)" font-size="10" fill="var(--c-ink-muted)" letter-spacing="0.16em">NOT PAID</text>
+    </svg>
+  </div>
+
+  <section data-reveal>
+    <p class="eyebrow">Who Volume LTL is for</p>
+    <h2 class="t-h2 display">Bigger than LTL. Smaller than a truckload.</h2>
+    <p class="t-lede">
+      6 to 24 pallets. Six linear feet to twenty-eight. The middle slice of freight
+      that gets murdered by LTL accessorials and overpriced by full-truckload brokers.
+      We move it for what it actually costs.
+    </p>
+    <ul class="vol-ltl__bullets reveal-stagger" data-reveal>
+      <li>6–24 pallets · 6–28 linear feet · up to 30,000 lbs</li>
+      <li>No reclass risk · no density minimums · no surprise linear-foot charges</li>
+      <li>US + Canada · one carrier all the way</li>
+      <li>Single touchpoint dispatch from Atlanta</li>
+    </ul>
+  </section>
+
+  <section data-reveal>
+    <p class="eyebrow">Why Volume LTL vs FTL</p>
+    <h2 class="t-h2 display">Don't buy capacity you can't use.</h2>
+    <p class="t-lede">
+      Booking a full truckload for half a load means paying for half a truck full of air.
+      Volume LTL shares capacity intelligently — you pay for the space, the FTL customer
+      pays for theirs, and the trailer leaves full. Everyone wins.
+    </p>
+    <a href="/why-comet/everyone-wins" class="vol-ltl__cta link-arrow">Read "How everybody wins" <span class="arrow" aria-hidden="true">→</span></a>
+  </section>
+</ServicePillarLayout>
+
+<style>
+  .art-placeholder svg { width: 100%; height: auto; display: block; }
+  .t-h2 { font-size: var(--t-h2); line-height: 1.05; margin-top: var(--s-3); margin-bottom: var(--s-5); max-width: 22ch; }
+  .t-lede { color: var(--c-ink-muted); max-width: 64ch; font-size: 1.0625rem; }
+
+  .vol-ltl__bullets {
+    list-style: none;
+    padding: 0;
+    margin: var(--s-6) 0 0;
+    display: grid;
+    gap: var(--s-3);
+  }
+  .vol-ltl__bullets li {
+    padding: var(--s-3) var(--s-4);
+    border-left: 2px solid var(--c-accent);
+    font-family: var(--ff-mono);
+    font-size: var(--t-small);
+    background: var(--c-bg-elevated);
+    transition: padding-left var(--d-fast) var(--ease-out), border-left-width var(--d-fast) var(--ease-out), background var(--d-fast) var(--ease-out);
+  }
+  .vol-ltl__bullets li:hover {
+    padding-left: calc(var(--s-4) + 4px);
+    border-left-width: 4px;
+    background: var(--c-bg);
+  }
+  .vol-ltl__cta {
+    display: inline-block;
+    margin-top: var(--s-5);
+    color: var(--c-accent);
+    font-family: var(--ff-display);
+    font-weight: 600;
+    transition: color var(--d-fast) var(--ease-out);
+  }
+  .vol-ltl__cta:hover { color: var(--c-accent-hover); }
+</style>

@@ -1,0 +1,118 @@
+---
+export const prerender = true;
+import BaseLayout from "@layouts/BaseLayout.astro";
+import Button from "@components/ui/Button.astro";
+import { SITE } from "@lib/site";
+---
+<BaseLayout
+  title={`Contact | ${SITE.name}`}
+  description={`Reach Comet National in Atlanta, GA. Call ${SITE.phone}, email ${SITE.email}, or request a freight quote online. One Atlanta team since 1970.`}
+>
+  <section class="contact section section-bar" data-reveal>
+    <div class="container-content">
+      <div class="reveal-stagger" data-reveal>
+        <p class="eyebrow">Contact</p>
+        <h1 class="contact__title display">Pick up the phone or pick up the form.</h1>
+        <p class="contact__lede">
+          Real people. Atlanta dispatch. One call solves the whole problem.
+        </p>
+      </div>
+
+      <div class="contact__grid reveal-stagger" data-reveal>
+        <div class="contact__card">
+          <p class="eyebrow">Call</p>
+          <a class="contact__phone display" href={`tel:${SITE.phoneE164}`}>{SITE.phone}</a>
+          <p class="contact__hours mono">Mon–Fri · 8a–5p ET · 24/7 for distressed loads</p>
+        </div>
+
+        <div class="contact__card">
+          <p class="eyebrow">Email</p>
+          <a class="contact__email display" href={`mailto:${SITE.email}`}>{SITE.email}</a>
+          <p class="contact__hours mono">Replies within one business hour</p>
+        </div>
+
+        <div class="contact__card contact__card--ad">
+          <p class="eyebrow">Atlanta facility</p>
+          <address class="contact__addr display">
+            {SITE.address.street}<br/>
+            {SITE.address.locality}, {SITE.address.region} {SITE.address.postal}
+          </address>
+          <p class="contact__hours mono">By appointment for transload &amp; cross-dock</p>
+        </div>
+
+        <div class="contact__card contact__card--cta">
+          <p class="eyebrow">Or skip ahead</p>
+          <h2 class="contact__cta-title display">Send a quote request.</h2>
+          <Button href="/get-a-quote">Get a Quote</Button>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .contact__title { font-size: clamp(2.5rem, 4vw, 3.5rem); line-height: 1; margin-top: var(--s-3); max-width: 20ch; }
+  .contact__lede { margin-top: var(--s-5); color: var(--c-ink-muted); }
+  .contact__grid {
+    margin-top: var(--s-12);
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--s-4);
+  }
+  .contact__card {
+    background: var(--c-bg-elevated);
+    border: 1px solid var(--c-line);
+    padding: var(--s-8);
+    display: grid;
+    gap: var(--s-3);
+    align-content: start;
+    position: relative;
+    overflow: hidden;
+    transition:
+      transform var(--d-base) var(--ease-out),
+      border-color var(--d-fast) var(--ease-out),
+      box-shadow var(--d-base) var(--ease-out);
+  }
+  .contact__card::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 2px;
+    background: var(--c-accent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform var(--d-base) var(--ease-out);
+  }
+  .contact__card:hover {
+    transform: translateY(-3px);
+    border-color: var(--c-ink);
+    box-shadow: 0 12px 26px -18px rgba(13, 17, 23, 0.22);
+  }
+  .contact__card:hover::before { transform: scaleX(1); }
+  .contact__card--cta { background: var(--c-navy-deep); color: var(--c-bg); border-color: var(--c-navy-deep); }
+  .contact__card--cta:hover { background: var(--c-navy); border-color: var(--c-navy); }
+  .contact__card--cta .eyebrow { color: var(--c-accent); }
+
+  .contact__phone, .contact__email {
+    font-size: 1.75rem;
+    line-height: 1;
+    color: var(--c-ink);
+    word-break: break-all;
+    transition: color var(--d-fast) var(--ease-out);
+  }
+  .contact__phone:hover,
+  .contact__email:hover { color: var(--c-accent); }
+  .contact__phone { border-bottom: 2px solid var(--c-accent); padding-bottom: 4px; width: max-content; }
+  .contact__addr {
+    font-style: normal;
+    font-size: 1.25rem;
+    line-height: 1.3;
+    color: var(--c-ink);
+  }
+  .contact__hours { color: var(--c-ink-muted); font-size: var(--t-eyebrow); letter-spacing: var(--ls-wide); text-transform: uppercase; }
+  .contact__cta-title { font-size: 1.75rem; line-height: 1.05; color: var(--c-bg); }
+
+  @media (max-width: 760px) {
+    .contact__grid { grid-template-columns: 1fr; }
+  }
+</style>

@@ -1,0 +1,66 @@
+---
+import { resolveSeo, type PageSeo } from "@lib/seo";
+import { organizationSchema, websiteSchema, breadcrumbSchema, breadcrumbsFromPath } from "@lib/schema";
+import { SITE } from "@lib/site";
+import JsonLd from "@components/seo/JsonLd.astro";
+import "@styles/base.css";
+import "@styles/motion.css";
+
+interface Props extends PageSeo {
+  preloadHero?: string;
+  extraSchema?: Array<Record<string, unknown>>;
+}
+
+const { preloadHero, extraSchema = [], ...seoInput } = Astro.props;
+const seo = resolveSeo({ ...seoInput, pathname: Astro.url.pathname });
+
+const showBreadcrumbs = Astro.url.pathname.split("/").filter(Boolean).length >= 1;
+const sitewideSchemas: Array<Record<string, unknown>> = [
+  organizationSchema(),
+  websiteSchema(),
+];
+if (showBreadcrumbs) {
+  sitewideSchemas.push(breadcrumbSchema({ items: breadcrumbsFromPath(Astro.url.pathname) }));
+}
+---
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#1a2332" />
+<meta name="format-detection" content="telephone=yes" />
+<meta name="generator" content={Astro.generator} />
+
+<title>{seo.title}</title>
+<meta name="description" content={seo.description} />
+<link rel="canonical" href={seo.canonical} />
+<meta name="robots" content={seo.robots} />
+
+<!-- Open Graph -->
+<meta property="og:type" content={seo.ogType} />
+<meta property="og:site_name" content={SITE.name} />
+<meta property="og:title" content={seo.title} />
+<meta property="og:description" content={seo.description} />
+<meta property="og:url" content={seo.canonical} />
+<meta property="og:image" content={seo.ogImage} />
+<meta property="og:locale" content="en_US" />
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={seo.title} />
+<meta name="twitter:description" content={seo.description} />
+<meta name="twitter:image" content={seo.ogImage} />
+
+<!-- Icons -->
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+<!-- DNS prefetch for Sanity CDN (Phase 2+) -->
+<link rel="dns-prefetch" href="https://cdn.sanity.io" />
+
+{preloadHero && <link rel="preload" as="image" href={preloadHero} fetchpriority="high" />}
+
+<link rel="sitemap" href="/sitemap-index.xml" />
+<link rel="alternate" type="application/rss+xml" title={`${SITE.name} — Insights`} href="/insights/rss.xml" />
+
+<!-- Sitewide JSON-LD -->
+{sitewideSchemas.map((d) => <JsonLd data={d} />)}
+{extraSchema.map((d) => <JsonLd data={d} />)}

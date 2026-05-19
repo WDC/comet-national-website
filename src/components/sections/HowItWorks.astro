@@ -1,0 +1,38 @@
+---
+import HowItWorksFlow from "@components/animations/HowItWorksFlow.astro";
+---
+<section class="how section section-progress" data-reveal>
+  <div class="container-content">
+    <header class="how__head reveal" data-reveal>
+      <p class="eyebrow">05 · How it works</p>
+      <h2 class="how__title display">
+        Quote. Schedule. <span class="how__accent">Rest easy.</span>
+      </h2>
+      <p class="how__sub">
+        Three steps. One team. No handoffs. Industrial freight done by people who pick up the phone.
+      </p>
+    </header>
+
+    <HowItWorksFlow />
+  </div>
+</section>
+
+<style>
+  .how { background: var(--c-bg-elevated); }
+  .how__head {
+    text-align: center;
+    max-width: 60ch;
+    margin-inline: auto;
+    margin-bottom: var(--s-16);
+  }
+  .how__title {
+    font-size: var(--t-h1);
+    line-height: 1.02;
+    margin-top: var(--s-3);
+  }
+  .how__accent { color: var(--c-accent); }
+  .how__sub {
+    margin-top: var(--s-5);
+    color: var(--c-ink-muted);
+  }
+</style>

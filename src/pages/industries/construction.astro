@@ -1,0 +1,106 @@
+---
+export const prerender = true;
+import IndustryLayout from "@layouts/IndustryLayout.astro";
+import ConstructionRise from "@components/animations/ConstructionRise.astro";
+import { INDUSTRIES } from "@lib/services";
+
+const industry = INDUSTRIES.find((i) => i.slug === "construction")!;
+const description =
+  "Construction freight from an Atlanta carrier built around the schedule. Flatbed LTL, full flatbed, hotshot, and jobsite delivery for GCs, superintendents, and logistics managers.";
+---
+<IndustryLayout
+  industry={industry}
+  pageTitle="Construction Freight Shipping | Flatbed, Hotshot, Jobsite | Comet National"
+  pageDescription={description}
+>
+  <ConstructionRise slot="hero-art" />
+
+  <section data-reveal>
+    <p class="eyebrow">What you call us for</p>
+    <h2 class="ind-h2 display">The construction freight problems that don't fit a portal.</h2>
+    <p class="ind-lede">
+      Every job has a calendar — inspections, pours, deliveries that have to land
+      between the framing and the drywall. Here are the freight problems that
+      get our phone ringing, and what we do about each.
+    </p>
+    <ul class="ind-grid reveal-stagger" data-reveal>
+      {industry.challenges?.map(({ challenge, answer }) => (
+        <li>
+          <strong class="display">{challenge}</strong>
+          <span>{answer}</span>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <section data-reveal>
+    <p class="eyebrow">What we move</p>
+    <h2 class="ind-h2 display">From rebar bundles to roof-top HVAC.</h2>
+    <p class="ind-lede">
+      The freight construction crews actually order — long, heavy, awkward,
+      jobsite-bound. We've moved it for builders across the southeast for
+      five decades.
+    </p>
+    <ul class="ind-cargo reveal-stagger" data-reveal>
+      {industry.cargoExamples?.map((item) => (
+        <li><span class="ind-cargo__tick">·</span>{item}</li>
+      ))}
+    </ul>
+  </section>
+
+  <section data-reveal>
+    <p class="eyebrow">Why Comet for construction</p>
+    <h2 class="ind-h2 display">A carrier that reads the schedule, not just the BOL.</h2>
+    <p class="ind-lede">{industry.whyComet}</p>
+  </section>
+</IndustryLayout>
+
+<style>
+  .ind-h2 { font-size: var(--t-h2); line-height: 1.05; margin-top: var(--s-3); margin-bottom: var(--s-5); max-width: 26ch; }
+  .ind-lede { color: var(--c-ink-muted); max-width: 64ch; font-size: 1.0625rem; line-height: 1.55; }
+
+  .ind-grid {
+    list-style: none;
+    padding: 0;
+    margin: var(--s-6) 0 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--c-line);
+    border: 1px solid var(--c-line);
+  }
+  .ind-grid li {
+    background: var(--c-bg);
+    padding: var(--s-5);
+    display: grid;
+    gap: var(--s-2);
+  }
+  .ind-grid strong { font-size: 1.0625rem; color: var(--c-ink); }
+  .ind-grid span { font-size: var(--t-small); color: var(--c-ink-muted); line-height: 1.5; }
+
+  .ind-cargo {
+    list-style: none;
+    padding: 0;
+    margin: var(--s-6) 0 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--s-3);
+  }
+  .ind-cargo li {
+    padding: var(--s-3) var(--s-4);
+    border: 1px solid var(--c-line);
+    font-family: var(--ff-mono);
+    font-size: var(--t-small);
+    color: var(--c-ink);
+  }
+  .ind-cargo__tick {
+    color: var(--c-accent);
+    margin-right: var(--s-2);
+    font-weight: bold;
+  }
+
+  @media (max-width: 760px) {
+    .ind-grid { grid-template-columns: 1fr; }
+    .ind-cargo { grid-template-columns: 1fr 1fr; }
+  }
+</style>

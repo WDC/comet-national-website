@@ -1,0 +1,67 @@
+---
+/**
+ * Prompt 7 — Cross-dock consolidation/deconsolidation.
+ * Three small trucks → one large truck and back. Loop.
+ */
+---
+<div class="crossdock-viz" data-anim>
+  <svg viewBox="0 0 520 240" role="img" aria-label="Cross-docking flow: three small inbound trucks consolidated into one outbound truck, and the reverse">
+    <!-- Dock building -->
+    <g transform="translate(200, 80)">
+      <rect width="120" height="80" fill="var(--c-line-soft)" stroke="var(--c-line)" stroke-width="1" />
+      <line x1="0" y1="20" x2="120" y2="20" stroke="var(--c-line)" />
+      <line x1="60" y1="20" x2="60" y2="80" stroke="var(--c-line)" />
+      <text x="60" y="118" text-anchor="middle" font-family="var(--ff-mono)" font-size="10" fill="var(--c-ink-muted)" letter-spacing="0.12em">
+        DOCK
+      </text>
+    </g>
+
+    <!-- Inbound: 3 small trucks (left) -->
+    <g class="cd-inbound">
+      {[40, 100, 160].map((y, i) => (
+        <g transform={`translate(40, ${y})`} style={`animation-delay: ${i * 0.4}s`} class="cd-truck-in">
+          <rect x="0" y="0" width="50" height="20" fill="none" stroke="var(--c-navy)" stroke-width="1.25" />
+          <rect x="-12" y="4" width="14" height="14" fill="var(--c-navy)" />
+          <circle cx="6" cy="22" r="3" fill="none" stroke="var(--c-navy)" stroke-width="1" />
+          <circle cx="44" cy="22" r="3" fill="none" stroke="var(--c-navy)" stroke-width="1" />
+          <rect x="6" y="4" width="38" height="12" fill="var(--c-accent)" opacity="0.85" />
+        </g>
+      ))}
+    </g>
+
+    <!-- Outbound: 1 big truck (right) -->
+    <g class="cd-outbound" transform="translate(360, 90)">
+      <rect x="0" y="0" width="120" height="50" fill="none" stroke="var(--c-navy)" stroke-width="1.5" />
+      <rect x="-22" y="14" width="20" height="22" fill="var(--c-navy)" />
+      <rect x="6" y="6" width="108" height="38" fill="var(--c-accent)" />
+      <circle cx="14" cy="52" r="5" fill="none" stroke="var(--c-navy)" stroke-width="1.25" />
+      <circle cx="106" cy="52" r="5" fill="none" stroke="var(--c-navy)" stroke-width="1.25" />
+    </g>
+
+    <!-- Direction arrow -->
+    <g stroke="var(--c-accent)" stroke-width="1.25" fill="none">
+      <path d="M150 140 L195 140 M190 136 L195 140 L190 144" />
+      <path d="M325 140 L355 140 M350 136 L355 140 L350 144" />
+    </g>
+
+    <text x="260" y="40" text-anchor="middle" font-family="var(--ff-display)" font-size="14" font-weight="700" fill="var(--c-ink)" letter-spacing="-0.01em">
+      Three loads in, one load out.
+    </text>
+  </svg>
+</div>
+
+<style>
+  .crossdock-viz svg { width: 100%; height: auto; display: block; }
+  .cd-truck-in {
+    transform-origin: left center;
+    animation: cd-inbound-cycle 4s var(--ease-in-out) infinite;
+  }
+  @keyframes cd-inbound-cycle {
+    0%, 15% { transform: translate(0, 0); opacity: 1; }
+    35%, 60% { transform: translate(140px, 0); opacity: 1; }
+    65%, 100% { transform: translate(140px, 0); opacity: 0; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .cd-truck-in { animation: none !important; }
+  }
+</style>

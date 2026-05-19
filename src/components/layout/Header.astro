@@ -1,0 +1,293 @@
+---
+import Logo from "./Logo.astro";
+import MegaMenu from "./MegaMenu.astro";
+import Button from "@components/ui/Button.astro";
+import { SITE } from "@lib/site";
+
+const links = [
+  { label: "Services", href: "/services", hasMenu: true },
+  { label: "Industries", href: "/industries" },
+  { label: "Why Comet", href: "/why-comet" },
+  { label: "Insights", href: "/insights" },
+];
+
+const pathname = Astro.url.pathname;
+function isActive(href: string) {
+  if (href === "/") return pathname === "/";
+  return pathname === href || pathname.startsWith(`${href}/`);
+}
+---
+<header class="site-header" data-header>
+  <div class="site-header__bar container-content">
+    <Logo />
+
+    <nav class="site-nav" aria-label="Primary">
+      <ul class="site-nav__list">
+        {links.map((l) => (
+          <li class={`site-nav__item${l.hasMenu ? " has-menu" : ""}`}>
+            <a
+              href={l.href}
+              class="site-nav__link"
+              id={l.hasMenu ? "services-trigger" : undefined}
+              aria-haspopup={l.hasMenu ? "true" : undefined}
+              aria-expanded={l.hasMenu ? "false" : undefined}
+              aria-controls={l.hasMenu ? "services-mega-menu" : undefined}
+              data-active={isActive(l.href)}
+            >
+              {l.label}
+              {l.hasMenu && (
+                <svg width="10" height="6" viewBox="0 0 10 6" aria-hidden="true">
+                  <path d="M1 1 L5 5 L9 1" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="square" />
+                </svg>
+              )}
+            </a>
+            {l.hasMenu && <MegaMenu />}
+          </li>
+        ))}
+      </ul>
+    </nav>
+
+    <div class="site-header__actions">
+      <a href={`tel:${SITE.phoneE164}`} class="site-header__phone" aria-label={`Call ${SITE.phone}`}>
+        <svg class="phone-icon" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
+          <path d="M3.654 1.328a.678.678 0 00-1.015-.063L1.605 2.3c-.483.484-.661 1.169-.45 1.77a17.6 17.6 0 004.168 6.608 17.6 17.6 0 006.608 4.168c.601.211 1.286.033 1.77-.45l1.034-1.034a.678.678 0 00-.063-1.015l-2.307-1.794a.678.678 0 00-.58-.122l-2.19.547a1.745 1.745 0 01-1.657-.459L5.482 8.157a1.745 1.745 0 01-.46-1.657l.548-2.19a.678.678 0 00-.122-.58L3.654 1.328z" fill="currentColor"/>
+        </svg>
+        <span>{SITE.phone}</span>
+      </a>
+      <Button href="/get-a-quote" size="md">Get a Quote</Button>
+    </div>
+
+    <button
+      class="site-header__menu-toggle"
+      type="button"
+      aria-label="Toggle navigation"
+      aria-expanded="false"
+      aria-controls="mobile-nav"
+      data-mobile-toggle
+    >
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+
+  <div id="mobile-nav" class="site-mobile-nav" data-mobile-nav hidden>
+    <ul>
+      {links.map((l) => (
+        <li><a href={l.href}>{l.label}</a></li>
+      ))}
+      <li><a href="/get-a-quote" class="mobile-cta">Get a Quote</a></li>
+    </ul>
+  </div>
+</header>
+
+<script>
+  // Mega-menu open on hover & keyboard focus; respects reduced-motion via CSS
+  const triggers = document.querySelectorAll<HTMLElement>(".site-nav__item.has-menu");
+  triggers.forEach((item) => {
+    const link = item.querySelector<HTMLElement>(".site-nav__link");
+    const menu = item.querySelector<HTMLElement>(".mega-menu");
+    if (!link || !menu) return;
+    let openTimer: number | undefined;
+    let closeTimer: number | undefined;
+
+    const open = () => {
+      if (closeTimer) window.clearTimeout(closeTimer);
+      openTimer = window.setTimeout(() => {
+        menu.classList.add("is-open");
+        link.setAttribute("aria-expanded", "true");
+      }, 60);
+    };
+    const close = () => {
+      if (openTimer) window.clearTimeout(openTimer);
+      closeTimer = window.setTimeout(() => {
+        menu.classList.remove("is-open");
+        link.setAttribute("aria-expanded", "false");
+      }, 140);
+    };
+    item.addEventListener("mouseenter", open);
+    item.addEventListener("mouseleave", close);
+    item.addEventListener("focusin", open);
+    item.addEventListener("focusout", (e) => {
+      const next = e.relatedTarget as Node | null;
+      if (!next || !item.contains(next)) close();
+    });
+  });
+
+  // Mobile nav toggle
+  const toggle = document.querySelector<HTMLButtonElement>("[data-mobile-toggle]");
+  const mnav = document.querySelector<HTMLElement>("[data-mobile-nav]");
+  toggle?.addEventListener("click", () => {
+    const open = toggle.getAttribute("aria-expanded") === "true";
+    toggle.setAttribute("aria-expanded", String(!open));
+    if (mnav) {
+      if (open) {
+        mnav.setAttribute("hidden", "");
+      } else {
+        mnav.removeAttribute("hidden");
+      }
+    }
+  });
+
+  // Header scrim on scroll
+  const header = document.querySelector<HTMLElement>("[data-header]");
+  if (header) {
+    const onScroll = () => header.classList.toggle("is-scrolled", window.scrollY > 8);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+  }
+</script>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: var(--z-nav);
+    background: rgba(250, 250, 248, 0.92);
+    backdrop-filter: saturate(120%) blur(8px);
+    -webkit-backdrop-filter: saturate(120%) blur(8px);
+    border-bottom: 1px solid transparent;
+    transition: border-color var(--d-fast) var(--ease-out), background var(--d-fast) var(--ease-out);
+  }
+  .site-header.is-scrolled {
+    border-bottom-color: var(--c-line);
+    background: rgba(255, 255, 255, 0.96);
+  }
+  .site-header__bar {
+    display: grid;
+    grid-template-columns: auto 1fr auto auto;
+    align-items: center;
+    gap: var(--s-6);
+    height: 72px;
+  }
+  .site-nav__list {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    gap: var(--s-2);
+    justify-content: center;
+  }
+  .site-nav__item {
+    /* no position:relative — mega-menu must escape to the sticky header as its containing block */
+  }
+  .site-nav__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 10px 14px;
+    font-family: var(--ff-display);
+    font-weight: 600;
+    font-size: 0.9rem;
+    letter-spacing: var(--ls-snug);
+    color: var(--c-ink);
+    border-radius: var(--r-sm);
+    transition: color var(--d-fast) var(--ease-out);
+  }
+  .site-nav__link:hover,
+  .site-nav__link[data-active="true"] {
+    color: var(--c-accent);
+  }
+  /* Active underline is provided by .site-nav__link::after in motion.css */
+  .site-header__actions {
+    display: flex;
+    align-items: center;
+    gap: var(--s-4);
+    grid-column: 4;
+  }
+  .site-header__phone {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--ff-mono);
+    font-size: var(--t-small);
+    color: var(--c-ink);
+    white-space: nowrap;
+  }
+  .site-header__phone:hover { color: var(--c-accent); }
+
+  .site-header__menu-toggle {
+    display: none;
+    width: 40px;
+    height: 40px;
+    grid-column: 4;
+    align-self: center;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+  }
+  .site-header__menu-toggle span {
+    display: block;
+    width: 20px;
+    height: 2px;
+    background: var(--c-ink);
+    transition:
+      transform var(--d-base) var(--ease-out),
+      opacity var(--d-fast) var(--ease-out);
+    transform-origin: center;
+  }
+  .site-header__menu-toggle[aria-expanded="true"] span:nth-child(1) {
+    transform: translateY(6px) rotate(45deg);
+  }
+  .site-header__menu-toggle[aria-expanded="true"] span:nth-child(2) {
+    opacity: 0;
+  }
+  .site-header__menu-toggle[aria-expanded="true"] span:nth-child(3) {
+    transform: translateY(-6px) rotate(-45deg);
+  }
+
+  .site-mobile-nav {
+    border-top: 1px solid var(--c-line);
+    background: var(--c-bg-elevated);
+    padding: var(--s-3) var(--content-pad-x);
+    animation: mobile-slide-down 280ms var(--ease-out);
+  }
+  @keyframes mobile-slide-down {
+    from { opacity: 0; transform: translateY(-8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .site-mobile-nav[hidden] { display: none; }
+  .site-mobile-nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: var(--s-1);
+  }
+  .site-mobile-nav a {
+    display: block;
+    padding: var(--s-3);
+    font-family: var(--ff-display);
+    font-weight: 600;
+    color: var(--c-ink);
+    border-bottom: 1px solid var(--c-line-soft);
+    position: relative;
+    transition: padding-left var(--d-fast) var(--ease-out), color var(--d-fast) var(--ease-out);
+  }
+  .site-mobile-nav a:hover,
+  .site-mobile-nav a:focus-visible {
+    color: var(--c-accent);
+    padding-left: calc(var(--s-3) + 6px);
+  }
+  .site-mobile-nav .mobile-cta {
+    background: var(--c-accent);
+    color: var(--c-accent-ink);
+    margin-top: var(--s-2);
+    border-radius: var(--r-sm);
+    text-align: center;
+    border-bottom: none;
+  }
+
+  @media (max-width: 960px) {
+    .site-header__bar {
+      grid-template-columns: 1fr auto;
+      gap: var(--s-3);
+    }
+    .site-nav,
+    .site-header__actions {
+      display: none;
+    }
+    .site-header__menu-toggle {
+      display: flex;
+    }
+  }
+</style>

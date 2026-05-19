@@ -1,0 +1,184 @@
+---
+export const prerender = true;
+import BaseLayout from "@layouts/BaseLayout.astro";
+import Button from "@components/ui/Button.astro";
+import { SERVICES_BY_CATEGORY, SERVICE_CATEGORY_LABEL, type ServiceCategory } from "@lib/services";
+import { SITE } from "@lib/site";
+
+const groups: ServiceCategory[] = ["trailer", "facility", "managed"];
+---
+<BaseLayout
+  title={`Freight Services | ${SITE.name}`}
+  description="Every freight mode under one roof. Flatbed LTL, dry van, reefer, full truckload, transloading, cross-docking, warehousing, and freight brokerage — managed by one Atlanta team since 1970."
+>
+  <section class="services-hero section-tight section-bar" data-reveal>
+    <div class="container-content services-hero__inner reveal-stagger" data-reveal>
+      <p class="eyebrow">Services overview</p>
+      <h1 class="services-hero__title display">Every mode. One team.</h1>
+      <p class="services-hero__lede">
+        Twelve services, organized the way industrial buyers actually shop them —
+        by trailer, by facility, and by what we manage end-to-end.
+      </p>
+    </div>
+  </section>
+
+  {groups.map((g, gi) => (
+    <section class="services-group section">
+      <div class="container-content">
+        <header class="services-group__head">
+          <span class="mono services-group__num">0{gi + 1}</span>
+          <div>
+            <p class="eyebrow">{SERVICE_CATEGORY_LABEL[g]}</p>
+            <h2 class="services-group__title display">
+              {g === "trailer" && "Pick the right trailer."}
+              {g === "facility" && "Solve it at the dock."}
+              {g === "managed" && "Hand us the whole problem."}
+            </h2>
+          </div>
+        </header>
+
+        <ul class="services-group__list">
+          {SERVICES_BY_CATEGORY[g].map((s, i) => (
+            <li class="services-group__cell reveal" data-reveal style={`--reveal-delay: ${i * 50}ms`}>
+              <a href={`/services/${s.slug}`} class="link-arrow">
+                <div class="services-group__cell-head">
+                  <span class="mono services-group__cell-idx">{(i + 1).toString().padStart(2, "0")}</span>
+                  <h3 class="services-group__cell-title display">{s.title}</h3>
+                </div>
+                {s.equityLine && <p class="services-group__cell-equity">{s.equityLine}</p>}
+                <p class="services-group__cell-blurb">{s.blurb}</p>
+                <span class="services-group__cell-cta">Explore service <span class="arrow" aria-hidden="true">→</span></span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  ))}
+
+  <section class="section container-content services-cta reveal-stagger" data-reveal>
+    <h2 class="display services-cta__title">Not sure which service fits?</h2>
+    <p>Talk to a dispatcher. We'll match the right mode to your load — often in one call.</p>
+    <div class="services-cta__actions">
+      <Button href="/get-a-quote" size="lg">Get a Quote</Button>
+      <a class="mono" href={`tel:${SITE.phoneE164}`}>or call {SITE.phone}</a>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .services-hero { background: var(--c-bg-elevated); border-bottom: 1px solid var(--c-line); }
+  .services-hero__inner { max-width: 60ch; }
+  .services-hero__title { font-size: clamp(2.75rem, 5vw, 4.5rem); line-height: 1; margin-top: var(--s-3); }
+  .services-hero__lede { margin-top: var(--s-6); font-size: 1.125rem; color: var(--c-ink-muted); }
+
+  .services-group:nth-child(even) { background: var(--c-bg-elevated); }
+  .services-group__head {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: var(--s-6);
+    align-items: end;
+    padding-bottom: var(--s-10);
+  }
+  .services-group__num {
+    font-size: clamp(3rem, 5vw, 5rem);
+    font-weight: 700;
+    color: var(--c-line);
+    line-height: 0.85;
+    font-family: var(--ff-display);
+  }
+  .services-group__title { font-size: var(--t-h1); line-height: 1.02; margin-top: var(--s-2); max-width: 18ch; }
+
+  .services-group__list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--c-line);
+    border: 1px solid var(--c-line);
+  }
+  .services-group__cell {
+    background: var(--c-bg);
+    position: relative;
+    overflow: hidden;
+    transition: transform var(--d-base) var(--ease-out);
+  }
+  .services-group__cell::before {
+    content: "";
+    position: absolute;
+    inset: auto 0 0 0;
+    height: 2px;
+    background: var(--c-accent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform var(--d-base) var(--ease-out);
+    z-index: 2;
+  }
+  .services-group__cell:hover::before { transform: scaleX(1); }
+  .services-group__cell a {
+    display: grid;
+    grid-template-rows: auto auto 1fr auto;
+    gap: var(--s-3);
+    padding: var(--s-6);
+    color: var(--c-ink);
+    min-height: 240px;
+    height: 100%;
+    transition: background var(--d-fast) var(--ease-out);
+  }
+  .services-group__cell a:hover { background: var(--c-bg-elevated); }
+  .services-group__cell-idx {
+    transition: transform var(--d-base) var(--ease-out), color var(--d-fast) var(--ease-out);
+  }
+  .services-group__cell a:hover .services-group__cell-idx {
+    transform: translateX(-2px);
+    color: var(--c-accent-hover);
+  }
+  .services-group__num {
+    display: inline-block;
+    transition: color var(--d-base) var(--ease-out), transform var(--d-base) var(--ease-out);
+  }
+  .services-group__head:hover .services-group__num {
+    color: var(--c-accent);
+    transform: translateY(-2px);
+  }
+  .services-group__cell-head {
+    display: flex;
+    align-items: baseline;
+    gap: var(--s-3);
+  }
+  .services-group__cell-idx {
+    font-size: var(--t-eyebrow);
+    color: var(--c-accent);
+    letter-spacing: var(--ls-wider);
+  }
+  .services-group__cell-title { font-size: 1.5rem; line-height: 1.05; }
+  .services-group__cell-equity {
+    color: var(--c-accent);
+    font-family: var(--ff-display);
+    font-style: italic;
+    font-size: var(--t-small);
+  }
+  .services-group__cell-blurb { color: var(--c-ink-muted); font-size: var(--t-small); line-height: 1.5; }
+  .services-group__cell-cta {
+    font-family: var(--ff-display);
+    font-weight: 600;
+    color: var(--c-accent);
+    font-size: var(--t-small);
+    letter-spacing: var(--ls-snug);
+  }
+
+  .services-cta { text-align: center; display: grid; gap: var(--s-3); justify-items: center; }
+  .services-cta__title { font-size: var(--t-h2); margin-top: var(--s-3); }
+  .services-cta__actions {
+    margin-top: var(--s-4);
+    display: flex;
+    align-items: center;
+    gap: var(--s-5);
+  }
+
+  @media (max-width: 880px) {
+    .services-group__list { grid-template-columns: 1fr; }
+  }
+</style>

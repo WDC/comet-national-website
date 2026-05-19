@@ -1,0 +1,111 @@
+---
+export const prerender = true;
+import BaseLayout from "@layouts/BaseLayout.astro";
+import Button from "@components/ui/Button.astro";
+import { SERVICES } from "@lib/services";
+import { SITE } from "@lib/site";
+
+const popular = SERVICES.slice(0, 6);
+---
+<BaseLayout
+  title={`404 — Page not found | ${SITE.name}`}
+  description="The page you were looking for has moved. Browse our freight services or call our Atlanta team."
+  noindex
+>
+  <section class="nf section section-bar" data-reveal>
+    <div class="container-content nf__inner reveal-stagger" data-reveal>
+      <p class="eyebrow">404 · Page not found</p>
+      <h1 class="nf__title display">Wrong dock.</h1>
+      <p class="nf__lede">
+        The page you were looking for has moved or been retired. Try a service below,
+        or talk to a dispatcher.
+      </p>
+
+      <div class="nf__actions">
+        <Button href="/services" size="lg">Browse services</Button>
+        <Button href="/get-a-quote" variant="ghost" size="lg">Get a Quote</Button>
+        <a class="mono nf__phone" href={`tel:${SITE.phoneE164}`}>or call {SITE.phone}</a>
+      </div>
+
+      <div class="nf__popular">
+        <p class="eyebrow nf__pop-eyebrow">Popular services</p>
+        <ul class="nf__pop-list">
+          {popular.map((s, i) => (
+            <li class="reveal" data-reveal style={`--reveal-delay: ${i * 60}ms`}><a href={`/services/${s.slug}`} class="link-arrow"><span class="display">{s.title}</span><span>{s.blurb}</span><span class="arrow nf__pop-arrow" aria-hidden="true">→</span></a></li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .nf__inner { max-width: 920px; }
+  .nf__title { font-size: clamp(3rem, 7vw, 6rem); line-height: 0.95; margin-top: var(--s-3); animation: nf-pop 700ms var(--ease-out) backwards; }
+  @keyframes nf-pop {
+    from { opacity: 0; transform: scale(0.96); }
+    to   { opacity: 1; transform: none; }
+  }
+  .nf__lede { margin-top: var(--s-5); color: var(--c-ink-muted); font-size: 1.125rem; max-width: 50ch; }
+  .nf__actions {
+    margin-top: var(--s-8);
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--s-4);
+  }
+  .nf__phone { color: var(--c-ink-muted); letter-spacing: var(--ls-wider); text-transform: uppercase; font-size: var(--t-eyebrow); }
+  .nf__popular { margin-top: var(--s-16); }
+  .nf__pop-eyebrow { margin-bottom: var(--s-4); }
+  .nf__pop-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--c-line);
+    border: 1px solid var(--c-line);
+  }
+  .nf__pop-list li {
+    background: var(--c-bg);
+    position: relative;
+    overflow: hidden;
+    transition: transform var(--d-base) var(--ease-out);
+  }
+  .nf__pop-list li::before {
+    content: "";
+    position: absolute;
+    inset: auto 0 0 0;
+    height: 2px;
+    background: var(--c-accent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform var(--d-base) var(--ease-out);
+  }
+  .nf__pop-list li:hover::before { transform: scaleX(1); }
+  .nf__pop-list a {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-rows: auto auto;
+    column-gap: var(--s-3);
+    row-gap: var(--s-1);
+    padding: var(--s-5);
+    color: var(--c-ink);
+    transition: background var(--d-fast) var(--ease-out);
+  }
+  .nf__pop-list a:hover { background: var(--c-bg-elevated); }
+  .nf__pop-list .nf__pop-arrow {
+    grid-row: 1 / span 2;
+    grid-column: 2;
+    align-self: center;
+    color: var(--c-accent);
+    font-weight: 600;
+  }
+  .nf__pop-list span:first-child { font-size: 1rem; }
+  .nf__pop-list span:last-child { font-size: var(--t-small); color: var(--c-ink-muted); }
+
+  @media (max-width: 760px) {
+    .nf__pop-list { grid-template-columns: 1fr; }
+  }
+</style>

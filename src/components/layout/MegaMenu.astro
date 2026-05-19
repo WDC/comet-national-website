@@ -1,0 +1,139 @@
+---
+import { SERVICES_BY_CATEGORY, SERVICE_CATEGORY_LABEL, type ServiceCategory } from "@lib/services";
+
+const groups: ServiceCategory[] = ["trailer", "facility", "managed"];
+---
+<div
+  id="services-mega-menu"
+  class="mega-menu"
+  role="menu"
+  aria-labelledby="services-trigger"
+>
+  <div class="mega-menu__inner container-content">
+    {groups.map((g) => (
+      <div class="mega-menu__group">
+        <div class="eyebrow mega-menu__group-label">{SERVICE_CATEGORY_LABEL[g]}</div>
+        <ul class="mega-menu__list">
+          {SERVICES_BY_CATEGORY[g].map((s) => (
+            <li>
+              <a href={`/services/${s.slug}`} class="mega-menu__item" role="menuitem">
+                <span class="mega-menu__item-title">{s.title}</span>
+                <span class="mega-menu__item-blurb">{s.blurb}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    ))}
+    <div class="mega-menu__cta">
+      <div class="eyebrow">Need a partner?</div>
+      <p class="mega-menu__cta-line">One call, every mode. We solve the whole problem.</p>
+      <a href="/get-a-quote" class="mega-menu__cta-link">Get a quote →</a>
+    </div>
+  </div>
+</div>
+
+<style>
+  .mega-menu {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 100%;
+    background: var(--c-bg-elevated);
+    border-bottom: 1px solid var(--c-line);
+    box-shadow: 0 18px 32px -24px rgba(13, 17, 23, 0.18);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-4px);
+    transition:
+      opacity var(--d-fast) var(--ease-out),
+      transform var(--d-fast) var(--ease-out),
+      visibility var(--d-fast) linear;
+    z-index: var(--z-nav);
+  }
+  .mega-menu.is-open {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+  .mega-menu__inner {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr) 0.85fr;
+    gap: var(--s-10);
+    padding-block: var(--s-10);
+  }
+  .mega-menu__group-label {
+    margin-bottom: var(--s-4);
+  }
+  .mega-menu__list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: var(--s-1);
+  }
+  .mega-menu__item {
+    display: grid;
+    gap: 2px;
+    padding: var(--s-2) var(--s-2) var(--s-2) 0;
+    border-left: 2px solid transparent;
+    padding-left: var(--s-3);
+    margin-left: calc(-1 * var(--s-3));
+    border-radius: var(--r-sm);
+    transition: border-color var(--d-fast) var(--ease-out), background var(--d-fast) var(--ease-out);
+  }
+  .mega-menu__item:hover,
+  .mega-menu__item:focus-visible {
+    border-left-color: var(--c-accent);
+    background: var(--c-bg);
+    outline: none;
+  }
+  .mega-menu__item-title {
+    font-family: var(--ff-display);
+    font-weight: 600;
+    font-size: 1rem;
+    color: var(--c-ink);
+    letter-spacing: var(--ls-snug);
+  }
+  .mega-menu__item-blurb {
+    font-size: var(--t-small);
+    color: var(--c-ink-muted);
+    line-height: 1.45;
+  }
+  .mega-menu__cta {
+    padding: var(--s-6);
+    background: var(--c-navy-deep);
+    color: var(--c-bg);
+    border-radius: var(--r-md);
+    display: grid;
+    align-content: start;
+    gap: var(--s-3);
+  }
+  .mega-menu__cta .eyebrow {
+    color: var(--c-accent);
+  }
+  .mega-menu__cta-line {
+    font-family: var(--ff-display);
+    font-size: 1.2rem;
+    line-height: 1.25;
+    letter-spacing: var(--ls-snug);
+  }
+  .mega-menu__cta-link {
+    margin-top: auto;
+    color: var(--c-accent);
+    font-family: var(--ff-display);
+    font-weight: 600;
+    letter-spacing: var(--ls-snug);
+  }
+  .mega-menu__cta-link:hover {
+    color: var(--c-accent-hover);
+  }
+
+  @media (max-width: 900px) {
+    .mega-menu__inner {
+      grid-template-columns: 1fr;
+      gap: var(--s-6);
+      padding-block: var(--s-6);
+    }
+  }
+</style>

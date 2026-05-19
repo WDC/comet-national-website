@@ -1,0 +1,135 @@
+---
+export const prerender = true;
+import ServicePillarLayout from "@layouts/ServicePillarLayout.astro";
+import { getService } from "@lib/services";
+
+const service = getService("freight-brokerage")!;
+const description =
+  "Freight brokerage from a carrier that started as a carrier. One call, every mode — flatbed, van, reefer, hotshot, open deck. We solve the whole problem from Atlanta, not just the easy parts.";
+
+const relatedSlugs = ["full-truckload", "transloading", "warehousing-fulfillment"];
+---
+<ServicePillarLayout
+  service={service}
+  pageTitle="Freight Brokerage Atlanta | One Call, Every Mode | Comet National"
+  pageDescription={description}
+  relatedSlugs={relatedSlugs}
+>
+  {/* TODO: replace with custom animation (Phase 3) */}
+  <div slot="hero-art" class="art-placeholder" data-anim-placeholder="freight-brokerage">
+    <svg viewBox="0 0 380 180" aria-hidden="true">
+      <circle cx="80" cy="90" r="34" fill="none" stroke="var(--c-navy)" stroke-width="1.5" />
+      <circle cx="80" cy="90" r="14" fill="var(--c-accent)" />
+      <text x="80" y="148" text-anchor="middle" font-family="var(--ff-mono)" font-size="10" fill="var(--c-ink)" letter-spacing="0.12em">ONE CALL</text>
+      <g stroke="var(--c-navy)" stroke-width="1.25" fill="none">
+        <path d="M120 80 L200 50" />
+        <path d="M120 90 L200 90" />
+        <path d="M120 100 L200 130" />
+        <path d="M195 47 L200 50 L196 54" />
+        <path d="M195 87 L200 90 L196 93" />
+        <path d="M195 127 L200 130 L196 133" />
+      </g>
+      <g fill="var(--c-accent)" opacity="0.9">
+        <rect x="210" y="40" width="60" height="20" />
+        <rect x="210" y="80" width="60" height="20" />
+        <rect x="210" y="120" width="60" height="20" />
+      </g>
+      <g font-family="var(--ff-mono)" font-size="9" fill="var(--c-accent-ink)" letter-spacing="0.06em">
+        <text x="240" y="54" text-anchor="middle">FLATBED</text>
+        <text x="240" y="94" text-anchor="middle">DRY VAN</text>
+        <text x="240" y="134" text-anchor="middle">REEFER</text>
+      </g>
+      <g stroke="var(--c-navy)" stroke-width="1" fill="none" opacity="0.55">
+        <path d="M280 50 L340 50" />
+        <path d="M280 90 L340 90" />
+        <path d="M280 130 L340 130" />
+      </g>
+      <text x="200" y="20" text-anchor="middle" font-family="var(--ff-display)" font-size="13" font-weight="700" fill="var(--c-ink)">ONE CALL · EVERY MODE</text>
+    </svg>
+  </div>
+
+  <section data-reveal>
+    <p class="eyebrow">Who brokerage is for</p>
+    <h2 class="svc-h2 display">When the freight needs a mode we don't run that day.</h2>
+    <p class="svc-lede">
+      We start as a carrier, not as a broker — so we only quote brokerage
+      when it's the right answer. When we do, you get the same single
+      Atlanta touchpoint, the same dispatcher, and the same accountability
+      as a load on our own equipment.
+    </p>
+    <ul class="svc-bullets reveal-stagger" data-reveal>
+      <li>Vetted carrier network · FMCSA-current, insured to your standards</li>
+      <li>Same dispatcher start to finish · no hand-off to a "carrier rep"</li>
+      <li>Equipment confirmed before booking · no last-minute carrier swap</li>
+      <li>Full mode coverage · flatbed, van, reefer, hotshot, open deck</li>
+    </ul>
+  </section>
+
+  <section data-reveal>
+    <p class="eyebrow">What we broker</p>
+    <h2 class="svc-h2 display">Every trailer type. Every common lane.</h2>
+    <ul class="svc-grid reveal-stagger" data-reveal>
+      <li><strong class="display">Full Truckload</strong><span>Dry van, reefer, flatbed — coast-to-coast or regional, dedicated capacity.</span></li>
+      <li><strong class="display">Volume / Partial</strong><span>6–24 pallets when our own equipment isn't on the lane that week.</span></li>
+      <li><strong class="display">Open Deck</strong><span>Step-deck, double-drop, RGN, multi-axle — sourced and routed end-to-end.</span></li>
+      <li><strong class="display">Refrigerated</strong><span>Single-temp and multi-temp, with logged temperature data on the POD.</span></li>
+      <li><strong class="display">Hotshot</strong><span>Expedited capacity when we can't roll our own truck within the hour.</span></li>
+      <li><strong class="display">Multi-stop & Pool</strong><span>Multi-pickup or multi-delivery routes built to one freight cost.</span></li>
+    </ul>
+  </section>
+
+  <section data-reveal>
+    <p class="eyebrow">Why Comet for brokerage</p>
+    <h2 class="svc-h2 display">A carrier that brokers is not the same as a broker that pretends to be a carrier.</h2>
+    <p class="svc-lede">
+      Most freight brokers have never strapped a load. We have. That means
+      we know what equipment your freight actually needs — not what's
+      cheapest to book. We quote honestly, we book the right carrier, and
+      we own the load until it's signed for at the destination.
+    </p>
+  </section>
+</ServicePillarLayout>
+
+<style>
+  .art-placeholder svg { width: 100%; height: auto; display: block; }
+  .svc-h2 { font-size: var(--t-h2); line-height: 1.05; margin-top: var(--s-3); margin-bottom: var(--s-5); max-width: 30ch; }
+  .svc-lede { color: var(--c-ink-muted); max-width: 64ch; font-size: 1.0625rem; }
+
+  .svc-bullets {
+    list-style: none;
+    padding: 0;
+    margin: var(--s-6) 0 0;
+    display: grid;
+    gap: var(--s-3);
+  }
+  .svc-bullets li {
+    padding: var(--s-3) var(--s-4);
+    border-left: 2px solid var(--c-accent);
+    font-family: var(--ff-mono);
+    font-size: var(--t-small);
+    background: var(--c-bg-elevated);
+  }
+
+  .svc-grid {
+    list-style: none;
+    padding: 0;
+    margin: var(--s-6) 0 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--c-line);
+    border: 1px solid var(--c-line);
+  }
+  .svc-grid li {
+    background: var(--c-bg);
+    padding: var(--s-5);
+    display: grid;
+    gap: var(--s-2);
+  }
+  .svc-grid strong { font-size: 1.0625rem; color: var(--c-ink); }
+  .svc-grid span { font-size: var(--t-small); color: var(--c-ink-muted); line-height: 1.5; }
+
+  @media (max-width: 760px) {
+    .svc-grid { grid-template-columns: 1fr; }
+  }
+</style>

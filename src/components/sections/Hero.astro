@@ -1,0 +1,151 @@
+---
+import Button from "@components/ui/Button.astro";
+import FreightNetwork from "@components/animations/FreightNetwork.astro";
+import { SITE } from "@lib/site";
+---
+<section class="hero" aria-labelledby="hero-headline">
+  <div class="container-content hero__inner">
+    <div class="hero__copy">
+      <p class="eyebrow hero__eyebrow reveal" data-reveal>Atlanta · since 1970</p>
+      <h1 id="hero-headline" class="hero__headline display reveal" data-reveal style="--reveal-delay: 80ms">
+        We ship <span class="hero__accent">anything</span> to anywhere.
+      </h1>
+      <p class="hero__lede reveal" data-reveal style="--reveal-delay: 200ms">
+        Flatbed LTL, dry van, reefer, full truckload, transloading, and warehousing —
+        managed by one team out of Atlanta. You make one call.
+        <span class="hero__lede-accent">We solve the whole problem.</span>
+      </p>
+      <div class="hero__actions reveal" data-reveal style="--reveal-delay: 320ms">
+        <Button href="/get-a-quote" size="lg">Get a Quote</Button>
+        <Button href={`tel:${SITE.phoneE164}`} variant="ghost" size="lg">
+          <svg class="phone-icon" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
+            <path d="M3.654 1.328a.678.678 0 00-1.015-.063L1.605 2.3c-.483.484-.661 1.169-.45 1.77a17.6 17.6 0 004.168 6.608 17.6 17.6 0 006.608 4.168c.601.211 1.286.033 1.77-.45l1.034-1.034a.678.678 0 00-.063-1.015l-2.307-1.794a.678.678 0 00-.58-.122l-2.19.547a1.745 1.745 0 01-1.657-.459L5.482 8.157a1.745 1.745 0 01-.46-1.657l.548-2.19a.678.678 0 00-.122-.58L3.654 1.328z" fill="currentColor"/>
+          </svg>
+          <span>{SITE.phone}</span>
+        </Button>
+      </div>
+    </div>
+
+    <div class="hero__visual" aria-hidden="false">
+      <FreightNetwork />
+    </div>
+  </div>
+
+  <!-- Specs ribbon under hero -->
+  <div class="hero__specs container-content section-bar" data-reveal>
+    <span class="mono">[ 01 · WHAT WE DO ]</span>
+    <ul class="hero__spec-list reveal-stagger" data-reveal>
+      <li>Partial / Volume LTL</li>
+      <li>Full Truckload</li>
+      <li>Flatbed &amp; Open Deck</li>
+      <li>Refrigerated</li>
+      <li>Transload &amp; Cross-Dock</li>
+      <li>Distressed Load Recovery</li>
+    </ul>
+  </div>
+</section>
+
+<style>
+  .hero {
+    padding-top: clamp(2rem, 5vw, 4rem);
+    padding-bottom: clamp(2rem, 4vw, 3rem);
+    background:
+      linear-gradient(180deg, var(--c-bg) 0%, var(--c-bg) 90%, var(--c-bg-elevated) 100%);
+    overflow: hidden;
+  }
+  .hero__inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--s-12);
+    align-items: center;
+  }
+  .hero__copy { max-width: 38ch; }
+  .hero__eyebrow { margin-bottom: var(--s-5); }
+  .hero__headline {
+    font-size: var(--t-display);
+    line-height: 0.98;
+    letter-spacing: var(--ls-tight);
+    color: var(--c-ink);
+  }
+  .hero__accent {
+    color: var(--c-accent);
+    font-style: italic;
+    font-weight: 800;
+    position: relative;
+    display: inline-block;
+  }
+  .hero__accent::after {
+    content: "";
+    position: absolute;
+    left: 0; right: 0; bottom: 4px;
+    height: 0.12em;
+    background: var(--c-accent);
+    opacity: 0.22;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 1100ms var(--ease-out) 700ms;
+  }
+  .hero__headline.is-visible .hero__accent::after { transform: scaleX(1); }
+  .hero__spec-list li {
+    transition: color var(--d-fast) var(--ease-out), transform var(--d-fast) var(--ease-out);
+  }
+  .hero__spec-list li:hover { color: var(--c-accent); transform: translateY(-1px); }
+  .hero__lede {
+    margin-top: var(--s-6);
+    font-size: 1.125rem;
+    line-height: 1.55;
+    color: var(--c-ink-muted);
+    max-width: 44ch;
+  }
+  .hero__lede-accent {
+    color: var(--c-ink);
+    font-weight: 600;
+  }
+  .hero__actions {
+    margin-top: var(--s-8);
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--s-3);
+  }
+  .hero__visual {
+    position: relative;
+  }
+  .hero__specs {
+    margin-top: clamp(2rem, 5vw, 4rem);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--s-6);
+    padding-top: var(--s-6);
+    border-top: 1px solid var(--c-line);
+  }
+  .hero__specs > .mono {
+    font-size: var(--t-eyebrow);
+    letter-spacing: var(--ls-wider);
+    color: var(--c-ink-muted);
+  }
+  .hero__spec-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--s-4) var(--s-6);
+    font-family: var(--ff-mono);
+    font-size: var(--t-small);
+    color: var(--c-ink);
+  }
+  .hero__spec-list li::before {
+    content: "·";
+    color: var(--c-accent);
+    margin-right: var(--s-2);
+  }
+
+  @media (max-width: 960px) {
+    .hero__inner {
+      grid-template-columns: 1fr;
+      gap: var(--s-8);
+    }
+    .hero__visual { order: -1; }
+  }
+</style>

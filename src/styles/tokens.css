@@ -1,0 +1,111 @@
+/* ----------------------------------------------------------------------------
+ * Comet National — Design tokens
+ * Single source of truth. Tailwind v4 @theme references these custom properties.
+ * --------------------------------------------------------------------------- */
+
+:root {
+  /* Color — industrial palette */
+  --c-navy: #1a2332;
+  --c-navy-deep: #111824;
+  --c-charcoal: #2a2f3a;
+  --c-ink: #0d1117; /* near-black body text */
+  --c-ink-muted: #4b5563;
+  --c-ink-soft: #6b7280;
+  --c-line: #d4d8de;
+  --c-line-soft: #e6e8ec;
+  --c-bg: #fafaf8; /* near-white ground, slight warm cast */
+  --c-bg-elevated: #ffffff;
+  --c-bg-inverse: #0d1117;
+  --c-accent: #f5a623; /* safety amber */
+  --c-accent-hover: #ffb733;
+  --c-accent-ink: #1a1206; /* text on amber */
+  --c-warn: #c8331a; /* distressed-load red, used sparingly */
+  --c-success: #2f7d3b;
+
+  /* Type — fluid scale */
+  --t-display: clamp(2.75rem, 5vw + 1rem, 5.25rem);
+  --t-h1: clamp(2.25rem, 3vw + 1rem, 3.75rem);
+  --t-h2: clamp(1.625rem, 2vw + 0.75rem, 2.5rem);
+  --t-h3: clamp(1.25rem, 1vw + 0.75rem, 1.625rem);
+  --t-h4: 1.125rem;
+  --t-body: 1.0625rem;
+  --t-small: 0.875rem;
+  --t-mono: 0.875rem;
+  --t-eyebrow: 0.75rem; /* section numbers and labels */
+
+  /* Type families */
+  --ff-display: "Archivo Variable", "Archivo", system-ui, sans-serif;
+  --ff-body: "Inter Variable", "Inter", system-ui, sans-serif;
+  --ff-mono: "JetBrains Mono Variable", "JetBrains Mono", ui-monospace, monospace;
+
+  /* Line height */
+  --lh-tight: 1.05;
+  --lh-snug: 1.2;
+  --lh-base: 1.55;
+  --lh-relaxed: 1.7;
+
+  /* Letter spacing */
+  --ls-tight: -0.02em;
+  --ls-snug: -0.01em;
+  --ls-base: 0;
+  --ls-wide: 0.06em;
+  --ls-wider: 0.16em; /* eyebrows, mono labels */
+
+  /* Space — 4px base */
+  --s-0: 0;
+  --s-1: 0.25rem;
+  --s-2: 0.5rem;
+  --s-3: 0.75rem;
+  --s-4: 1rem;
+  --s-5: 1.25rem;
+  --s-6: 1.5rem;
+  --s-8: 2rem;
+  --s-10: 2.5rem;
+  --s-12: 3rem;
+  --s-16: 4rem;
+  --s-20: 5rem;
+  --s-24: 6rem;
+  --s-32: 8rem;
+  --s-40: 10rem;
+
+  /* Radii — sharp, industrial */
+  --r-sm: 2px;
+  --r-md: 4px;
+  --r-lg: 6px;
+  --r-pill: 999px;
+
+  /* Borders */
+  --bw-hair: 1px;
+  --bw-thick: 2px;
+
+  /* Layout */
+  --content-max: 80rem; /* 1280px */
+  --content-pad-x: clamp(1rem, 4vw, 2.5rem);
+
+  /* Motion */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-in: cubic-bezier(0.65, 0, 0.84, 0.35);
+  --d-fast: 200ms;
+  --d-base: 400ms;
+  --d-slow: 800ms;
+  --d-slower: 1600ms;
+
+  /* Z-index scale */
+  --z-base: 1;
+  --z-raised: 10;
+  --z-sticky: 100;
+  --z-nav: 200;
+  --z-modal: 1000;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+    scroll-behavior: auto !important;
+  }
+}

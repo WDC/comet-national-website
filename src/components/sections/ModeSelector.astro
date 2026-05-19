@@ -1,0 +1,141 @@
+---
+import TrailerMorph from "@components/animations/TrailerMorph.astro";
+import { SERVICES } from "@lib/services";
+
+// Card grid of all services — the "self-qualify fast" device from PLAN.md
+const featured = SERVICES.slice(0, 9);
+---
+<section class="modes section">
+  <div class="container-content">
+    <header class="modes__head">
+      <div>
+        <p class="eyebrow">02 · Modes</p>
+        <h2 class="modes__title display">Pick your freight. We do the rest.</h2>
+        <p class="modes__sub">
+          Every trailer, every facility service — under one roof. Hover a tile to see what fits.
+        </p>
+      </div>
+      <div class="modes__visual">
+        <TrailerMorph />
+      </div>
+    </header>
+
+    <ul class="modes__grid" data-reveal>
+      {featured.map((s, i) => (
+        <li class="modes__cell reveal" style={`--reveal-delay: ${i * 60}ms;`} data-reveal>
+          <a href={`/services/${s.slug}`} class="modes__cell-link link-arrow">
+            <span class="mono modes__cell-num">0{i + 1}</span>
+            <span class="modes__cell-title">{s.title}</span>
+            <span class="modes__cell-blurb">{s.blurb}</span>
+            <span class="modes__cell-cta">Explore <span class="arrow" aria-hidden="true">→</span></span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .modes__head {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: var(--s-10);
+    align-items: end;
+    padding-bottom: var(--s-12);
+    border-bottom: 1px solid var(--c-line);
+    margin-bottom: var(--s-10);
+  }
+  .modes__title {
+    font-size: var(--t-h1);
+    line-height: 1;
+    margin-top: var(--s-3);
+    max-width: 14ch;
+  }
+  .modes__sub {
+    margin-top: var(--s-5);
+    color: var(--c-ink-muted);
+    max-width: 42ch;
+  }
+
+  .modes__grid {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+    border-top: 1px solid var(--c-line);
+    border-left: 1px solid var(--c-line);
+  }
+  .modes__cell {
+    border-right: 1px solid var(--c-line);
+    border-bottom: 1px solid var(--c-line);
+    background: var(--c-bg);
+    transition: background var(--d-fast) var(--ease-out);
+    position: relative;
+    overflow: hidden;
+  }
+  .modes__cell::before {
+    content: "";
+    position: absolute;
+    inset: auto 0 0 0;
+    height: 2px;
+    background: var(--c-accent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform var(--d-base) var(--ease-out);
+    z-index: 1;
+  }
+  .modes__cell:hover { background: var(--c-bg-elevated); }
+  .modes__cell:hover::before { transform: scaleX(1); }
+  .modes__cell:hover .modes__cell-num { color: var(--c-accent); }
+  .modes__cell-num {
+    transition: color var(--d-fast) var(--ease-out);
+  }
+  .modes__cell-title {
+    transition: transform var(--d-fast) var(--ease-out);
+  }
+  .modes__cell:hover .modes__cell-title { transform: translateX(2px); }
+  .modes__cell-link {
+    display: grid;
+    grid-template-rows: auto auto 1fr auto;
+    gap: var(--s-3);
+    padding: var(--s-6);
+    min-height: 220px;
+    height: 100%;
+    color: var(--c-ink);
+  }
+  .modes__cell-num {
+    font-size: var(--t-eyebrow);
+    letter-spacing: var(--ls-wider);
+    color: var(--c-ink-muted);
+  }
+  .modes__cell-title {
+    font-family: var(--ff-display);
+    font-size: 1.5rem;
+    font-weight: 700;
+    line-height: 1.05;
+    letter-spacing: var(--ls-snug);
+  }
+  .modes__cell-blurb {
+    font-size: var(--t-small);
+    color: var(--c-ink-muted);
+    line-height: 1.5;
+  }
+  .modes__cell-cta {
+    font-family: var(--ff-display);
+    font-weight: 600;
+    font-size: var(--t-small);
+    letter-spacing: var(--ls-snug);
+    color: var(--c-accent);
+  }
+  .modes__cell:hover .modes__cell-cta { color: var(--c-accent-hover); }
+
+  @media (max-width: 960px) {
+    .modes__head { grid-template-columns: 1fr; gap: var(--s-6); }
+    .modes__grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 560px) {
+    .modes__grid { grid-template-columns: 1fr; }
+  }
+</style>

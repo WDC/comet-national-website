@@ -1,0 +1,63 @@
+---
+/**
+ * Prompt 6 — Transload mode change.
+ * Container → dock → van loop. Then dock → flatbed.
+ */
+---
+<div class="transload-viz" data-anim>
+  <svg viewBox="0 0 520 220" role="img" aria-label="Animated transloading flow: pallets moving from shipping container to dry van to flatbed">
+    <!-- Container (left) -->
+    <g transform="translate(20, 60)">
+      <rect width="140" height="100" fill="none" stroke="var(--c-navy)" stroke-width="1.5" />
+      <line x1="20" y1="0" x2="20" y2="100" stroke="var(--c-navy)" stroke-width="0.75" opacity="0.5" />
+      <line x1="40" y1="0" x2="40" y2="100" stroke="var(--c-navy)" stroke-width="0.75" opacity="0.5" />
+      <line x1="60" y1="0" x2="60" y2="100" stroke="var(--c-navy)" stroke-width="0.75" opacity="0.5" />
+      <text x="70" y="116" text-anchor="middle" font-family="var(--ff-mono)" font-size="10" fill="var(--c-ink-muted)" letter-spacing="0.12em">
+        CONTAINER
+      </text>
+    </g>
+
+    <!-- Dock (center) -->
+    <g transform="translate(180, 60)">
+      <rect width="160" height="100" fill="var(--c-line-soft)" stroke="var(--c-line)" stroke-width="1" />
+      <text x="80" y="116" text-anchor="middle" font-family="var(--ff-mono)" font-size="10" fill="var(--c-ink)" letter-spacing="0.12em">
+        ATLANTA DOCK
+      </text>
+    </g>
+
+    <!-- Van (right) -->
+    <g transform="translate(360, 60)">
+      <rect width="140" height="100" fill="none" stroke="var(--c-navy)" stroke-width="1.5" />
+      <rect x="120" y="20" width="14" height="60" fill="none" stroke="var(--c-navy)" stroke-width="0.75" />
+      <text x="70" y="116" text-anchor="middle" font-family="var(--ff-mono)" font-size="10" fill="var(--c-ink-muted)" letter-spacing="0.12em">
+        DRY VAN
+      </text>
+    </g>
+
+    <!-- Pallets in flow -->
+    <g class="pallet-flow" transform="translate(170, 102)">
+      <rect width="18" height="12" fill="var(--c-accent)" />
+      <rect width="18" height="12" fill="var(--c-accent)" />
+      <rect width="18" height="12" fill="var(--c-accent)" />
+      <rect width="18" height="12" fill="var(--c-accent)" />
+    </g>
+
+    <!-- Arrow hints -->
+    <g stroke="var(--c-ink-muted)" stroke-width="1" fill="none">
+      <path d="M168 110 L178 110 M174 106 L178 110 L174 114" />
+      <path d="M345 110 L355 110 M351 106 L355 110 L351 114" />
+    </g>
+
+    <!-- Label -->
+    <text x="260" y="40" text-anchor="middle" font-family="var(--ff-display)" font-size="14" font-weight="700" fill="var(--c-ink)" letter-spacing="-0.01em">
+      Container to van — same afternoon.
+    </text>
+  </svg>
+</div>
+
+<style>
+  .transload-viz svg { width: 100%; height: auto; display: block; }
+  @media (prefers-reduced-motion: reduce) {
+    .pallet-flow > * { animation: none !important; opacity: 1 !important; }
+  }
+</style>

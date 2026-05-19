@@ -1,0 +1,12 @@
+---
+import JsonLd from "./JsonLd.astro";
+import { serviceSchema, faqSchema, type ServiceSchemaInput, type FaqInput } from "@lib/schema";
+
+interface Props {
+  service: ServiceSchemaInput;
+  faq?: FaqInput["items"];
+}
+const { service, faq } = Astro.props;
+---
+<JsonLd data={serviceSchema(service)} />
+{faq && faq.length > 0 && <JsonLd data={faqSchema({ items: faq })} />}

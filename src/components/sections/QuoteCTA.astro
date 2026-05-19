@@ -1,0 +1,66 @@
+---
+import Button from "@components/ui/Button.astro";
+import { SITE } from "@lib/site";
+---
+<section class="quote-cta section section-bar" data-reveal>
+  <div class="container-content quote-cta__inner reveal-stagger" data-reveal>
+    <p class="eyebrow">09 · Get moving</p>
+    <h2 class="quote-cta__title display">
+      You make one call.<br/>
+      <span class="quote-cta__accent">We solve the whole problem.</span>
+    </h2>
+    <p class="quote-cta__body">
+      Tell us where it's going, when it has to be there, and what's on it.
+      We'll put the right trailer under it.
+    </p>
+    <div class="quote-cta__actions">
+      <Button href="/get-a-quote" size="lg">Get a Quote</Button>
+      <a class="quote-cta__phone display" href={`tel:${SITE.phoneE164}`}>
+        or call <span class="quote-cta__phone-num">{SITE.phone}</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .quote-cta__inner {
+    text-align: center;
+    display: grid;
+    justify-items: center;
+    gap: var(--s-5);
+  }
+  .quote-cta__title {
+    font-size: var(--t-display);
+    line-height: 0.98;
+    margin-top: var(--s-3);
+  }
+  .quote-cta__accent { color: var(--c-accent); }
+  .quote-cta__body {
+    color: var(--c-ink-muted);
+    max-width: 50ch;
+  }
+  .quote-cta__actions {
+    margin-top: var(--s-6);
+    display: flex;
+    gap: var(--s-6);
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .quote-cta__phone {
+    font-weight: 600;
+    font-size: 1rem;
+    color: var(--c-ink-muted);
+    letter-spacing: var(--ls-snug);
+  }
+  .quote-cta__phone-num {
+    color: var(--c-ink);
+    border-bottom: 1.5px solid var(--c-accent);
+    padding-bottom: 2px;
+    transition: color var(--d-fast) var(--ease-out), border-color var(--d-fast) var(--ease-out);
+  }
+  .quote-cta__phone:hover .quote-cta__phone-num {
+    color: var(--c-accent);
+    border-color: var(--c-accent-hover);
+  }
+</style>

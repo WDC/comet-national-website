@@ -1,0 +1,210 @@
+---
+export const prerender = true;
+import ServicePillarLayout from "@layouts/ServicePillarLayout.astro";
+import FlatbedLTLViz from "@components/animations/FlatbedLTLViz.astro";
+import { getService } from "@lib/services";
+
+const service = getService("flatbed-ltl")!;
+const description =
+  "Partial flatbed (Flatbed LTL) for pumps, big iron, generators, transformers, and raw materials. Pay only for the linear feet your freight occupies — not phantom density or full-trailer minimums. Atlanta-based since 1970.";
+
+const relatedSlugs = ["flatbed-open-deck", "volume-ltl", "transloading"];
+---
+<ServicePillarLayout
+  service={service}
+  pageTitle="Flatbed LTL Shipping | Partial Flatbed Carrier | Comet National"
+  pageDescription={description}
+  relatedSlugs={relatedSlugs}
+>
+  <FlatbedLTLViz slot="hero-art" />
+
+  <section data-reveal>
+    <p class="eyebrow">What we haul</p>
+    <h2 class="pillar-section__h2 display">Anything heavy, anything awkward.</h2>
+    <p class="pillar-section__lede">
+      The freight that doesn't fit a standard pallet, doesn't ride well in a van,
+      and doesn't deserve a full trailer minimum.
+    </p>
+    <ul class="cargo-grid reveal-stagger" data-reveal>
+      {[
+        "Industrial pumps",
+        "Construction equipment",
+        "Big iron & castings",
+        "Generators",
+        "Transformers",
+        "Tanks & vessels",
+        "Steel & raw materials",
+        "Pre-cast concrete",
+        "Scaffolding",
+        "HVAC units",
+        "Reinforced rebar",
+        "Lumber & treated wood",
+      ].map((item) => <li><span class="cargo-grid__tick">·</span>{item}</li>)}
+    </ul>
+  </section>
+
+  <section class="cost-trap" data-reveal>
+    <p class="eyebrow">Why Flatbed LTL — cost trap explainer</p>
+    <h2 class="pillar-section__h2 display">A $500 freight bill becomes $3,500. Here's how.</h2>
+    <p class="pillar-section__lede">
+      Standard LTL carriers price by density and minimum class. The moment your freight breaks 12 linear
+      feet or hits "exceeds 750 cubic feet," accessorials kick in: <strong>Density Minimum Charge</strong>,
+      <strong>Linear Foot Charge</strong>, <strong>Over-Dimensional Surcharge</strong>. Stack them up and
+      the quote you got isn't the bill you pay.
+    </p>
+    <div class="cost-trap__compare">
+      <article class="cost-trap__card">
+        <h3 class="display">Standard LTL <small>— the trap</small></h3>
+        <table>
+          <tbody>
+            <tr><th>Base rate</th><td class="mono">$500</td></tr>
+            <tr><th>Density Minimum Charge</th><td class="mono">+ $1,400</td></tr>
+            <tr><th>Linear Foot Charge (16′)</th><td class="mono">+ $1,200</td></tr>
+            <tr><th>Over-dimensional surcharge</th><td class="mono">+ $400</td></tr>
+            <tr><th>What you actually pay</th><td class="mono cost-trap__final">$3,500</td></tr>
+          </tbody>
+        </table>
+      </article>
+      <article class="cost-trap__card cost-trap__card--ours">
+        <h3 class="display">Comet Flatbed LTL <small>— pay the space</small></h3>
+        <table>
+          <tbody>
+            <tr><th>Linear feet quoted</th><td class="mono">16 ft</td></tr>
+            <tr><th>Per-foot rate</th><td class="mono">flat</td></tr>
+            <tr><th>Accessorials</th><td class="mono">none for size</td></tr>
+            <tr><th>What you actually pay</th><td class="mono cost-trap__final">the quote</td></tr>
+          </tbody>
+        </table>
+      </article>
+    </div>
+    <p class="cost-trap__note mono">
+      No phantom density. No surprise linear-foot lookup. The number you get is the number you pay.
+    </p>
+  </section>
+</ServicePillarLayout>
+
+<style>
+  .pillar-section__h2 {
+    font-size: var(--t-h2);
+    line-height: 1.05;
+    margin-top: var(--s-3);
+    margin-bottom: var(--s-5);
+    max-width: 24ch;
+  }
+  .pillar-section__lede {
+    color: var(--c-ink-muted);
+    max-width: 64ch;
+    font-size: 1.0625rem;
+    margin-bottom: var(--s-8);
+  }
+  .cargo-grid {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--s-3);
+  }
+  .cargo-grid li {
+    padding: var(--s-3) var(--s-4);
+    border: 1px solid var(--c-line);
+    font-family: var(--ff-mono);
+    font-size: var(--t-small);
+    color: var(--c-ink);
+    transition:
+      border-color var(--d-fast) var(--ease-out),
+      background var(--d-fast) var(--ease-out),
+      transform var(--d-fast) var(--ease-out);
+  }
+  .cargo-grid li:hover {
+    border-color: var(--c-accent);
+    background: var(--c-bg-elevated);
+    transform: translateY(-1px);
+  }
+  .cargo-grid__tick {
+    color: var(--c-accent);
+    margin-right: var(--s-2);
+    font-weight: bold;
+    transition: transform var(--d-fast) var(--ease-out);
+    display: inline-block;
+  }
+  .cargo-grid li:hover .cargo-grid__tick { transform: scale(1.5); }
+
+  .cost-trap__compare {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--s-4);
+    margin-top: var(--s-6);
+  }
+  .cost-trap__card {
+    background: var(--c-bg-elevated);
+    border: 1px solid var(--c-line);
+    padding: var(--s-6);
+    transition: transform var(--d-base) var(--ease-out), box-shadow var(--d-base) var(--ease-out);
+  }
+  .cost-trap__card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 24px -16px rgba(13, 17, 23, 0.18);
+  }
+  .cost-trap__card tr {
+    transition: background var(--d-fast) var(--ease-out);
+  }
+  .cost-trap__card tr:hover { background: rgba(13, 17, 23, 0.03); }
+  .cost-trap__card--ours tr:hover { background: rgba(255, 255, 255, 0.04); }
+  .cost-trap__final {
+    transition: transform var(--d-base) var(--ease-out);
+  }
+  .cost-trap__card:hover .cost-trap__final {
+    transform: scale(1.06);
+  }
+  .cost-trap__card--ours {
+    background: var(--c-navy-deep);
+    color: var(--c-bg);
+    border-color: var(--c-navy-deep);
+  }
+  .cost-trap__card h3 {
+    font-size: 1.25rem;
+    margin-bottom: var(--s-4);
+    color: var(--c-ink);
+  }
+  .cost-trap__card--ours h3 { color: var(--c-bg); }
+  .cost-trap__card h3 small {
+    font-size: 0.8em;
+    font-weight: 500;
+    color: var(--c-ink-muted);
+    margin-left: 6px;
+  }
+  .cost-trap__card--ours h3 small { color: rgba(255,255,255,0.6); }
+  .cost-trap__card table { width: 100%; border-collapse: collapse; }
+  .cost-trap__card th, .cost-trap__card td {
+    padding: var(--s-2) 0;
+    border-bottom: 1px solid var(--c-line-soft);
+    text-align: left;
+    font-size: var(--t-small);
+    font-weight: 500;
+  }
+  .cost-trap__card td { text-align: right; }
+  .cost-trap__card--ours th, .cost-trap__card--ours td {
+    border-color: rgba(255,255,255,0.1);
+    color: rgba(255,255,255,0.85);
+  }
+  .cost-trap__final {
+    font-size: 1.25rem !important;
+    font-weight: 700 !important;
+    color: var(--c-warn);
+  }
+  .cost-trap__card--ours .cost-trap__final { color: var(--c-accent); }
+  .cost-trap__note {
+    margin-top: var(--s-6);
+    color: var(--c-ink-muted);
+    text-align: center;
+    letter-spacing: var(--ls-wider);
+    text-transform: uppercase;
+    font-size: var(--t-eyebrow);
+  }
+
+  @media (max-width: 760px) {
+    .cargo-grid { grid-template-columns: 1fr 1fr; }
+    .cost-trap__compare { grid-template-columns: 1fr; }
+  }
+</style>

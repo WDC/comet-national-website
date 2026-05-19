@@ -1,0 +1,174 @@
+---
+import { INDUSTRIES } from "@lib/services";
+---
+<section class="industries section">
+  <div class="container-content">
+    <header class="industries__head">
+      <div>
+        <p class="eyebrow">04 · Industries</p>
+        <h2 class="industries__title display">Built around how you buy freight.</h2>
+      </div>
+      <p class="industries__sub">
+        We recombine our services around the way construction GMs, plant managers, distributors,
+        and equipment dealers actually move loads. Pick yours.
+      </p>
+    </header>
+
+    <ul class="industries__grid">
+      {INDUSTRIES.map((ind, i) => (
+        <li class="industries__cell reveal" data-reveal style={`--reveal-delay: ${i * 80}ms`}>
+          <a href={`/industries/${ind.slug}`} class="industries__cell-link">
+            <div class="industries__art">
+              <svg viewBox="0 0 80 80" aria-hidden="true">
+                {ind.slug === "construction" && (
+                  <g stroke="currentColor" stroke-width="1.5" fill="none">
+                    <path d="M10 70 L70 70" />
+                    <rect x="18" y="40" width="20" height="30" />
+                    <rect x="42" y="28" width="22" height="42" />
+                    <line x1="22" y1="40" x2="22" y2="70" />
+                    <line x1="28" y1="40" x2="28" y2="70" />
+                    <line x1="34" y1="40" x2="34" y2="70" />
+                    <line x1="42" y1="40" x2="64" y2="40" />
+                    <line x1="42" y1="52" x2="64" y2="52" />
+                    <line x1="42" y1="64" x2="64" y2="64" />
+                    <path d="M14 40 L8 16 L18 16" />
+                    <circle cx="8" cy="16" r="2" fill="currentColor"/>
+                  </g>
+                )}
+                {ind.slug === "manufacturing-industrial" && (
+                  <g stroke="currentColor" stroke-width="1.5" fill="none">
+                    <path d="M8 70 L72 70" />
+                    <path d="M12 70 L12 38 L26 48 L26 30 L40 40 L40 22 L54 32 L54 14 L72 26 L72 70" />
+                    <circle cx="18" cy="56" r="2" fill="currentColor"/>
+                    <circle cx="34" cy="56" r="2" fill="currentColor"/>
+                    <circle cx="48" cy="56" r="2" fill="currentColor"/>
+                    <circle cx="62" cy="56" r="2" fill="currentColor"/>
+                  </g>
+                )}
+                {ind.slug === "building-materials" && (
+                  <g stroke="currentColor" stroke-width="1.5" fill="none">
+                    <rect x="14" y="32" width="52" height="36" />
+                    <line x1="14" y1="44" x2="66" y2="44" />
+                    <line x1="14" y1="56" x2="66" y2="56" />
+                    <line x1="40" y1="32" x2="40" y2="68" />
+                    <path d="M14 32 L26 18 L66 18 L66 32" />
+                  </g>
+                )}
+                {ind.slug === "machinery-equipment" && (
+                  <g stroke="currentColor" stroke-width="1.5" fill="none">
+                    <rect x="18" y="38" width="36" height="18" />
+                    <path d="M54 44 L66 44 L66 56 L54 56" />
+                    <circle cx="26" cy="62" r="6" />
+                    <circle cx="44" cy="62" r="6" />
+                    <line x1="18" y1="38" x2="22" y2="30" />
+                    <line x1="34" y1="38" x2="34" y2="30" />
+                    <line x1="22" y1="30" x2="34" y2="30" />
+                  </g>
+                )}
+              </svg>
+            </div>
+            <div class="industries__cell-body">
+              <h3 class="industries__cell-title">{ind.title}</h3>
+              <p class="industries__cell-blurb">{ind.blurb}</p>
+              <span class="industries__cell-cta">See how <span class="arrow" aria-hidden="true">→</span></span>
+            </div>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .industries__head {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: var(--s-10);
+    align-items: end;
+    padding-bottom: var(--s-12);
+  }
+  .industries__title {
+    font-size: var(--t-h1);
+    line-height: 1;
+    margin-top: var(--s-3);
+    max-width: 18ch;
+  }
+  .industries__sub {
+    color: var(--c-ink-muted);
+    max-width: 42ch;
+  }
+
+  .industries__grid {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--s-4);
+  }
+  .industries__cell {
+    background: var(--c-bg-elevated);
+    border: 1px solid var(--c-line);
+    transition:
+      border-color var(--d-fast) var(--ease-out),
+      transform var(--d-base) var(--ease-out),
+      box-shadow var(--d-base) var(--ease-out);
+  }
+  .industries__cell:hover {
+    border-color: var(--c-ink);
+    transform: translateY(-3px);
+    box-shadow: 0 12px 26px -18px rgba(13, 17, 23, 0.22);
+  }
+  .industries__cell-link {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    gap: var(--s-5);
+    padding: var(--s-6);
+    height: 100%;
+    color: var(--c-ink);
+  }
+  .industries__art {
+    width: 56px;
+    height: 56px;
+    color: var(--c-accent);
+    transition: transform var(--d-base) var(--ease-out), color var(--d-fast) var(--ease-out);
+  }
+  .industries__cell:hover .industries__art {
+    transform: scale(1.06) rotate(-2deg);
+    color: var(--c-accent-hover);
+  }
+  .industries__art svg { width: 100%; height: 100%; display: block; }
+  .industries__art svg g { transition: stroke-width var(--d-base) var(--ease-out); }
+  .industries__cell:hover .industries__art svg g { stroke-width: 2; }
+  .industries__cell-body {
+    display: grid;
+    gap: var(--s-2);
+    align-content: end;
+  }
+  .industries__cell-title {
+    font-size: 1.375rem;
+    line-height: 1.05;
+    letter-spacing: var(--ls-snug);
+  }
+  .industries__cell-blurb {
+    font-size: var(--t-small);
+    color: var(--c-ink-muted);
+    line-height: 1.5;
+  }
+  .industries__cell-cta {
+    margin-top: var(--s-2);
+    color: var(--c-accent);
+    font-family: var(--ff-display);
+    font-weight: 600;
+    font-size: var(--t-small);
+    letter-spacing: var(--ls-snug);
+  }
+
+  @media (max-width: 960px) {
+    .industries__head { grid-template-columns: 1fr; gap: var(--s-4); }
+    .industries__grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 560px) {
+    .industries__grid { grid-template-columns: 1fr; }
+  }
+</style>

@@ -1,0 +1,107 @@
+---
+export const prerender = true;
+import IndustryLayout from "@layouts/IndustryLayout.astro";
+import MaterialsStack from "@components/animations/MaterialsStack.astro";
+import { INDUSTRIES } from "@lib/services";
+
+const industry = INDUSTRIES.find((i) => i.slug === "building-materials")!;
+const description =
+  "Building-materials freight from an Atlanta carrier. Partial flatbed for long product, dry van for boxed, and warehouse staging for seasonal swings. Distributor-friendly billing, single-touchpoint dispatch.";
+---
+<IndustryLayout
+  industry={industry}
+  pageTitle="Building Materials Freight Shipping | Distributor Logistics | Comet National"
+  pageDescription={description}
+>
+  <MaterialsStack slot="hero-art" />
+
+  <section data-reveal>
+    <p class="eyebrow">What you call us for</p>
+    <h2 class="ind-h2 display">The distributor logistics problems that shape the season.</h2>
+    <p class="ind-lede">
+      Branches that need replenishment on a weekly cadence. Pre-season buys
+      that have to land somewhere until the contractor walks in. Long product
+      that LTL carriers murder on linear-foot accessorials. Here's how we
+      handle each.
+    </p>
+    <ul class="ind-grid reveal-stagger" data-reveal>
+      {industry.challenges?.map(({ challenge, answer }) => (
+        <li>
+          <strong class="display">{challenge}</strong>
+          <span>{answer}</span>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <section data-reveal>
+    <p class="eyebrow">What we move</p>
+    <h2 class="ind-h2 display">From pre-hung doors to fasteners — the dealer's shelf.</h2>
+    <p class="ind-lede">
+      Anything that ends up in a branch or on a contractor's truck. Mixed
+      pallets, long product, fragile glazing, and the seasonal buys that
+      have to sit somewhere until the calendar turns.
+    </p>
+    <ul class="ind-cargo reveal-stagger" data-reveal>
+      {industry.cargoExamples?.map((item) => (
+        <li><span class="ind-cargo__tick">·</span>{item}</li>
+      ))}
+    </ul>
+  </section>
+
+  <section data-reveal>
+    <p class="eyebrow">Why Comet for building materials</p>
+    <h2 class="ind-h2 display">Freight as a competitive edge — not just overhead.</h2>
+    <p class="ind-lede">{industry.whyComet}</p>
+  </section>
+</IndustryLayout>
+
+<style>
+  .ind-h2 { font-size: var(--t-h2); line-height: 1.05; margin-top: var(--s-3); margin-bottom: var(--s-5); max-width: 26ch; }
+  .ind-lede { color: var(--c-ink-muted); max-width: 64ch; font-size: 1.0625rem; line-height: 1.55; }
+
+  .ind-grid {
+    list-style: none;
+    padding: 0;
+    margin: var(--s-6) 0 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--c-line);
+    border: 1px solid var(--c-line);
+  }
+  .ind-grid li {
+    background: var(--c-bg);
+    padding: var(--s-5);
+    display: grid;
+    gap: var(--s-2);
+  }
+  .ind-grid strong { font-size: 1.0625rem; color: var(--c-ink); }
+  .ind-grid span { font-size: var(--t-small); color: var(--c-ink-muted); line-height: 1.5; }
+
+  .ind-cargo {
+    list-style: none;
+    padding: 0;
+    margin: var(--s-6) 0 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--s-3);
+  }
+  .ind-cargo li {
+    padding: var(--s-3) var(--s-4);
+    border: 1px solid var(--c-line);
+    font-family: var(--ff-mono);
+    font-size: var(--t-small);
+    color: var(--c-ink);
+  }
+  .ind-cargo__tick {
+    color: var(--c-accent);
+    margin-right: var(--s-2);
+    font-weight: bold;
+  }
+
+  @media (max-width: 760px) {
+    .ind-grid { grid-template-columns: 1fr; }
+    .ind-cargo { grid-template-columns: 1fr 1fr; }
+  }
+</style>

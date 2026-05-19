@@ -1,0 +1,104 @@
+---
+export const prerender = true;
+import ServicePillarLayout from "@layouts/ServicePillarLayout.astro";
+import TransloadFlow from "@components/animations/TransloadFlow.astro";
+import { getService } from "@lib/services";
+
+const service = getService("transloading")!;
+const description =
+  "Transloading services at our Atlanta facility. Container to van, flatbed to pup, or van to hotshot — fast mode changes when the original trailer can't finish the job. 24/7 dispatch.";
+
+const relatedSlugs = ["cross-docking", "distressed-load-recovery", "warehousing-fulfillment"];
+---
+<ServicePillarLayout
+  service={service}
+  pageTitle="Transloading Services Atlanta | Container to Van, Flatbed | Comet National"
+  pageDescription={description}
+  relatedSlugs={relatedSlugs}
+>
+  <TransloadFlow slot="hero-art" />
+
+  <section data-reveal>
+    <p class="eyebrow">What transloading solves</p>
+    <h2 class="t-h2 display">When the trailer the freight came on can't finish the trip.</h2>
+    <p class="t-lede">
+      A container hits the port, but your delivery is two states inland. A flatbed
+      shows up with a load that can't unload at the customer's dock. A van loaded
+      in California needs to finish on a hotshot to make a Friday deadline.
+      That's transloading — and we do it at our Lilburn dock the same day.
+    </p>
+  </section>
+
+  <section data-reveal>
+    <p class="eyebrow">Common mode changes</p>
+    <h2 class="t-h2 display">Container to van, flatbed to pup, van to hotshot.</h2>
+    <ul class="modes-grid reveal-stagger" data-reveal>
+      <li><strong class="display">Container → Dry Van</strong><span>Port-to-inland deliveries when the container can't go to the dock.</span></li>
+      <li><strong class="display">Container → Flatbed</strong><span>Industrial freight unboxed at the dock and re-secured for open-deck transport.</span></li>
+      <li><strong class="display">Flatbed → Dry Van</strong><span>Weather-sensitive freight switched to enclosed for the last leg.</span></li>
+      <li><strong class="display">Flatbed → Pup Trailer</strong><span>Splitting a full flatbed for jobsite access constraints.</span></li>
+      <li><strong class="display">Dry Van → Hotshot</strong><span>Late-stage expediting when a deadline tightens.</span></li>
+      <li><strong class="display">Multi-mode splits</strong><span>One inbound, multiple outbound — different destinations, different trailers.</span></li>
+    </ul>
+  </section>
+
+  <section data-reveal>
+    <p class="eyebrow">Why Comet for transloading</p>
+    <h2 class="t-h2 display">One Atlanta dock. One team. Every paperwork format.</h2>
+    <p class="t-lede">
+      We've been the transload everyone-else-calls since 1970. Same-day mode changes,
+      cargo-specific securement (chains, straps, banding, shrink-wrap), POD reissue,
+      and clean weight tickets. When disaster strikes, we're already on the dock.
+    </p>
+  </section>
+</ServicePillarLayout>
+
+<style>
+  .t-h2 { font-size: var(--t-h2); line-height: 1.05; margin-top: var(--s-3); margin-bottom: var(--s-5); max-width: 22ch; }
+  .t-lede { color: var(--c-ink-muted); max-width: 64ch; font-size: 1.0625rem; }
+
+  .modes-grid {
+    list-style: none;
+    padding: 0;
+    margin: var(--s-6) 0 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--c-line);
+    border: 1px solid var(--c-line);
+  }
+  .modes-grid li {
+    background: var(--c-bg);
+    padding: var(--s-5);
+    display: grid;
+    gap: var(--s-2);
+    position: relative;
+    overflow: hidden;
+    transition: background var(--d-fast) var(--ease-out), transform var(--d-base) var(--ease-out);
+  }
+  .modes-grid li::before {
+    content: "";
+    position: absolute;
+    inset: auto 0 0 0;
+    height: 2px;
+    background: var(--c-accent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform var(--d-base) var(--ease-out);
+  }
+  .modes-grid li:hover {
+    background: var(--c-bg-elevated);
+  }
+  .modes-grid li:hover::before { transform: scaleX(1); }
+  .modes-grid strong {
+    transition: transform var(--d-fast) var(--ease-out);
+    display: inline-block;
+  }
+  .modes-grid li:hover strong { transform: translateX(3px); color: var(--c-accent); }
+  .modes-grid strong { font-size: 1.0625rem; color: var(--c-ink); }
+  .modes-grid span { font-size: var(--t-small); color: var(--c-ink-muted); line-height: 1.5; }
+
+  @media (max-width: 760px) {
+    .modes-grid { grid-template-columns: 1fr; }
+  }
+</style>

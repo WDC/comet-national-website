@@ -1,0 +1,120 @@
+---
+export const prerender = true;
+import BaseLayout from "@layouts/BaseLayout.astro";
+import QuoteForm from "@components/ui/QuoteForm.astro";
+import { SITE } from "@lib/site";
+---
+<BaseLayout
+  title={`Get a Freight Quote | ${SITE.name}`}
+  description="Get a fast freight quote from Comet National. Flatbed LTL, full truckload, transloading, and more. Atlanta-based since 1970. Quote requests answered within one business hour."
+>
+  <section class="quote-page section-tight section-bar" data-reveal>
+    <div class="container-content quote-page__inner">
+      <div class="reveal-stagger" data-reveal>
+        <p class="eyebrow">Step 01 · Tell us about the load</p>
+        <h1 class="quote-page__title display">Get a quote.</h1>
+        <p class="quote-page__lede">
+          Two minutes of typing buys you the right trailer for your freight.
+          We answer every request within one business hour.
+        </p>
+      </div>
+
+      <div class="quote-page__grid">
+        <QuoteForm />
+
+        <aside class="quote-page__aside reveal" data-reveal style="--reveal-delay: 200ms">
+          <div class="quote-page__panel">
+            <p class="eyebrow">Or call dispatch</p>
+            <a class="quote-page__phone display" href={`tel:${SITE.phoneE164}`}>{SITE.phone}</a>
+            <p class="mono quote-page__small">Mon–Fri · 8a–5p ET</p>
+            <p class="mono quote-page__small">24/7 dispatch for distressed loads</p>
+          </div>
+
+          <div class="quote-page__panel quote-page__panel--alt">
+            <p class="eyebrow">What you'll get back</p>
+            <ul class="quote-page__bullets">
+              <li>A direct dispatch contact (name + cell)</li>
+              <li>Rate broken out — no phantom accessorials</li>
+              <li>Multiple mode options when it makes sense</li>
+              <li>Honest timing, not optimistic timing</li>
+            </ul>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .quote-page__inner { max-width: 1180px; }
+  .quote-page__title { font-size: clamp(2.75rem, 5vw, 4.5rem); line-height: 1; margin-top: var(--s-3); }
+  .quote-page__lede { margin-top: var(--s-5); color: var(--c-ink-muted); max-width: 60ch; font-size: 1.125rem; }
+  .quote-page__grid {
+    margin-top: var(--s-12);
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: var(--s-12);
+    align-items: start;
+  }
+  .quote-page__aside { display: grid; gap: var(--s-4); position: sticky; top: 100px; }
+  .quote-page__panel {
+    background: var(--c-bg-elevated);
+    border: 1px solid var(--c-line);
+    padding: var(--s-6);
+    display: grid;
+    gap: var(--s-2);
+    transition: transform var(--d-base) var(--ease-out), border-color var(--d-fast) var(--ease-out), box-shadow var(--d-base) var(--ease-out);
+  }
+  .quote-page__panel:hover {
+    transform: translateY(-2px);
+    border-color: var(--c-ink);
+    box-shadow: 0 10px 22px -16px rgba(13, 17, 23, 0.18);
+  }
+  .quote-page__panel--alt:hover { background: var(--c-navy); border-color: var(--c-navy); }
+  .quote-page__phone {
+    transition: color var(--d-fast) var(--ease-out), border-color var(--d-fast) var(--ease-out);
+  }
+  .quote-page__phone:hover {
+    color: var(--c-accent);
+    border-color: var(--c-accent-hover);
+  }
+  .quote-page__bullets li {
+    transition: padding-left var(--d-fast) var(--ease-out);
+  }
+  .quote-page__bullets li:hover { padding-left: 4px; }
+  .quote-page__panel--alt { background: var(--c-navy-deep); color: var(--c-bg); border-color: var(--c-navy-deep); }
+  .quote-page__panel--alt .eyebrow { color: var(--c-accent); }
+  .quote-page__phone {
+    font-size: 1.875rem;
+    color: var(--c-ink);
+    font-weight: 700;
+    line-height: 1;
+    border-bottom: 2px solid var(--c-accent);
+    padding-bottom: 4px;
+    width: max-content;
+  }
+  .quote-page__small {
+    color: var(--c-ink-muted);
+    font-size: var(--t-eyebrow);
+    letter-spacing: var(--ls-wide);
+  }
+  .quote-page__panel--alt .quote-page__small { color: rgba(255,255,255,0.6); }
+  .quote-page__bullets {
+    list-style: none;
+    padding: 0;
+    margin: var(--s-2) 0 0;
+    display: grid;
+    gap: var(--s-2);
+    font-size: var(--t-small);
+  }
+  .quote-page__bullets li::before {
+    content: "·";
+    color: var(--c-accent);
+    margin-right: 8px;
+    font-weight: bold;
+  }
+  @media (max-width: 880px) {
+    .quote-page__grid { grid-template-columns: 1fr; }
+    .quote-page__aside { position: static; }
+  }
+</style>

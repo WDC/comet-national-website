@@ -1,0 +1,122 @@
+---
+// Three real quotes carried over from the legacy sites (per PLAN.md §3 — keep verbatim).
+// Names lightly anonymized when initials only; replace with full attribution in Sanity.
+const quotes = [
+  {
+    body: "I've shipped freight all over the country with Comet for years. Their team handles partial flatbed loads cleaner and cheaper than any LTL carrier I've quoted. They actually answer the phone.",
+    author: "B. Waite",
+    role: "Operations Manager",
+    company: "Industrial supplier, Southeast",
+  },
+  {
+    body: "When a container showed up at the wrong port we had 36 hours to get the freight to the jobsite. Comet transloaded it the same afternoon and split it across two trucks. They saved a multi-million-dollar program.",
+    author: "L. Villalobos",
+    role: "Logistics Coordinator",
+    company: "Construction GC",
+  },
+  {
+    body: "Our broker dropped a distressed load on us at 9 PM. Comet had a crew at the dock by midnight, restacked and rewrapped everything, and got it out by morning. That's the kind of partner we needed.",
+    author: "R. Cabello",
+    role: "Plant Manager",
+    company: "Building materials manufacturer",
+  },
+];
+---
+<section class="testimonials section">
+  <div class="container-content">
+    <header class="testimonials__head">
+      <p class="eyebrow">07 · Customers</p>
+      <h2 class="testimonials__title display">In their words.</h2>
+    </header>
+
+    <ul class="testimonials__list">
+      {quotes.map((q, i) => (
+        <li class="testimonials__item reveal" data-reveal style={`--reveal-delay: ${i * 120}ms`}>
+          <span class="testimonials__quote-mark" aria-hidden="true">"</span>
+          <blockquote class="testimonials__body">
+            <p>{q.body}</p>
+          </blockquote>
+          <footer class="testimonials__attr">
+            <div class="testimonials__author display">{q.author}</div>
+            <div class="testimonials__role mono">{q.role} · {q.company}</div>
+          </footer>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .testimonials__head {
+    margin-bottom: var(--s-12);
+  }
+  .testimonials__title {
+    font-size: var(--t-h1);
+    line-height: 1;
+    margin-top: var(--s-3);
+  }
+  .testimonials__list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--s-6);
+  }
+  .testimonials__item {
+    background: var(--c-bg-elevated);
+    border: 1px solid var(--c-line);
+    padding: var(--s-8);
+    position: relative;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    gap: var(--s-5);
+    transition:
+      transform var(--d-base) var(--ease-out),
+      border-color var(--d-fast) var(--ease-out),
+      box-shadow var(--d-base) var(--ease-out);
+  }
+  .testimonials__item:hover {
+    transform: translateY(-3px);
+    border-color: var(--c-ink);
+    box-shadow: 0 12px 24px -16px rgba(13, 17, 23, 0.18);
+  }
+  .testimonials__quote-mark {
+    font-family: var(--ff-display);
+    font-size: 4rem;
+    line-height: 0.5;
+    color: var(--c-accent);
+    margin-top: var(--s-3);
+    transition: transform var(--d-base) var(--ease-out);
+    transform-origin: top left;
+  }
+  .testimonials__item:hover .testimonials__quote-mark {
+    transform: scale(1.15) rotate(-3deg);
+  }
+  .testimonials__body {
+    margin: 0;
+    padding: 0;
+  }
+  .testimonials__body p {
+    font-family: var(--ff-display);
+    font-weight: 500;
+    font-size: 1.125rem;
+    line-height: 1.45;
+    color: var(--c-ink);
+  }
+  .testimonials__author {
+    font-weight: 700;
+    color: var(--c-ink);
+  }
+  .testimonials__role {
+    font-size: var(--t-eyebrow);
+    color: var(--c-ink-muted);
+    letter-spacing: var(--ls-wider);
+    text-transform: uppercase;
+    margin-top: 2px;
+  }
+
+  @media (max-width: 900px) {
+    .testimonials__list { grid-template-columns: 1fr; }
+  }
+</style>

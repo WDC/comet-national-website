@@ -1,0 +1,42 @@
+---
+interface Props {
+  href?: string;
+  variant?: "primary" | "secondary" | "ghost";
+  size?: "md" | "lg";
+  type?: "button" | "submit";
+  class?: string;
+  fullWidth?: boolean;
+  ariaLabel?: string;
+}
+const {
+  href,
+  variant = "primary",
+  size = "md",
+  type = "button",
+  class: className = "",
+  fullWidth = false,
+  ariaLabel,
+} = Astro.props;
+
+const base =
+  "inline-flex items-center justify-center gap-2 font-display font-semibold tracking-tight uppercase transition-all duration-200 ease-out focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent hover:-translate-y-0.5 active:translate-y-0";
+const sizing = size === "lg" ? "h-14 px-7 text-[0.95rem]" : "h-11 px-5 text-[0.85rem]";
+const radius = "rounded-[var(--r-sm)]";
+const variantCls =
+  variant === "primary"
+    ? "bg-accent text-accent-ink hover:bg-accent-hover"
+    : variant === "secondary"
+    ? "bg-navy text-bg hover:bg-navy-deep"
+    : "border border-line text-ink hover:border-ink";
+const widthCls = fullWidth ? "w-full" : "";
+const cls = [base, sizing, radius, variantCls, widthCls, className].filter(Boolean).join(" ");
+---
+{href ? (
+  <a href={href} class={cls} aria-label={ariaLabel}>
+    <slot />
+  </a>
+) : (
+  <button type={type} class={cls} aria-label={ariaLabel}>
+    <slot />
+  </button>
+)}

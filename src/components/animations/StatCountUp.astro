@@ -1,0 +1,74 @@
+---
+/**
+ * Prompt 9 — Stat count-up band.
+ * Numbers tick up on scroll-into-view (via lib/motion.ts runCountUps).
+ * Underline draws below each finished number.
+ *
+ * Phase 1 stats are placeholders per user direction — backfill in Sanity later.
+ */
+interface Stat {
+  label: string;
+  value: number;
+  format?: "plus" | "k";
+  suffix?: string;
+}
+const stats: Stat[] = [
+  { label: "Years in business", value: new Date().getFullYear() - 1970, format: "plus" },
+  { label: "Lanes served", value: 48, suffix: " states + Canada" },
+  { label: "Loads moved", value: 50000, format: "plus" },
+  { label: "Atlanta dock", value: 1, suffix: " — every mode" },
+];
+---
+<div class="stat-band" data-anim>
+  {stats.map((s) => (
+    <div class="stat-band__stat">
+      <span class="stat-band__num display" data-count={s.value} data-format={s.format ?? ""}>0</span>
+      {s.suffix && <span class="stat-band__suffix mono">{s.suffix}</span>}
+      <span class="stat-band__underline stat-underline" aria-hidden="true"></span>
+      <span class="stat-band__label">{s.label}</span>
+    </div>
+  ))}
+</div>
+
+<style>
+  .stat-band {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--s-8);
+  }
+  .stat-band__stat {
+    display: grid;
+    gap: var(--s-2);
+    position: relative;
+  }
+  .stat-band__num {
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    line-height: 1;
+    letter-spacing: var(--ls-tight);
+    color: var(--c-ink);
+    font-weight: 800;
+  }
+  .stat-band__suffix {
+    font-size: var(--t-small);
+    color: var(--c-ink-muted);
+    letter-spacing: var(--ls-wide);
+  }
+  .stat-band__underline {
+    width: 48px;
+    height: 2px;
+    background: var(--c-accent);
+    display: block;
+    margin-top: var(--s-2);
+  }
+  .stat-band__label {
+    margin-top: var(--s-2);
+    font-size: var(--t-small);
+    color: var(--c-ink-muted);
+    text-transform: uppercase;
+    letter-spacing: var(--ls-wider);
+    font-family: var(--ff-mono);
+  }
+  @media (max-width: 760px) {
+    .stat-band { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>

@@ -1,0 +1,134 @@
+---
+export const prerender = true;
+import ServicePillarLayout from "@layouts/ServicePillarLayout.astro";
+import { getService } from "@lib/services";
+
+const service = getService("hotshot")!;
+const description =
+  "Hotshot expedited freight when the deadline can't slip. Dedicated 1-, 2-, or 3-driver pickup-and-deliver service from Atlanta, dispatched 24/7 for time-critical loads.";
+
+const relatedSlugs = ["full-truckload", "flatbed-open-deck", "distressed-load-recovery"];
+---
+<ServicePillarLayout
+  service={service}
+  pageTitle="Hotshot Freight Shipping | Expedited Same-Day Delivery | Comet National"
+  pageDescription={description}
+  relatedSlugs={relatedSlugs}
+>
+  {/* TODO: replace with custom animation (Phase 3) */}
+  <div slot="hero-art" class="art-placeholder" data-anim-placeholder="hotshot">
+    <svg viewBox="0 0 380 180" aria-hidden="true">
+      <line x1="20" y1="140" x2="360" y2="140" stroke="var(--c-navy)" stroke-width="1.5" />
+      <rect x="120" y="80" width="200" height="34" fill="none" stroke="var(--c-navy)" stroke-width="1.5" />
+      <rect x="130" y="86" width="184" height="22" fill="var(--c-accent)" />
+      <rect x="80" y="86" width="40" height="28" fill="none" stroke="var(--c-navy)" stroke-width="1.5" />
+      <rect x="84" y="90" width="20" height="14" fill="var(--c-navy)" />
+      <circle cx="100" cy="118" r="7" fill="none" stroke="var(--c-navy)" stroke-width="1.25" />
+      <circle cx="160" cy="118" r="7" fill="none" stroke="var(--c-navy)" stroke-width="1.25" />
+      <circle cx="280" cy="118" r="7" fill="none" stroke="var(--c-navy)" stroke-width="1.25" />
+      <g stroke="var(--c-accent)" stroke-width="1.5" fill="none" stroke-linecap="round">
+        <line x1="30" y1="74" x2="68" y2="74" />
+        <line x1="30" y1="90" x2="60" y2="90" />
+        <line x1="30" y1="106" x2="64" y2="106" />
+      </g>
+      <text x="200" y="40" text-anchor="middle" font-family="var(--ff-display)" font-size="13" font-weight="700" fill="var(--c-ink)">DEDICATED · DIRECT · DRIVEN STRAIGHT THROUGH</text>
+      <text x="200" y="170" text-anchor="middle" font-family="var(--ff-mono)" font-size="10" fill="var(--c-ink-muted)" letter-spacing="0.16em">PICKUP NOW · DELIVER TONIGHT</text>
+    </svg>
+  </div>
+
+  <section data-reveal>
+    <p class="eyebrow">When hotshot is the answer</p>
+    <h2 class="svc-h2 display">When the load can't wait for tomorrow's lane.</h2>
+    <p class="svc-lede">
+      A plant is down. A jobsite stalled. A part flew out of a competitor's
+      warehouse two states away and you need it on the floor by morning.
+      Hotshot is dedicated, direct, and driven straight through — one
+      driver, one trailer, one delivery.
+    </p>
+    <ul class="svc-bullets reveal-stagger" data-reveal>
+      <li>Dispatch 24/7 · driver rolling within 2 hours of confirmation</li>
+      <li>1, 2, or 3-driver teams · continuous drive on coast-to-coast runs</li>
+      <li>Pickup truck + gooseneck or 26′ box · skip the full-trailer wait</li>
+      <li>Driver phone shared on dispatch · live ETA, no portal logins</li>
+    </ul>
+  </section>
+
+  <section data-reveal>
+    <p class="eyebrow">What ships hotshot</p>
+    <h2 class="svc-h2 display">Anything that won't wait for the next LTL run.</h2>
+    <ul class="cargo-grid reveal-stagger" data-reveal>
+      {[
+        "Down-machine parts",
+        "Plant repair components",
+        "Jobsite materials",
+        "Replacement equipment",
+        "Trade-show freight",
+        "Pre-production prototypes",
+        "Last-minute samples",
+        "Emergency MRO supplies",
+        "Time-critical raw materials",
+        "Show-must-go-on freight",
+        "Recovered loads",
+        "After-hours deliveries",
+      ].map((item) => <li><span class="cargo-grid__tick">·</span>{item}</li>)}
+    </ul>
+  </section>
+
+  <section data-reveal>
+    <p class="eyebrow">Why Comet for hotshot</p>
+    <h2 class="svc-h2 display">The dispatcher picks up the phone. Always.</h2>
+    <p class="svc-lede">
+      Hotshot is a phone-call business — and we still run it that way.
+      No portal queue, no "we'll get back to you," no tier-one screener.
+      Call dispatch, get pricing in minutes, get a driver moving the same
+      hour. That's the trade-off you pay extra for, and it's the only one
+      that matters when the clock's already ticking.
+    </p>
+  </section>
+</ServicePillarLayout>
+
+<style>
+  .art-placeholder svg { width: 100%; height: auto; display: block; }
+  .svc-h2 { font-size: var(--t-h2); line-height: 1.05; margin-top: var(--s-3); margin-bottom: var(--s-5); max-width: 24ch; }
+  .svc-lede { color: var(--c-ink-muted); max-width: 64ch; font-size: 1.0625rem; }
+
+  .svc-bullets {
+    list-style: none;
+    padding: 0;
+    margin: var(--s-6) 0 0;
+    display: grid;
+    gap: var(--s-3);
+  }
+  .svc-bullets li {
+    padding: var(--s-3) var(--s-4);
+    border-left: 2px solid var(--c-accent);
+    font-family: var(--ff-mono);
+    font-size: var(--t-small);
+    background: var(--c-bg-elevated);
+  }
+
+  .cargo-grid {
+    list-style: none;
+    padding: 0;
+    margin: var(--s-6) 0 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--s-3);
+  }
+  .cargo-grid li {
+    padding: var(--s-3) var(--s-4);
+    border: 1px solid var(--c-line);
+    font-family: var(--ff-mono);
+    font-size: var(--t-small);
+    color: var(--c-ink);
+  }
+  .cargo-grid__tick {
+    color: var(--c-accent);
+    margin-right: var(--s-2);
+    font-weight: bold;
+  }
+
+  @media (max-width: 760px) {
+    .cargo-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>

@@ -1,0 +1,91 @@
+---
+/**
+ * Industry hero — Manufacturing & Industrial.
+ * Pallets flow from a docked trailer into a factory skyline using the shared
+ * `.pallet-flow` keyframe (same primitive as TransloadFlow). Smoke stacks pulse.
+ */
+---
+<div class="plant-flow" data-anim>
+  <svg viewBox="0 0 520 260" role="img" aria-label="Animated factory skyline receiving pallets from a docked trailer">
+    <!-- Ground -->
+    <line x1="20" y1="220" x2="500" y2="220" stroke="var(--c-navy)" stroke-width="1.5" />
+
+    <!-- Trailer at the dock (left) -->
+    <g transform="translate(30, 150)">
+      <rect x="0" y="0" width="150" height="70" fill="none" stroke="var(--c-navy)" stroke-width="1.5" />
+      <rect x="-30" y="20" width="26" height="30" fill="none" stroke="var(--c-navy)" stroke-width="1.5" />
+      <rect x="-26" y="24" width="18" height="14" fill="var(--c-navy)" />
+      <circle cx="-12" cy="76" r="7" fill="none" stroke="var(--c-navy)" stroke-width="1.25" />
+      <circle cx="28" cy="76" r="7" fill="none" stroke="var(--c-navy)" stroke-width="1.25" />
+      <circle cx="130" cy="76" r="7" fill="none" stroke="var(--c-navy)" stroke-width="1.25" />
+      <text x="75" y="92" text-anchor="middle" font-family="var(--ff-mono)" font-size="10" fill="var(--c-ink-muted)" letter-spacing="0.12em">INBOUND</text>
+    </g>
+
+    <!-- Factory skyline (right) — silhouette outline -->
+    <g transform="translate(280, 80)" stroke="var(--c-navy)" stroke-width="1.5" fill="none">
+      <path d="M0 140 L0 100 L40 100 L40 70 L80 70 L80 50 L130 50 L130 30 L180 30 L180 0 L210 0 L210 140 Z" />
+      <!-- Stack 1 -->
+      <line x1="50" y1="100" x2="50" y2="40" />
+      <line x1="60" y1="100" x2="60" y2="40" />
+      <rect x="46" y="36" width="18" height="8" fill="var(--c-navy)" />
+      <!-- Stack 2 -->
+      <line x1="155" y1="50" x2="155" y2="-10" />
+      <line x1="165" y1="50" x2="165" y2="-10" />
+      <rect x="151" y="-14" width="18" height="8" fill="var(--c-navy)" />
+      <!-- Windows -->
+      <g stroke="var(--c-line)" stroke-width="1">
+        <line x1="10" y1="116" x2="30" y2="116" />
+        <line x1="10" y1="128" x2="30" y2="128" />
+        <line x1="90" y1="90" x2="120" y2="90" />
+        <line x1="90" y1="105" x2="120" y2="105" />
+        <line x1="140" y1="70" x2="170" y2="70" />
+        <line x1="140" y1="90" x2="170" y2="90" />
+        <line x1="190" y1="20" x2="200" y2="20" />
+        <line x1="190" y1="40" x2="200" y2="40" />
+      </g>
+    </g>
+
+    <!-- Smoke puffs (pulse) -->
+    <circle cx="335" cy="100" r="6" fill="var(--c-line)" class="pulse" opacity="0.65" />
+    <circle cx="440" cy="56" r="5" fill="var(--c-line)" class="pulse" opacity="0.55" style="animation-delay: 600ms" />
+
+    <!-- Pallets flowing from trailer into factory -->
+    <g class="pallet-flow" transform="translate(180, 190)">
+      <rect width="22" height="14" fill="var(--c-accent)" />
+      <rect width="22" height="14" fill="var(--c-accent)" />
+      <rect width="22" height="14" fill="var(--c-accent)" />
+      <rect width="22" height="14" fill="var(--c-accent)" />
+    </g>
+
+    <!-- Direction arrow -->
+    <g stroke="var(--c-ink-muted)" stroke-width="1" fill="none">
+      <path d="M180 198 L268 198 M264 194 L268 198 L264 202" />
+    </g>
+
+    <!-- Label -->
+    <text x="260" y="36" text-anchor="middle" font-family="var(--ff-display)" font-size="14" font-weight="700" fill="var(--c-ink)" letter-spacing="-0.01em">
+      Inbound. JIT. Cross-docked. Out the back.
+    </text>
+    <text x="260" y="246" text-anchor="middle" font-family="var(--ff-mono)" font-size="10" fill="var(--c-ink-muted)" letter-spacing="0.16em">
+      THE LINE NEVER STOPS BECAUSE THE FREIGHT NEVER STOPS
+    </text>
+  </svg>
+</div>
+
+<style>
+  .plant-flow svg { width: 100%; height: auto; display: block; }
+  /* Override pallet-flow translation distance to match the inbound→factory span (~88px) */
+  .plant-flow .pallet-flow > * {
+    animation-name: pallet-cross-plant;
+  }
+  @keyframes pallet-cross-plant {
+    0%   { transform: translateX(0);   opacity: 0; }
+    10%  { opacity: 1; }
+    90%  { opacity: 1; }
+    100% { transform: translateX(88px); opacity: 0; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .plant-flow .pallet-flow > * { animation: none !important; opacity: 1 !important; }
+    .plant-flow .pulse { animation: none !important; }
+  }
+</style>

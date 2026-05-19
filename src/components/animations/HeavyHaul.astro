@@ -1,0 +1,96 @@
+---
+/**
+ * Industry hero — Machinery & Equipment.
+ * Step-deck silhouette with a piece of heavy iron on the lower deck. The
+ * planned route draws using `.draw`, then a traveling dot follows it via
+ * `.travel`. Same primitives as FreightNetwork.
+ */
+---
+<div class="heavy-haul" data-anim>
+  <svg viewBox="0 0 520 260" role="img" aria-label="Animated step-deck trailer with heavy machinery and a planned route">
+    <!-- Route arc — drawn first -->
+    <path id="hh-route"
+          d="M70 70 C 170 30, 320 30, 460 80"
+          fill="none" stroke="var(--c-accent)" stroke-width="1.5" stroke-linecap="round"
+          class="draw" style="--draw-length: 460; --draw-delay: 200ms" />
+
+    <!-- Route endpoint markers -->
+    <circle cx="70" cy="70" r="4" fill="var(--c-accent)" />
+    <circle cx="460" cy="80" r="6" fill="none" stroke="var(--c-accent)" stroke-width="1.5" class="pulse" />
+    <circle cx="460" cy="80" r="3" fill="var(--c-accent)" />
+
+    <!-- Route labels -->
+    <text x="70" y="58" text-anchor="middle" font-family="var(--ff-mono)" font-size="9" fill="var(--c-ink-muted)" letter-spacing="0.12em">ORIGIN</text>
+    <text x="460" y="100" text-anchor="middle" font-family="var(--ff-mono)" font-size="9" fill="var(--c-ink-muted)" letter-spacing="0.12em">DESTINATION</text>
+
+    <!-- Ground -->
+    <line x1="20" y1="220" x2="500" y2="220" stroke="var(--c-navy)" stroke-width="1.5" />
+
+    <!-- Step-deck trailer: upper deck (rear) and lower deck (front) -->
+    <g transform="translate(60, 170)">
+      <!-- Cab -->
+      <rect x="-26" y="-22" width="26" height="44" fill="none" stroke="var(--c-navy)" stroke-width="1.5" />
+      <rect x="-22" y="-18" width="18" height="14" fill="var(--c-navy)" />
+      <!-- Upper deck (over cab) -->
+      <rect x="0" y="-6" width="80" height="10" fill="var(--c-line)" />
+      <line x1="0" y1="-6" x2="80" y2="-6" stroke="var(--c-navy)" stroke-width="1.5" />
+      <!-- Step transition -->
+      <line x1="80" y1="-6" x2="80" y2="14" stroke="var(--c-navy)" stroke-width="1.5" />
+      <!-- Lower deck (rear) -->
+      <rect x="80" y="14" width="280" height="10" fill="var(--c-line)" />
+      <line x1="80" y1="14" x2="360" y2="14" stroke="var(--c-navy)" stroke-width="1.5" />
+
+      <!-- Heavy iron on lower deck (static silhouette) -->
+      <g transform="translate(120, -38)">
+        <!-- Body -->
+        <rect x="0" y="0" width="140" height="52" fill="var(--c-accent)" opacity="0.92" />
+        <!-- Top cab/housing -->
+        <rect x="20" y="-22" width="70" height="22" fill="var(--c-accent)" opacity="0.92" />
+        <!-- Stack/exhaust -->
+        <rect x="100" y="-16" width="8" height="16" fill="var(--c-accent-ink)" opacity="0.6" />
+        <!-- Mounting bolts (visual texture) -->
+        <circle cx="14" cy="42" r="2" fill="var(--c-accent-ink)" opacity="0.55" />
+        <circle cx="126" cy="42" r="2" fill="var(--c-accent-ink)" opacity="0.55" />
+        <circle cx="14" cy="10" r="2" fill="var(--c-accent-ink)" opacity="0.55" />
+        <circle cx="126" cy="10" r="2" fill="var(--c-accent-ink)" opacity="0.55" />
+      </g>
+
+      <!-- Chain straps -->
+      <g stroke="var(--c-navy)" stroke-width="1.25" fill="none">
+        <line x1="130" y1="-44" x2="130" y2="14" class="draw" style="--draw-length: 58; --draw-delay: 1400ms" />
+        <line x1="180" y1="-44" x2="180" y2="14" class="draw" style="--draw-length: 58; --draw-delay: 1550ms" />
+        <line x1="230" y1="-44" x2="230" y2="14" class="draw" style="--draw-length: 58; --draw-delay: 1700ms" />
+      </g>
+
+      <!-- Wheels -->
+      <circle cx="-12" cy="46" r="9" fill="none" stroke="var(--c-navy)" stroke-width="1.25" />
+      <circle cx="30" cy="46" r="9" fill="none" stroke="var(--c-navy)" stroke-width="1.25" />
+      <circle cx="320" cy="46" r="9" fill="none" stroke="var(--c-navy)" stroke-width="1.25" />
+      <circle cx="354" cy="46" r="9" fill="none" stroke="var(--c-navy)" stroke-width="1.25" />
+    </g>
+
+    <!-- Traveling dot on the route -->
+    <circle r="4" fill="var(--c-accent)" class="travel"
+            style="offset-path: path('M70 70 C 170 30, 320 30, 460 80'); --travel-duration: 4.4s; --travel-delay: 1800ms;" />
+
+    <!-- Permit / pilot mono badges -->
+    <g font-family="var(--ff-mono)" font-size="9" fill="var(--c-ink-muted)" letter-spacing="0.12em">
+      <text x="200" y="22">PERMITS ROUTED</text>
+      <text x="360" y="22">· PILOTS DISPATCHED</text>
+    </g>
+
+    <!-- Bottom caption -->
+    <text x="260" y="246" text-anchor="middle" font-family="var(--ff-mono)" font-size="10" fill="var(--c-ink-muted)" letter-spacing="0.16em">
+      HEAVY IRON · ROUTED THE WAY IT HAS TO RIDE
+    </text>
+  </svg>
+</div>
+
+<style>
+  .heavy-haul svg { width: 100%; height: auto; display: block; }
+  @media (prefers-reduced-motion: reduce) {
+    .heavy-haul .draw { stroke-dashoffset: 0 !important; }
+    .heavy-haul .travel { display: none; }
+    .heavy-haul .pulse { animation: none; }
+  }
+</style>

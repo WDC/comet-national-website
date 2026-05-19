@@ -1,0 +1,30 @@
+---
+export const prerender = true;
+import BaseLayout from "@layouts/BaseLayout.astro";
+import Hero from "@components/sections/Hero.astro";
+import TrustStrip from "@components/sections/TrustStrip.astro";
+import ModeSelector from "@components/sections/ModeSelector.astro";
+import CometDifference from "@components/sections/CometDifference.astro";
+import IndustriesBand from "@components/sections/IndustriesBand.astro";
+import HowItWorks from "@components/sections/HowItWorks.astro";
+import CoverageMap from "@components/sections/CoverageMap.astro";
+import Testimonials from "@components/sections/Testimonials.astro";
+import StatBand from "@components/sections/StatBand.astro";
+import QuoteCTA from "@components/sections/QuoteCTA.astro";
+import { SITE } from "@lib/site";
+---
+<BaseLayout
+  title={`${SITE.name} — ${SITE.tagline}`}
+  description={`${SITE.subline} Atlanta-based since ${SITE.foundingYear}.`}
+>
+  <Hero />
+  <TrustStrip />
+  <ModeSelector />
+  <CometDifference />
+  <IndustriesBand />
+  <HowItWorks />
+  <CoverageMap />
+  <StatBand />
+  <Testimonials />
+  <QuoteCTA />
+</BaseLayout>

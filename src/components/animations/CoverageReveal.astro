@@ -1,0 +1,109 @@
+---
+/**
+ * Prompt 2 — Coverage map reveal.
+ * Scroll-triggered. Simplified US + southern Canada, lane lines sweep on,
+ * Atlanta marker drops in and pulses twice.
+ */
+---
+<div class="coverage" data-anim>
+  <svg
+    viewBox="0 0 900 520"
+    role="img"
+    aria-label="Coverage map showing freight lanes across the US and southern Canada, anchored at Atlanta"
+    preserveAspectRatio="xMidYMid meet"
+  >
+    <!-- Canada outline (southern band) -->
+    <path
+      class="map-outline"
+      d="M50 50 L150 35 L260 25 L380 20 L500 25 L620 35 L740 50 L820 70 L860 90 L860 130 L800 145 L700 150 L580 145 L460 138 L340 135 L220 140 L120 145 L60 130 Z"
+      fill="none"
+      stroke="var(--c-line)"
+      stroke-width="1.2"
+    />
+    <!-- US lower-48 outline -->
+    <path
+      class="map-outline"
+      d="M85 170 L120 155 L200 145 L300 140 L400 138 L500 138 L580 140 L660 145 L740 155 L810 170 L840 190 L850 220 L850 260 L830 295 L810 325 L780 360 L740 390 L700 420 L650 445 L600 460 L545 470 L490 475 L435 470 L380 460 L325 445 L275 425 L225 400 L180 370 L140 335 L110 295 L90 250 L80 210 Z"
+      fill="none"
+      stroke="var(--c-line)"
+      stroke-width="1.3"
+    />
+
+    <!-- Lane lines — fan out from Atlanta -->
+    {[
+      [560, 320, 180, 200],   // Atlanta → Pacific NW
+      [560, 320, 150, 280],   // Atlanta → CA
+      [560, 320, 300, 380],   // Atlanta → Southwest
+      [560, 320, 380, 220],   // Atlanta → Midwest
+      [560, 320, 480, 165],   // Atlanta → Plains North
+      [560, 320, 700, 200],   // Atlanta → NE
+      [560, 320, 760, 280],   // Atlanta → Northeast
+      [560, 320, 680, 410],   // Atlanta → FL
+      [560, 320, 320, 90],    // Atlanta → Canada West
+      [560, 320, 600, 95],    // Atlanta → Canada Central
+    ].map(([x1, y1, x2, y2], i) => {
+      const dx = (x2 ?? 0) - (x1 ?? 0);
+      const dy = (y2 ?? 0) - (y1 ?? 0);
+      const len = Math.round(Math.sqrt(dx * dx + dy * dy));
+      return (
+        <line
+          x1={x1} y1={y1} x2={x2} y2={y2}
+          stroke="var(--c-accent)"
+          stroke-width="1.25"
+          stroke-linecap="round"
+          opacity="0.85"
+          class="draw"
+          style={`--draw-length: ${len}; --draw-delay: ${200 + i * 100}ms`}
+        />
+      );
+    })}
+
+    <!-- Lane endpoint dots -->
+    {[[180, 200], [150, 280], [300, 380], [380, 220], [480, 165], [700, 200], [760, 280], [680, 410], [320, 90], [600, 95]].map(([x, y], i) => (
+      <circle
+        cx={x} cy={y} r="3"
+        fill="var(--c-accent)"
+        class="reveal"
+        data-reveal
+        style={`--reveal-delay: ${600 + i * 100}ms`}
+      />
+    ))}
+
+    <!-- Atlanta marker — drops in and pulses -->
+    <g transform="translate(560, 320)" class="atl-marker">
+      <circle r="14" fill="none" stroke="var(--c-accent)" stroke-width="1.25" class="pulse" opacity="0.4" />
+      <circle r="8" fill="var(--c-accent)" />
+      <circle r="3" fill="var(--c-navy-deep)" />
+      <text x="16" y="4" font-family="var(--ff-mono)" font-size="13" fill="var(--c-ink)" letter-spacing="0.12em">
+        ATLANTA
+      </text>
+      <text x="16" y="20" font-family="var(--ff-mono)" font-size="10" fill="var(--c-ink-muted)" letter-spacing="0.16em">
+        FACILITY · HQ
+      </text>
+    </g>
+  </svg>
+</div>
+
+<style>
+  .coverage svg {
+    width: 100%;
+    height: auto;
+  }
+  .coverage .atl-marker {
+    opacity: 0;
+    transform: translate(560px, 305px);
+    transition:
+      opacity 600ms var(--ease-out) 1200ms,
+      transform 700ms var(--ease-out) 1200ms;
+  }
+  .anim-on .coverage .atl-marker,
+  .coverage[data-anim].anim-on .atl-marker {
+    opacity: 1;
+    transform: translate(560px, 320px);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .coverage .draw { stroke-dashoffset: 0 !important; }
+    .coverage .pulse { animation: none; }
+    .coverage .atl-marker { opacity: 1; transform: translate(560px, 320px); }
+  }
+</style>

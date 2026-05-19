@@ -1,0 +1,105 @@
+---
+export const prerender = true;
+import IndustryLayout from "@layouts/IndustryLayout.astro";
+import PlantFlow from "@components/animations/PlantFlow.astro";
+import { INDUSTRIES } from "@lib/services";
+
+const industry = INDUSTRIES.find((i) => i.slug === "manufacturing-industrial")!;
+const description =
+  "Plant logistics from an Atlanta carrier that respects the production schedule. Volume LTL, FTL, warehousing, cross-docking, and same-shift hotshot for line-down emergencies.";
+---
+<IndustryLayout
+  industry={industry}
+  pageTitle="Manufacturing & Industrial Freight | Plant Logistics | Comet National"
+  pageDescription={description}
+>
+  <PlantFlow slot="hero-art" />
+
+  <section data-reveal>
+    <p class="eyebrow">What you call us for</p>
+    <h2 class="ind-h2 display">The plant logistics calls our dispatchers know by heart.</h2>
+    <p class="ind-lede">
+      Inbound parts that have to land on the dock at 0700. WIP that needs to
+      move between lines without a third-party touch. Finished goods staged
+      for tomorrow's pool truck. Here's what we do about each.
+    </p>
+    <ul class="ind-grid reveal-stagger" data-reveal>
+      {industry.challenges?.map(({ challenge, answer }) => (
+        <li>
+          <strong class="display">{challenge}</strong>
+          <span>{answer}</span>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <section data-reveal>
+    <p class="eyebrow">What we move</p>
+    <h2 class="ind-h2 display">Raw, WIP, and finished — same dispatcher, every leg.</h2>
+    <p class="ind-lede">
+      Plant freight covers the full lifecycle, from inbound castings to
+      outbound DC replenishment. Same crew, same paperwork, same accountability.
+    </p>
+    <ul class="ind-cargo reveal-stagger" data-reveal>
+      {industry.cargoExamples?.map((item) => (
+        <li><span class="ind-cargo__tick">·</span>{item}</li>
+      ))}
+    </ul>
+  </section>
+
+  <section data-reveal>
+    <p class="eyebrow">Why Comet for manufacturing</p>
+    <h2 class="ind-h2 display">An asset-based carrier with a brokerage arm and a warehouse — at one address.</h2>
+    <p class="ind-lede">{industry.whyComet}</p>
+  </section>
+</IndustryLayout>
+
+<style>
+  .ind-h2 { font-size: var(--t-h2); line-height: 1.05; margin-top: var(--s-3); margin-bottom: var(--s-5); max-width: 28ch; }
+  .ind-lede { color: var(--c-ink-muted); max-width: 64ch; font-size: 1.0625rem; line-height: 1.55; }
+
+  .ind-grid {
+    list-style: none;
+    padding: 0;
+    margin: var(--s-6) 0 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--c-line);
+    border: 1px solid var(--c-line);
+  }
+  .ind-grid li {
+    background: var(--c-bg);
+    padding: var(--s-5);
+    display: grid;
+    gap: var(--s-2);
+  }
+  .ind-grid strong { font-size: 1.0625rem; color: var(--c-ink); }
+  .ind-grid span { font-size: var(--t-small); color: var(--c-ink-muted); line-height: 1.5; }
+
+  .ind-cargo {
+    list-style: none;
+    padding: 0;
+    margin: var(--s-6) 0 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--s-3);
+  }
+  .ind-cargo li {
+    padding: var(--s-3) var(--s-4);
+    border: 1px solid var(--c-line);
+    font-family: var(--ff-mono);
+    font-size: var(--t-small);
+    color: var(--c-ink);
+  }
+  .ind-cargo__tick {
+    color: var(--c-accent);
+    margin-right: var(--s-2);
+    font-weight: bold;
+  }
+
+  @media (max-width: 760px) {
+    .ind-grid { grid-template-columns: 1fr; }
+    .ind-cargo { grid-template-columns: 1fr 1fr; }
+  }
+</style>

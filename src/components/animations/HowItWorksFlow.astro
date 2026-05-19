@@ -1,0 +1,125 @@
+---
+/**
+ * Prompt 3 — How It Works, 3 steps.
+ * Triggered on scroll. Each node lights up sequentially, connecting line draws between.
+ */
+const steps = [
+  { id: 1, title: "Get a quote", body: "One call, every mode. We match the right trailer to your load." },
+  { id: 2, title: "Schedule the shipment", body: "Pickup, transload, paperwork, delivery — handled." },
+  { id: 3, title: "Rest easy", body: "Real updates, real people. We solve the whole problem." },
+];
+---
+<div class="how-flow" data-anim>
+  <ol class="how-flow__steps">
+    {steps.map((s, i) => (
+      <li class="how-flow__step" style={`--i: ${i}`}>
+        <div class="how-flow__node">
+          <span class="how-flow__num mono">0{s.id}</span>
+          <svg class="how-flow__icon" viewBox="0 0 32 32" aria-hidden="true">
+            {s.id === 1 && <path d="M6 8 L26 8 L26 24 L18 24 L14 28 L14 24 L6 24 Z" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linejoin="round" />}
+            {s.id === 2 && <g stroke="currentColor" stroke-width="1.5" fill="none"><rect x="6" y="8" width="20" height="16" rx="1"/><path d="M6 14 L26 14 M11 6 L11 10 M21 6 L21 10"/></g>}
+            {s.id === 3 && <g stroke="currentColor" stroke-width="1.5" fill="none"><path d="M16 4 L24 10 L24 24 L16 28 L8 24 L8 10 Z"/><path d="M12 16 L15 19 L21 13"/></g>}
+          </svg>
+        </div>
+        <div class="how-flow__body">
+          <h3 class="how-flow__title">{s.title}</h3>
+          <p class="how-flow__desc">{s.body}</p>
+        </div>
+        {i < steps.length - 1 && (
+          <svg class="how-flow__connector" viewBox="0 0 100 10" preserveAspectRatio="none" aria-hidden="true">
+            <line
+              x1="0" y1="5" x2="100" y2="5"
+              stroke="var(--c-accent)"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              class="draw"
+              style={`--draw-length: 100; --draw-delay: ${300 + i * 500}ms`}
+            />
+          </svg>
+        )}
+      </li>
+    ))}
+  </ol>
+</div>
+
+<style>
+  .how-flow__steps {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr auto 1fr;
+    gap: 0;
+    align-items: start;
+  }
+  .how-flow__step {
+    display: grid;
+    gap: var(--s-4);
+    text-align: center;
+    justify-items: center;
+    padding-inline: var(--s-4);
+  }
+  .how-flow__step:nth-child(1) { grid-column: 1; }
+  .how-flow__step:nth-child(2) { grid-column: 3; }
+  .how-flow__step:nth-child(3) { grid-column: 5; }
+  .how-flow__step .how-flow__connector { display: none; }
+
+  .how-flow__node {
+    width: 92px;
+    height: 92px;
+    border-radius: 50%;
+    border: 1.5px solid var(--c-line);
+    color: var(--c-ink);
+    display: grid;
+    place-items: center;
+    background: var(--c-bg-elevated);
+    position: relative;
+    transition: border-color var(--d-base) var(--ease-out), color var(--d-base) var(--ease-out), background var(--d-base) var(--ease-out);
+    transition-delay: calc(var(--i) * 500ms);
+  }
+  .anim-on .how-flow__node {
+    border-color: var(--c-accent);
+    background: var(--c-accent);
+    color: var(--c-accent-ink);
+  }
+  .how-flow__num {
+    position: absolute;
+    top: -22px;
+    font-size: var(--t-eyebrow);
+    letter-spacing: var(--ls-wider);
+    color: var(--c-ink-muted);
+  }
+  .how-flow__icon {
+    width: 36px;
+    height: 36px;
+  }
+  .how-flow__title {
+    font-size: 1.25rem;
+    letter-spacing: var(--ls-snug);
+  }
+  .how-flow__desc {
+    font-size: var(--t-small);
+    color: var(--c-ink-muted);
+    max-width: 28ch;
+  }
+
+  /* Connector lines between nodes — sit in the empty grid cells */
+  .how-flow__steps > .how-flow__step:nth-child(1)::after,
+  .how-flow__steps > .how-flow__step:nth-child(2)::after {
+    content: "";
+    position: absolute;
+    height: 1.5px;
+    background: var(--c-accent);
+    transform-origin: left;
+    transform: scaleX(0);
+    transition: transform 700ms var(--ease-out);
+  }
+
+  @media (max-width: 760px) {
+    .how-flow__steps {
+      grid-template-columns: 1fr;
+      gap: var(--s-8);
+    }
+    .how-flow__step:nth-child(n) { grid-column: 1; }
+  }
+</style>

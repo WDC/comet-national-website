@@ -1,0 +1,146 @@
+---
+import Logo from "./Logo.astro";
+import { SITE } from "@lib/site";
+import { SERVICES_BY_CATEGORY } from "@lib/services";
+
+const year = new Date().getFullYear();
+---
+<footer class="site-footer">
+  <div class="container-content site-footer__grid reveal-stagger" data-reveal>
+    <div class="site-footer__brand">
+      <Logo variant="bg" />
+      <p class="site-footer__tag">{SITE.trustLine}</p>
+      <address class="site-footer__nap">
+        <div>{SITE.address.street}</div>
+        <div>{SITE.address.locality}, {SITE.address.region} {SITE.address.postal}</div>
+        <div>
+          <a href={`tel:${SITE.phoneE164}`}>{SITE.phone}</a>
+        </div>
+        <div>
+          <a href={`mailto:${SITE.email}`}>{SITE.email}</a>
+        </div>
+      </address>
+    </div>
+
+    <nav class="site-footer__col" aria-label="Footer — By trailer">
+      <div class="eyebrow site-footer__heading">By trailer</div>
+      <ul>
+        {SERVICES_BY_CATEGORY.trailer.map((s) => (
+          <li><a href={`/services/${s.slug}`}>{s.title}</a></li>
+        ))}
+      </ul>
+    </nav>
+
+    <nav class="site-footer__col" aria-label="Footer — By facility">
+      <div class="eyebrow site-footer__heading">By facility</div>
+      <ul>
+        {SERVICES_BY_CATEGORY.facility.map((s) => (
+          <li><a href={`/services/${s.slug}`}>{s.title}</a></li>
+        ))}
+        {SERVICES_BY_CATEGORY.managed.map((s) => (
+          <li><a href={`/services/${s.slug}`}>{s.title}</a></li>
+        ))}
+      </ul>
+    </nav>
+
+    <nav class="site-footer__col" aria-label="Footer — Company">
+      <div class="eyebrow site-footer__heading">Company</div>
+      <ul>
+        <li><a href="/why-comet">Why Comet</a></li>
+        <li><a href="/industries">Industries</a></li>
+        <li><a href="/insights">Insights</a></li>
+        <li><a href="/locations/atlanta">Atlanta facility</a></li>
+        <li><a href="/carriers">Carriers</a></li>
+        <li><a href="/contact">Contact</a></li>
+      </ul>
+    </nav>
+  </div>
+
+  <div class="container-content site-footer__base">
+    <div class="site-footer__legal mono">
+      © {year} {SITE.legalName}. All rights reserved.
+    </div>
+    <div class="site-footer__socials">
+      {SITE.socials.map((s) => (
+        <a href={s.url} rel="noopener" target="_blank">{s.platform}</a>
+      ))}
+    </div>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    background: var(--c-navy-deep);
+    color: var(--c-bg);
+    padding-top: clamp(3rem, 7vw, 5rem);
+    padding-bottom: var(--s-8);
+    margin-top: var(--s-16);
+  }
+  .site-footer__grid {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1fr 1fr;
+    gap: var(--s-10);
+    padding-bottom: var(--s-12);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+  .site-footer__tag {
+    margin-top: var(--s-3);
+    font-family: var(--ff-display);
+    font-size: 1.1rem;
+    line-height: 1.3;
+    max-width: 24ch;
+    color: rgba(250, 250, 248, 0.78);
+  }
+  .site-footer__nap {
+    margin-top: var(--s-5);
+    font-style: normal;
+    font-family: var(--ff-mono);
+    font-size: var(--t-small);
+    line-height: 1.7;
+    color: rgba(250, 250, 248, 0.7);
+  }
+  .site-footer__nap a:hover { color: var(--c-accent); }
+
+  .site-footer__heading {
+    color: var(--c-accent);
+    margin-bottom: var(--s-3);
+  }
+  .site-footer__col ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: var(--s-2);
+  }
+  .site-footer__col a {
+    font-size: var(--t-small);
+    color: rgba(250, 250, 248, 0.78);
+  }
+  .site-footer__col a:hover { color: var(--c-accent); }
+
+  .site-footer__base {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: var(--s-6);
+    font-size: var(--t-small);
+    color: rgba(250, 250, 248, 0.55);
+  }
+  .site-footer__socials a {
+    color: rgba(250, 250, 248, 0.78);
+    margin-left: var(--s-4);
+  }
+  .site-footer__socials a:hover { color: var(--c-accent); }
+
+  @media (max-width: 880px) {
+    .site-footer__grid {
+      grid-template-columns: 1fr 1fr;
+      gap: var(--s-8);
+    }
+    .site-footer__base {
+      flex-direction: column;
+      gap: var(--s-2);
+      align-items: flex-start;
+    }
+  }
+</style>

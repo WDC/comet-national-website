@@ -1,0 +1,104 @@
+---
+export const prerender = true;
+import ServicePillarLayout from "@layouts/ServicePillarLayout.astro";
+import CrossDockFlow from "@components/animations/CrossDockFlow.astro";
+import { getService } from "@lib/services";
+
+const service = getService("cross-docking")!;
+const description =
+  "Cross-docking at our Lilburn, Atlanta facility. Inbound consolidation, outbound deconsolidation, and pass-through staging — three loads in, one load out, paperwork clean.";
+
+const relatedSlugs = ["transloading", "warehousing-fulfillment", "distressed-load-recovery"];
+---
+<ServicePillarLayout
+  service={service}
+  pageTitle="Cross-Docking Atlanta | Consolidation & Deconsolidation | Comet National"
+  pageDescription={description}
+  relatedSlugs={relatedSlugs}
+>
+  <CrossDockFlow slot="hero-art" />
+
+  <section data-reveal>
+    <p class="eyebrow">What cross-docking solves</p>
+    <h2 class="svc-h2 display">When freight needs to change trucks — not warehouses.</h2>
+    <p class="svc-lede">
+      Inbound freight unloaded, sorted, and reloaded onto outbound trailers
+      the same shift. Storage time measured in hours, not weeks. The dock
+      replaces the warehouse, and the freight keeps moving.
+    </p>
+    <ul class="svc-bullets reveal-stagger" data-reveal>
+      <li>Same-shift turn · most loads cross within 4 hours of arrival</li>
+      <li>Inbound consolidation · multiple suppliers → one outbound trailer</li>
+      <li>Outbound deconsolidation · one inbound trailer → multiple destinations</li>
+      <li>Lilburn, GA facility · I-85 corridor · clean dock, scaled floor</li>
+    </ul>
+  </section>
+
+  <section data-reveal>
+    <p class="eyebrow">The three patterns we run</p>
+    <h2 class="svc-h2 display">Consolidation, deconsolidation, or straight pass-through.</h2>
+    <ul class="svc-grid reveal-stagger" data-reveal>
+      <li><strong class="display">Consolidation</strong><span>Multiple inbound shipments combined into a single outbound full-trailer or partial.</span></li>
+      <li><strong class="display">Deconsolidation</strong><span>One inbound load broken into multiple outbound LTL or hotshot deliveries.</span></li>
+      <li><strong class="display">Pass-Through</strong><span>Inbound unloaded, recounted, reloaded — no sorting, just a mode change at the dock.</span></li>
+      <li><strong class="display">Pool Distribution</strong><span>National freight staged for regional delivery — single inbound, fanned-out outbound.</span></li>
+      <li><strong class="display">Reverse Logistics</strong><span>Returns aggregated from multiple customers, returned upstream in one load.</span></li>
+      <li><strong class="display">Inspection Hold</strong><span>Inbound staged for QA before release — counted, photographed, signed off.</span></li>
+    </ul>
+  </section>
+
+  <section data-reveal>
+    <p class="eyebrow">Why Comet for cross-docking</p>
+    <h2 class="svc-h2 display">One Atlanta dock. One team. Paperwork that matches the freight.</h2>
+    <p class="svc-lede">
+      Cross-dock errors aren't visible until the freight reaches the wrong
+      consignee. We count in, photograph, label, and recount out. BOLs
+      reconcile. Discrepancies surface at our dock — not at delivery.
+      Same crew on the floor since the 90s; we know the difference between
+      a 48×40 GMA pallet and an off-spec stringer at a glance.
+    </p>
+  </section>
+</ServicePillarLayout>
+
+<style>
+  .svc-h2 { font-size: var(--t-h2); line-height: 1.05; margin-top: var(--s-3); margin-bottom: var(--s-5); max-width: 24ch; }
+  .svc-lede { color: var(--c-ink-muted); max-width: 64ch; font-size: 1.0625rem; }
+
+  .svc-bullets {
+    list-style: none;
+    padding: 0;
+    margin: var(--s-6) 0 0;
+    display: grid;
+    gap: var(--s-3);
+  }
+  .svc-bullets li {
+    padding: var(--s-3) var(--s-4);
+    border-left: 2px solid var(--c-accent);
+    font-family: var(--ff-mono);
+    font-size: var(--t-small);
+    background: var(--c-bg-elevated);
+  }
+
+  .svc-grid {
+    list-style: none;
+    padding: 0;
+    margin: var(--s-6) 0 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--c-line);
+    border: 1px solid var(--c-line);
+  }
+  .svc-grid li {
+    background: var(--c-bg);
+    padding: var(--s-5);
+    display: grid;
+    gap: var(--s-2);
+  }
+  .svc-grid strong { font-size: 1.0625rem; color: var(--c-ink); }
+  .svc-grid span { font-size: var(--t-small); color: var(--c-ink-muted); line-height: 1.5; }
+
+  @media (max-width: 760px) {
+    .svc-grid { grid-template-columns: 1fr; }
+  }
+</style>
