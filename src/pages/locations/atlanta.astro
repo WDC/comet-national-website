@@ -8,6 +8,10 @@ import { SERVICES_BY_CATEGORY } from "@lib/services";
 
 const hoursLabel = "Mon–Fri · 8a–5p ET";
 const dockServices = [...SERVICES_BY_CATEGORY.facility, ...SERVICES_BY_CATEGORY.managed];
+const mapsQuery = encodeURIComponent(
+  `${SITE.address.street}, ${SITE.address.locality}, ${SITE.address.region} ${SITE.address.postal}`,
+);
+const directionsUrl = `https://www.google.com/maps/search/?api=1&query=${mapsQuery}`;
 ---
 <BaseLayout
   title={`Atlanta Freight & Warehousing Facility | ${SITE.name}`}
@@ -41,6 +45,9 @@ const dockServices = [...SERVICES_BY_CATEGORY.facility, ...SERVICES_BY_CATEGORY.
           <div class="loc__actions">
             <a class="loc__phone display" href={`tel:${SITE.phoneE164}`}>{SITE.phone}</a>
             <a class="loc__email mono" href={`mailto:${SITE.email}`}>{SITE.email}</a>
+            <a class="loc__directions mono" href={directionsUrl} rel="noopener" target="_blank">
+              Get directions <span class="arrow" aria-hidden="true">→</span>
+            </a>
           </div>
         </div>
 
@@ -105,6 +112,15 @@ const dockServices = [...SERVICES_BY_CATEGORY.facility, ...SERVICES_BY_CATEGORY.
   .loc__phone:hover { color: var(--c-accent); }
   .loc__email { color: var(--c-ink-muted); }
   .loc__email:hover { color: var(--c-accent); }
+  .loc__directions {
+    color: var(--c-accent-deep);
+    font-weight: 600;
+    display: inline-flex;
+    align-items: baseline;
+    gap: 6px;
+    transition: color var(--d-fast) var(--ease-out);
+  }
+  .loc__directions:hover { color: var(--c-accent); }
 
   .loc__services { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--s-2); }
   .loc__services a { color: var(--c-ink); font-family: var(--ff-display); font-weight: 600; }

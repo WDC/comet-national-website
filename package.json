@@ -11,7 +11,8 @@
     "check": "astro check",
     "astro": "astro",
     "redirects:build": "tsx scripts/build-redirects.ts",
-    "redirects:verify": "tsx scripts/verify-redirects.ts"
+    "redirects:verify": "tsx scripts/verify-redirects.ts",
+    "prerender:verify": "tsx scripts/verify-prerender.ts"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.4",
