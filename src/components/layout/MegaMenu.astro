@@ -1,5 +1,6 @@
 ---
 import { SERVICES_BY_CATEGORY, SERVICE_CATEGORY_LABEL, type ServiceCategory } from "@lib/services";
+import Caps from "@components/ui/Caps.astro";
 
 const groups: ServiceCategory[] = ["trailer", "facility", "managed"];
 ---
@@ -17,8 +18,8 @@ const groups: ServiceCategory[] = ["trailer", "facility", "managed"];
           {SERVICES_BY_CATEGORY[g].map((s) => (
             <li>
               <a href={`/services/${s.slug}`} class="mega-menu__item" role="menuitem">
-                <span class="mega-menu__item-title">{s.title}</span>
-                <span class="mega-menu__item-blurb">{s.blurb}</span>
+                <span class="mega-menu__item-title"><Caps text={s.title} /></span>
+                <span class="mega-menu__item-blurb"><Caps text={s.blurb} /></span>
               </a>
             </li>
           ))}

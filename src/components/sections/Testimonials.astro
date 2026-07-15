@@ -1,9 +1,10 @@
 ---
 // Three real quotes carried over from the legacy sites (per PLAN.md §3 — keep verbatim).
 // Names lightly anonymized when initials only; replace with full attribution in Sanity.
+import Caps from "@components/ui/Caps.astro";
 const quotes = [
   {
-    body: "I've shipped freight all over the country with Comet for years. Their team handles partial flatbed loads cleaner and cheaper than any LTL carrier I've quoted. They actually answer the phone.",
+    body: "I’ve shipped freight all over the country with Comet for years. Their team handles partial flatbed loads cleaner and cheaper than any LTL carrier I’ve quoted. They actually answer the phone.",
     author: "B. Waite",
     role: "Operations Manager",
     company: "Industrial supplier, Southeast",
@@ -15,7 +16,7 @@ const quotes = [
     company: "Construction GC",
   },
   {
-    body: "Our broker dropped a distressed load on us at 9 PM. Comet had a crew at the dock by midnight, restacked and rewrapped everything, and got it out by morning. That's the kind of partner we needed.",
+    body: "Our broker dropped a distressed load on us at 9 p.m. Comet had a crew at the dock by midnight, restacked and rewrapped everything, and got it out by morning. That’s the kind of partner we needed.",
     author: "R. Cabello",
     role: "Plant Manager",
     company: "Building materials manufacturer",
@@ -32,9 +33,9 @@ const quotes = [
     <ul class="testimonials__list">
       {quotes.map((q, i) => (
         <li class="testimonials__item reveal" data-reveal style={`--reveal-delay: ${i * 120}ms`}>
-          <span class="testimonials__quote-mark" aria-hidden="true">"</span>
+          <span class="testimonials__quote-mark" aria-hidden="true">“</span>
           <blockquote class="testimonials__body">
-            <p>{q.body}</p>
+            <p><Caps text={q.body} /></p>
           </blockquote>
           <footer class="testimonials__attr">
             <div class="testimonials__author display">{q.author}</div>
@@ -82,11 +83,12 @@ const quotes = [
     box-shadow: 0 12px 24px -16px rgba(13, 17, 23, 0.18);
   }
   .testimonials__quote-mark {
-    font-family: var(--ff-display);
-    font-size: 4rem;
+    font-family: var(--ff-body);
+    font-weight: 700;
+    font-size: 4.5rem;
     line-height: 0.5;
     color: var(--c-accent);
-    margin-top: var(--s-3);
+    margin-top: var(--s-4);
     transition: transform var(--d-base) var(--ease-out);
     transform-origin: top left;
   }
@@ -98,11 +100,15 @@ const quotes = [
     padding: 0;
   }
   .testimonials__body p {
-    font-family: var(--ff-display);
-    font-weight: 500;
-    font-size: 1.125rem;
-    line-height: 1.45;
+    /* Testimonials read as short-form prose — set them in the Equity serif,
+       not the display sans, for a warmer, more editorial voice. */
+    font-family: var(--ff-body);
+    font-weight: 400;
+    font-size: 1.1875rem;
+    line-height: 1.5;
+    letter-spacing: var(--ls-base);
     color: var(--c-ink);
+    text-wrap: pretty;
   }
   .testimonials__author {
     font-weight: 700;

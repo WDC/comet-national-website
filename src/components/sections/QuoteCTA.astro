@@ -10,8 +10,8 @@ import { SITE } from "@lib/site";
       <span class="quote-cta__accent">We solve the whole problem.</span>
     </h2>
     <p class="quote-cta__body">
-      Tell us where it's going, when it has to be there, and what's on it.
-      We'll put the right trailer under it.
+      Tell us where it’s going, when it has to be there, and what’s on it.
+      We’ll put the right trailer under it.
     </p>
     <div class="quote-cta__actions">
       <Button href="/get-a-quote" size="lg">Get a Quote</Button>
@@ -57,6 +57,8 @@ import { SITE } from "@lib/site";
     color: var(--c-ink);
     border-bottom: 1.5px solid var(--c-accent);
     padding-bottom: 2px;
+    font-feature-settings: "tnum" 1, "lnum" 1;
+    font-variant-numeric: tabular-nums lining-nums;
     transition: color var(--d-fast) var(--ease-out), border-color var(--d-fast) var(--ease-out);
   }
   .quote-cta__phone:hover .quote-cta__phone-num {

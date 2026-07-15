@@ -1,6 +1,7 @@
 ---
 import TrailerMorph from "@components/animations/TrailerMorph.astro";
 import { SERVICES } from "@lib/services";
+import Caps from "@components/ui/Caps.astro";
 
 // Card grid of all services — the "self-qualify fast" device from PLAN.md
 const featured = SERVICES.slice(0, 9);
@@ -25,8 +26,8 @@ const featured = SERVICES.slice(0, 9);
         <li class="modes__cell reveal" style={`--reveal-delay: ${i * 60}ms;`} data-reveal>
           <a href={`/services/${s.slug}`} class="modes__cell-link link-arrow">
             <span class="mono modes__cell-num">0{i + 1}</span>
-            <span class="modes__cell-title">{s.title}</span>
-            <span class="modes__cell-blurb">{s.blurb}</span>
+            <span class="modes__cell-title"><Caps text={s.title} /></span>
+            <span class="modes__cell-blurb"><Caps text={s.blurb} /></span>
             <span class="modes__cell-cta">Explore <span class="arrow" aria-hidden="true">→</span></span>
           </a>
         </li>

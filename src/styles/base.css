@@ -3,9 +3,7 @@
  * Resets + typography defaults. Tailwind v4 utilities layer on top.
  * --------------------------------------------------------------------------- */
 
-@import "@fontsource-variable/archivo";
-@import "@fontsource-variable/inter";
-@import "@fontsource-variable/jetbrains-mono";
+@import "./fonts.css";
 
 @import "tailwindcss";
 @import "./tokens.css";
@@ -30,7 +28,10 @@
   --color-success: var(--c-success);
 
   --font-display: var(--ff-display);
-  --font-sans: var(--ff-body);
+  --font-ui: var(--ff-ui);
+  --font-sans: var(--ff-ui);
+  --font-serif: var(--ff-body);
+  --font-body: var(--ff-body);
   --font-mono: var(--ff-mono);
 
   --radius-sm: var(--r-sm);
@@ -63,7 +64,11 @@ body {
   font-family: var(--ff-body);
   font-size: var(--t-body);
   line-height: var(--lh-base);
-  font-feature-settings: "ss01", "cv11";
+  /* Equity running text: kerning, ligatures, contextual alternates, and
+     oldstyle proportional figures so numerals sit naturally in prose. */
+  font-feature-settings: var(--fs-body);
+  font-kerning: normal;
+  font-size-adjust: from-font; /* hold x-height steady across the font swap */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
@@ -105,12 +110,127 @@ h6 {
   font-weight: 700;
   line-height: var(--lh-tight);
   letter-spacing: var(--ls-tight);
+  /* Concourse display: lining figures + case-aware punctuation. */
+  font-feature-settings: var(--fs-display);
   margin: 0;
   text-wrap: balance;
+}
+h3,
+h4,
+h5,
+h6 {
+  line-height: var(--lh-snug);
+  letter-spacing: var(--ls-snug);
+}
+b,
+strong {
+  font-weight: 700;
 }
 p {
   margin: 0;
   text-wrap: pretty;
+}
+/* Italic emphasis stays in the serif; Equity has a true italic. */
+em,
+i,
+cite {
+  font-style: italic;
+}
+small {
+  font-size: var(--t-small);
+}
+sup,
+sub {
+  /* real superior/inferior figures rather than shrunk-and-shifted glyphs */
+  font-size: 100%;
+  line-height: 0;
+  vertical-align: baseline;
+}
+sup {
+  font-feature-settings: "kern" 1, "sups" 1;
+}
+sub {
+  font-feature-settings: "kern" 1, "subs" 1;
+}
+
+/* --- Technical-typography helpers ---------------------------------------- *
+ * Small caps for acronyms/abbreviations in running text. Keep the source
+ * text as real letters (LTL, FTL, US) for screen readers; the font renders
+ * them at small-cap height. `case`-independent via c2sc + smcp. */
+.sc,
+abbr[class~="sc"] {
+  font-variant-caps: normal; /* reset any inherited variant */
+  font-feature-settings: "c2sc" 1, "smcp" 1, "kern" 1, "onum" 1;
+  letter-spacing: var(--ls-sc);
+}
+abbr {
+  text-decoration: none; /* no dotted underline on styled abbreviations */
+}
+/* Tabular lining figures — stats, tables, prices, phone numbers, anything
+   whose digits should align in columns or not jitter while animating. */
+.tnum,
+.tabular-nums {
+  font-feature-settings: var(--fs-tabular);
+  font-variant-numeric: tabular-nums lining-nums;
+}
+/* Lining proportional figures — set-in-caps contexts, headings inline. */
+.lnum {
+  font-feature-settings: "kern" 1, "lnum" 1, "pnum" 1;
+}
+/* Oldstyle figures — force text figures where a component would otherwise
+   inherit lining (e.g. a figure sitting inside a display heading). */
+.onum {
+  font-feature-settings: "kern" 1, "onum" 1, "pnum" 1;
+}
+/* Real fractions: 1/2 -> ½-style built from numerator/denominator glyphs. */
+.frac {
+  font-feature-settings: "frac" 1, "kern" 1;
+}
+
+/* --- Long-form prose ----------------------------------------------------- *
+ * Applied to service/industry body copy for editorial-grade reading. */
+.prose {
+  max-width: 68ch;
+  font-size: var(--t-body);
+  line-height: var(--lh-relaxed);
+  hanging-punctuation: first last; /* Safari: hang opening quotes/dashes */
+}
+.prose p + p {
+  margin-top: var(--s-5);
+}
+.prose p {
+  text-wrap: pretty;
+  hyphens: auto;
+}
+.prose h2,
+.prose h3,
+.prose h4 {
+  text-wrap: balance;
+}
+.prose a {
+  color: var(--c-accent-deep);
+  text-underline-offset: 0.14em;
+  text-decoration-thickness: 0.06em;
+  text-decoration-line: underline;
+  text-decoration-color: color-mix(in srgb, var(--c-accent-deep) 45%, transparent);
+}
+.prose a:hover {
+  text-decoration-color: var(--c-accent-deep);
+}
+.prose strong {
+  font-weight: 700;
+}
+/* Blockquotes / pull quotes get hanging opening quotation marks. */
+blockquote {
+  hanging-punctuation: first;
+  text-wrap: pretty;
+}
+
+/* Data tables: digits align in columns (tabular) and sit at cap height
+   (lining) rather than the oldstyle figures used in running prose. */
+table {
+  font-variant-numeric: tabular-nums lining-nums;
+  font-feature-settings: "tnum" 1, "lnum" 1, "kern" 1;
 }
 
 /* --- Focus state — industrial, visible --- */
@@ -140,16 +260,25 @@ p {
 .eyebrow {
   font-family: var(--ff-mono);
   font-size: var(--t-eyebrow);
+  font-weight: 700;
   letter-spacing: var(--ls-wider);
   text-transform: uppercase;
   color: var(--c-ink-muted);
+  /* Triplicate is monospaced (already tabular); force lining figures so any
+     numerals in a label sit at cap height. */
+  font-feature-settings: "lnum" 1, "calt" 1;
 }
 .mono {
   font-family: var(--ff-mono);
+  font-feature-settings: "lnum" 1, "calt" 1;
+}
+.mono--onum {
+  font-feature-settings: "onum" 1, "calt" 1;
 }
 .display {
   font-family: var(--ff-display);
   letter-spacing: var(--ls-tight);
+  font-feature-settings: var(--fs-display);
 }
 .sr-only {
   position: absolute;

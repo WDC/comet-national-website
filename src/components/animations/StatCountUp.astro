@@ -47,6 +47,10 @@ const stats: Stat[] = [
     letter-spacing: var(--ls-tight);
     color: var(--c-ink);
     font-weight: 800;
+    /* Tabular lining figures so the number holds a steady width as it counts up
+       and the digits align to the underline. */
+    font-feature-settings: "tnum" 1, "lnum" 1;
+    font-variant-numeric: tabular-nums lining-nums;
   }
   .stat-band__suffix {
     font-size: var(--t-small);

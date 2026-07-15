@@ -49,6 +49,12 @@ if (showBreadcrumbs) {
 <meta name="twitter:description" content={seo.description} />
 <meta name="twitter:image" content={seo.ogImage} />
 
+<!-- Preload the three critical above-the-fold MB faces (body serif, hero display,
+     mono labels). font-display:swap + metric-matched fallbacks cover the rest. -->
+<link rel="preload" href="/fonts/equity_ot_a_regular.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+<link rel="preload" href="/fonts/concourse_ot_8_black.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+<link rel="preload" href="/fonts/triplicate_ot_a_regular.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+
 <!-- Icons -->
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 <link rel="apple-touch-icon" href="/apple-touch-icon.png" />

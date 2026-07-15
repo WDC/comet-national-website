@@ -44,7 +44,7 @@ export const SERVICES: ServiceItem[] = [
     slug: "volume-ltl",
     title: "Volume LTL",
     category: "trailer",
-    blurb: "Partial truckload — when you outgrow LTL but don't need a full trailer.",
+    blurb: "Partial truckload — when you outgrow LTL but don’t need a full trailer.",
     schemaServiceType: "Volume LTL / Partial Truckload Freight",
   },
   {
@@ -72,7 +72,7 @@ export const SERVICES: ServiceItem[] = [
     slug: "hotshot",
     title: "Hotshot",
     category: "trailer",
-    blurb: "Expedited urgent freight when a load can't wait.",
+    blurb: "Expedited urgent freight when a load can’t wait.",
     schemaServiceType: "Hotshot / Expedited Freight",
   },
   {
@@ -97,7 +97,7 @@ export const SERVICES: ServiceItem[] = [
     title: "Distressed Load Recovery",
     category: "facility",
     equityLine: "When disaster strikes.",
-    blurb: "Restack, rewrap, recover. The 911 call freight brokers don't take.",
+    blurb: "Restack, rewrap, recover. The 911 call freight brokers don’t take.",
     animation: "DistressedRecovery",
     schemaServiceType: "Distressed Load Recovery",
   },
@@ -164,7 +164,7 @@ export const INDUSTRIES: IndustryItem[] = [
     serviceSlugs: ["flatbed-ltl", "flatbed-open-deck", "hotshot", "warehousing-fulfillment"],
     equityLine: "Built around the way GCs and superintendents actually order freight.",
     heroLede:
-      "Steel by the bundle. Pre-cast on a Tuesday. A generator that has to be on-site before the inspection at 7 a.m. Construction freight breaks every assumption commodity LTL carriers make — so we built our flatbed and jobsite service around the way the schedule actually moves.",
+      "Steel by the bundle. Pre-cast on a Tuesday. A generator that has to be on-site before the inspection at 7 a.m. Construction freight breaks every assumption commodity LTL carriers make — so we built our flatbed and jobsite service around the way the schedule actually moves.",
     buyer: "General contractors · superintendents · jobsite logistics managers",
     cargoExamples: [
       "Structural steel",
@@ -181,7 +181,7 @@ export const INDUSTRIES: IndustryItem[] = [
       "Materials for inspection windows",
     ],
     challenges: [
-      { challenge: "Jobsite access is tight", answer: "Flatbed with hand-unload, hotshot for back-lot drops, pup-trailer splits where a 53′ won't fit." },
+      { challenge: "Jobsite access is tight", answer: "Flatbed with hand-unload, hotshot for back-lot drops, pup-trailer splits where a 53′ won’t fit." },
       { challenge: "Inspection or pour deadlines", answer: "Hotshot dispatch within 2 hours · direct origin-to-destination · no consolidation stops." },
       { challenge: "Material delivered too early", answer: "Lilburn warehouse staging · release to site on your draw schedule." },
       { challenge: "Oversize or over-height load", answer: "Step-deck, double-drop, RGN · permits and pilot routes handled in-house." },
@@ -190,7 +190,7 @@ export const INDUSTRIES: IndustryItem[] = [
     ],
     animation: "ConstructionRise",
     whyComet:
-      "Construction logistics is a sequencing problem dressed up as a shipping problem. We've been the carrier behind the schedules of GCs across the southeast since 1995 — we know the difference between a permit you can route around and one you can't, between a foreman who'll hand-unload and one who won't.",
+      "Construction logistics is a sequencing problem dressed up as a shipping problem. We’ve been the carrier behind the schedules of GCs across the southeast since 1995 — we know the difference between a permit you can route around and one you can’t, between a foreman who’ll hand-unload and one who won’t.",
   },
   {
     slug: "manufacturing-industrial",
@@ -225,16 +225,16 @@ export const INDUSTRIES: IndustryItem[] = [
     ],
     animation: "PlantFlow",
     whyComet:
-      "Plant logistics rewards the carrier who picks up the phone and knows the part number. We're an asset-based carrier with a brokerage arm and a warehouse — so the answer to 'can you also do X' is almost always yes, from the same dispatcher, on the same BOL.",
+      "Plant logistics rewards the carrier who picks up the phone and knows the part number. We’re an asset-based carrier with a brokerage arm and a warehouse — so the answer to ‘can you also do X’ is almost always yes, from the same dispatcher, on the same BOL.",
   },
   {
     slug: "building-materials",
     title: "Building Materials",
     blurb: "Flatbed, LTL consolidation, and storage for distributors.",
     serviceSlugs: ["flatbed-ltl", "dry-van-ltl", "volume-ltl", "warehousing-fulfillment"],
-    equityLine: "Distribution freight that respects the dealer's calendar.",
+    equityLine: "Distribution freight that respects the dealer’s calendar.",
     heroLede:
-      "A pallet of fasteners doesn't move the same way a pre-hung door does. We carry building-materials freight the way distributors actually buy it — partial flatbed for the long stuff, dry van for the boxed, and warehouse staging for the seasonal swings.",
+      "A pallet of fasteners doesn’t move the same way a pre-hung door does. We carry building-materials freight the way distributors actually buy it — partial flatbed for the long stuff, dry van for the boxed, and warehouse staging for the seasonal swings.",
     buyer: "Building-materials distributors · branch managers · purchasing leads",
     cargoExamples: [
       "Pre-hung doors",
@@ -267,9 +267,9 @@ export const INDUSTRIES: IndustryItem[] = [
     title: "Machinery & Equipment",
     blurb: "Open deck, oversized, and distressed load recovery.",
     serviceSlugs: ["flatbed-open-deck", "distressed-load-recovery", "hotshot", "transloading"],
-    equityLine: "Heavy iron, handled by people who've been around heavy iron.",
+    equityLine: "Heavy iron, handled by people who’ve been around heavy iron.",
     heroLede:
-      "A piece of machinery in the wrong hands becomes a freight claim. We've moved presses, gensets, transformers, and yellow iron since long before the routing software existed — with the equipment, the securement, and the permitting know-how that protects the asset and the timeline.",
+      "A piece of machinery in the wrong hands becomes a freight claim. We’ve moved presses, gensets, transformers, and yellow iron since long before the routing software existed — with the equipment, the securement, and the permitting know-how that protects the asset and the timeline.",
     buyer: "Equipment dealers · OEM logistics teams · industrial buyers",
     cargoExamples: [
       "Industrial pumps",
@@ -295,6 +295,6 @@ export const INDUSTRIES: IndustryItem[] = [
     ],
     animation: "HeavyHaul",
     whyComet:
-      "Machinery freight has consequences. A misrouted permit costs days; a mis-set chain costs the asset. We've spent five decades earning the calls that other brokers pass on — because the carrier who's done it before is the one who actually finishes the job.",
+      "Machinery freight has consequences. A misrouted permit costs days; a mis-set chain costs the asset. We’ve spent five decades earning the calls that other brokers pass on — because the carrier who’s done it before is the one who actually finishes the job.",
   },
 ];

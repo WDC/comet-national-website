@@ -19,7 +19,7 @@ const {
 } = Astro.props;
 
 const base =
-  "inline-flex items-center justify-center gap-2 font-display font-semibold tracking-tight uppercase transition-all duration-200 ease-out focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent hover:-translate-y-0.5 active:translate-y-0";
+  "btn-type inline-flex items-center justify-center gap-2 font-display font-semibold tracking-[0.045em] uppercase transition-all duration-200 ease-out focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent hover:-translate-y-0.5 active:translate-y-0";
 const sizing = size === "lg" ? "h-14 px-7 text-[0.95rem]" : "h-11 px-5 text-[0.85rem]";
 const radius = "rounded-[var(--r-sm)]";
 const variantCls =
@@ -40,3 +40,11 @@ const cls = [base, sizing, radius, variantCls, widthCls, className].filter(Boole
     <slot />
   </button>
 )}
+
+<style>
+  /* Concourse set in caps: case-sensitive punctuation + ligatures/kerning.
+     (positive tracking is applied via the utility class in the base string). */
+  .btn-type {
+    font-feature-settings: "case" 1, "liga" 1, "kern" 1;
+  }
+</style>

@@ -1,5 +1,6 @@
 ---
 import Logo from "./Logo.astro";
+import Caps from "@components/ui/Caps.astro";
 import { SITE } from "@lib/site";
 import { SERVICES_BY_CATEGORY } from "@lib/services";
 
@@ -26,7 +27,7 @@ const year = new Date().getFullYear();
       <div class="eyebrow site-footer__heading">By trailer</div>
       <ul>
         {SERVICES_BY_CATEGORY.trailer.map((s) => (
-          <li><a href={`/services/${s.slug}`}>{s.title}</a></li>
+          <li><a href={`/services/${s.slug}`}><Caps text={s.title} /></a></li>
         ))}
       </ul>
     </nav>
@@ -35,10 +36,10 @@ const year = new Date().getFullYear();
       <div class="eyebrow site-footer__heading">By facility</div>
       <ul>
         {SERVICES_BY_CATEGORY.facility.map((s) => (
-          <li><a href={`/services/${s.slug}`}>{s.title}</a></li>
+          <li><a href={`/services/${s.slug}`}><Caps text={s.title} /></a></li>
         ))}
         {SERVICES_BY_CATEGORY.managed.map((s) => (
-          <li><a href={`/services/${s.slug}`}>{s.title}</a></li>
+          <li><a href={`/services/${s.slug}`}><Caps text={s.title} /></a></li>
         ))}
       </ul>
     </nav>
@@ -98,6 +99,9 @@ const year = new Date().getFullYear();
     font-size: var(--t-small);
     line-height: 1.7;
     color: rgba(247, 246, 238, 0.7);
+    /* address, zip, phone — lining figures on a fixed advance */
+    font-feature-settings: "lnum" 1, "tnum" 1;
+    font-variant-numeric: tabular-nums lining-nums;
   }
   .site-footer__nap a:hover { color: var(--c-accent); }
 

@@ -1,0 +1,147 @@
+/* ----------------------------------------------------------------------------
+ * Comet National — Web font faces (MB Type, self-hosted WOFF2)
+ *
+ * Three families do all the work, each in its OpenType ("OT") cut so that
+ * small caps, oldstyle/tabular figures, fractions, and kerning are all
+ * reachable from CSS `font-feature-settings` / `font-variant-*`:
+ *
+ *   Equity     — serif, running text & long-form prose            (Equity OT A)
+ *   Concourse  — geometric sans, headlines / UI / labels          (Concourse OT)
+ *   Triplicate — monospace, eyebrows / specs / data / code        (Triplicate OT A)
+ *
+ * THE GOLDEN RULE (per MB): every roman/italic/bold weight of a family shares
+ * one `font-family` name so the browser resolves them as one family.
+ * --------------------------------------------------------------------------- */
+
+/* ===== Equity (serif body) — Equity OT A ================================== */
+@font-face {
+  font-family: "Equity";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/equity_ot_a_regular.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Equity";
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/equity_ot_a_italic.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Equity";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("/fonts/equity_ot_a_bold.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Equity";
+  font-style: italic;
+  font-weight: 700;
+  font-display: swap;
+  src: url("/fonts/equity_ot_a_bold_italic.woff2") format("woff2");
+}
+
+/* ===== Concourse (sans headlines / UI) — Concourse OT ===================== *
+ * Weight ladder mapped to MB's numbered grades:
+ *   400 = 3 book · 500 = 4 medium · 600 = 6 semibold · 700 = 7 bold · 800 = 8 black
+ * Italics ship for the heavy grades (headline emphasis); body italic is Equity. */
+@font-face {
+  font-family: "Concourse";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/concourse_ot_3_book.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Concourse";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("/fonts/concourse_ot_4_medium.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Concourse";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("/fonts/concourse_ot_6_semibold.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Concourse";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("/fonts/concourse_ot_7_bold.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Concourse";
+  font-style: italic;
+  font-weight: 700;
+  font-display: swap;
+  src: url("/fonts/concourse_ot_7_bold_italic.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Concourse";
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url("/fonts/concourse_ot_8_black.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Concourse";
+  font-style: italic;
+  font-weight: 800;
+  font-display: swap;
+  src: url("/fonts/concourse_ot_8_black_italic.woff2") format("woff2");
+}
+
+/* ===== Triplicate (monospace) — Triplicate OT A ========================== */
+@font-face {
+  font-family: "Triplicate";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/triplicate_ot_a_regular.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Triplicate";
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/triplicate_ot_a_italic.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Triplicate";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("/fonts/triplicate_ot_a_bold.woff2") format("woff2");
+}
+
+/* ===== Metric-matched fallbacks ========================================== *
+ * Tune the system fallbacks toward each MB face's x-height/advance so the
+ * `font-display: swap` reflow is minimal. size-adjust values are eyeballed to
+ * Equity (~narrow serif) and Concourse (~tall geometric sans). */
+@font-face {
+  font-family: "Equity Fallback";
+  src: local("Georgia"), local("Times New Roman");
+  ascent-override: 92%;
+  descent-override: 24%;
+  line-gap-override: 0%;
+  size-adjust: 103%;
+}
+@font-face {
+  font-family: "Concourse Fallback";
+  src: local("Arial"), local("Helvetica Neue"), local("Helvetica");
+  ascent-override: 96%;
+  descent-override: 22%;
+  line-gap-override: 0%;
+  size-adjust: 97%;
+}
+@font-face {
+  font-family: "Triplicate Fallback";
+  src: local("Consolas"), local("Menlo"), local("Courier New");
+  size-adjust: 100%;
+}

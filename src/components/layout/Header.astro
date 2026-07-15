@@ -201,6 +201,8 @@ function isActive(href: string) {
     font-size: var(--t-small);
     color: var(--c-ink);
     white-space: nowrap;
+    font-feature-settings: "lnum" 1, "tnum" 1;
+    font-variant-numeric: tabular-nums lining-nums;
   }
   .site-header__phone:hover { color: var(--c-accent); }
 
