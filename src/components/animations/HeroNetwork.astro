@@ -1,0 +1,121 @@
+---
+/**
+ * Hero freight network — the legacy Comet coverage animation.
+ *
+ * Clean continental-US outline in thin lines; brass hub dots across the map. The
+ * active hub cycles through major cities (Atlanta → LA → Chicago → Dallas → NY →
+ * Seattle → back to Atlanta): each city pulses, lanes draw outward, shipments run
+ * them, then the next city takes over. Loops forever.
+ * Reduced-motion: static fully-drawn network from Atlanta, no travel.
+ *
+ * Ported from the FlatbedLTL hero and re-tokened to Comet's heritage palette
+ * (cream ground, pine outline, harvest-brass lanes/hubs). Flat/2D, GPU-friendly
+ * (opacity + transform + stroke-dashoffset), tokens only.
+ */
+import { CITIES, TOUR, createProjection } from "@lib/usmap";
+
+const VB = { w: 960, h: 600 };
+const proj = createProjection(VB.w, VB.h, 46, 74);
+
+// Resolve a city key to pixel space (non-null: keys come from CITIES itself).
+const px = (key: string) => {
+  const c = CITIES[key]!;
+  return proj.project(c.lonlat[0], c.lonlat[1]);
+};
+
+// Every city rendered as a persistent dot in the network.
+const NODES = Object.keys(CITIES).map((key) => ({ key, ...px(key) }));
+
+// Tour resolved to pixel space for the client runner.
+const tourPx = TOUR.map((s) => ({
+  hub: { label: CITIES[s.hub]!.label, ...px(s.hub) },
+  dests: s.to.map((k) => px(k)),
+}));
+
+const start = px("atlanta");
+const MAX_LANES = Math.max(...TOUR.map((s) => s.to.length));
+---
+
+<div class="hero-net" data-hero-net data-tour={JSON.stringify(tourPx)} aria-hidden="true">
+  <svg viewBox="0 0 960 600" preserveAspectRatio="xMidYMid meet" fill="none" role="presentation">
+    <defs>
+      <radialGradient id="hnGlow" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="var(--c-accent)" stop-opacity="0.45" />
+        <stop offset="100%" stop-color="var(--c-accent)" stop-opacity="0" />
+      </radialGradient>
+    </defs>
+
+    <!-- US outline (perimeter + Lake Michigan) -->
+    <path class="hn-outline" d={proj.usPath} />
+
+    <!-- Reusable lane pool -->
+    <g class="hn-lanes" stroke="var(--c-accent)" stroke-width="1.5" stroke-linecap="round">
+      {Array.from({ length: MAX_LANES }).map(() => (
+        <line class="hn-lane" data-lane x1={start.x} y1={start.y} x2={start.x} y2={start.y} />
+      ))}
+    </g>
+
+    <!-- Reusable shipment pool -->
+    <g class="hn-ships">
+      {Array.from({ length: MAX_LANES }).map(() => (
+        <circle class="hn-ship" data-ship r="3.5" cx={start.x} cy={start.y} />
+      ))}
+    </g>
+
+    <!-- Persistent hub dots -->
+    <g class="hn-hubs">
+      {NODES.map((n) => <circle class="hn-hub" cx={n.x} cy={n.y} r="4" />)}
+    </g>
+
+    <!-- Active hub marker: glow + pulse + solid core + label -->
+    <circle class="hn-glow" data-glow cx={start.x} cy={start.y} r="46" fill="url(#hnGlow)" />
+    <circle class="hn-pulse" data-pulse cx={start.x} cy={start.y} r="9" />
+    <circle class="hn-core" data-core cx={start.x} cy={start.y} r="7" />
+    <text class="hn-label" data-label x={start.x + 16} y={start.y + 5}>ATLANTA</text>
+  </svg>
+</div>
+
+<style>
+  .hero-net { width: 100%; height: 100%; }
+  .hero-net svg { width: 100%; height: auto; overflow: visible; display: block; }
+
+  /* Faint pine map on the cream ground. */
+  .hn-outline {
+    stroke: var(--c-ink-soft);
+    stroke-width: 1.25;
+    stroke-opacity: 0.42;
+    stroke-linejoin: round;
+    fill: rgba(47, 70, 43, 0.02);
+  }
+  .hn-lane { stroke-opacity: 0.55; opacity: 0; }
+  .hn-hub { fill: var(--c-accent); opacity: 0.6; }
+  /* Shipments read as deep-pine cargo carrying a brass trail on light ground. */
+  .hn-ship { fill: var(--c-pine-deep); filter: drop-shadow(0 0 4px var(--c-accent)); opacity: 0; }
+  .hn-core { fill: var(--c-accent); }
+  .hn-pulse { fill: none; stroke: var(--c-accent); stroke-width: 2; opacity: 0; }
+  .hn-glow { opacity: 0; }
+  .hn-label {
+    fill: var(--c-ink);
+    font-family: var(--ff-mono);
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    opacity: 0;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hn-ship { display: none; }
+  }
+</style>
+
+<script>
+  import { runNetworkCycle } from "@lib/networkCycle";
+  import type { NetStop } from "@lib/networkCycle";
+
+  const root = document.querySelector<HTMLElement>("[data-hero-net]");
+  if (root?.dataset.tour) {
+    const tour = JSON.parse(root.dataset.tour) as NetStop[];
+    runNetworkCycle(root, tour, { vbW: 960 });
+  }
+</script>
