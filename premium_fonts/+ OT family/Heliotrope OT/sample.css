@@ -1,0 +1,107 @@
+@font-face {
+font-family: heliotrope_ot_3_book;
+font-style: normal;
+font-weight: normal;
+font-stretch: normal;
+font-display: auto;
+src: url('heliotrope_ot_3_book.woff2') format('woff2');
+}
+
+@font-face {
+font-family: heliotrope_ot_3_book;
+font-style: italic;
+font-weight: normal;
+font-stretch: normal;
+font-display: auto;
+src: url('heliotrope_ot_3_book_italic.woff2') format('woff2');
+}
+
+@font-face {
+font-family: heliotrope_ot_3_book_italic;
+font-style: normal;
+font-weight: normal;
+font-stretch: normal;
+font-display: auto;
+src: url('heliotrope_ot_3_book_italic.woff2') format('woff2');
+}
+
+@font-face {
+font-family: heliotrope_ot_4_medium;
+font-style: normal;
+font-weight: normal;
+font-stretch: normal;
+font-display: auto;
+src: url('heliotrope_ot_4_medium.woff2') format('woff2');
+}
+
+@font-face {
+font-family: heliotrope_ot_4_medium;
+font-style: italic;
+font-weight: normal;
+font-stretch: normal;
+font-display: auto;
+src: url('heliotrope_ot_4_medium_italic.woff2') format('woff2');
+}
+
+@font-face {
+font-family: heliotrope_ot_4_medium_italic;
+font-style: normal;
+font-weight: normal;
+font-stretch: normal;
+font-display: auto;
+src: url('heliotrope_ot_4_medium_italic.woff2') format('woff2');
+}
+
+@font-face {
+font-family: heliotrope_ot_6_semibold;
+font-style: normal;
+font-weight: normal;
+font-stretch: normal;
+font-display: auto;
+src: url('heliotrope_ot_6_semibold.woff2') format('woff2');
+}
+
+@font-face {
+font-family: heliotrope_ot_6_semibold;
+font-style: italic;
+font-weight: normal;
+font-stretch: normal;
+font-display: auto;
+src: url('heliotrope_ot_6_semibold_italic.woff2') format('woff2');
+}
+
+@font-face {
+font-family: heliotrope_ot_6_semibold_italic;
+font-style: normal;
+font-weight: normal;
+font-stretch: normal;
+font-display: auto;
+src: url('heliotrope_ot_6_semibold_italic.woff2') format('woff2');
+}
+
+@font-face {
+font-family: heliotrope_ot_8_black;
+font-style: normal;
+font-weight: normal;
+font-stretch: normal;
+font-display: auto;
+src: url('heliotrope_ot_8_black.woff2') format('woff2');
+}
+
+@font-face {
+font-family: heliotrope_ot_8_black;
+font-style: italic;
+font-weight: normal;
+font-stretch: normal;
+font-display: auto;
+src: url('heliotrope_ot_8_black_italic.woff2') format('woff2');
+}
+
+@font-face {
+font-family: heliotrope_ot_8_black_italic;
+font-style: normal;
+font-weight: normal;
+font-stretch: normal;
+font-display: auto;
+src: url('heliotrope_ot_8_black_italic.woff2') format('woff2');
+}

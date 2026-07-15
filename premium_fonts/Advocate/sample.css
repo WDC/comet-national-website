@@ -1,0 +1,80 @@
+@font-face {
+font-family: advocate_14_cond_reg;
+font-style: normal;
+font-weight: normal;
+font-stretch: normal;
+font-display: auto;
+src: url('advocate_14_cond_reg.woff2') format('woff2');
+}
+
+@font-face {
+font-family: advocate_15_cond_med;
+font-style: normal;
+font-weight: normal;
+font-stretch: normal;
+font-display: auto;
+src: url('advocate_15_cond_med.woff2') format('woff2');
+}
+
+@font-face {
+font-family: advocate_16_cond_bold;
+font-style: normal;
+font-weight: normal;
+font-stretch: normal;
+font-display: auto;
+src: url('advocate_16_cond_bold.woff2') format('woff2');
+}
+
+@font-face {
+font-family: advocate_34_narr_reg;
+font-style: normal;
+font-weight: normal;
+font-stretch: normal;
+font-display: auto;
+src: url('advocate_34_narr_reg.woff2') format('woff2');
+}
+
+@font-face {
+font-family: advocate_35_narr_med;
+font-style: normal;
+font-weight: normal;
+font-stretch: normal;
+font-display: auto;
+src: url('advocate_35_narr_med.woff2') format('woff2');
+}
+
+@font-face {
+font-family: advocate_36_narr_bold;
+font-style: normal;
+font-weight: normal;
+font-stretch: normal;
+font-display: auto;
+src: url('advocate_36_narr_bold.woff2') format('woff2');
+}
+
+@font-face {
+font-family: advocate_54_wide_reg;
+font-style: normal;
+font-weight: normal;
+font-stretch: normal;
+font-display: auto;
+src: url('advocate_54_wide_reg.woff2') format('woff2');
+}
+
+@font-face {
+font-family: advocate_55_wide_med;
+font-style: normal;
+font-weight: normal;
+font-stretch: normal;
+font-display: auto;
+src: url('advocate_55_wide_med.woff2') format('woff2');
+}
+
+@font-face {
+font-family: advocate_56_wide_bold;
+font-style: normal;
+font-weight: normal;
+font-stretch: normal;
+font-display: auto;
+src: url('advocate_56_wide_bold.woff2') format('woff2');
+}
