@@ -30,6 +30,7 @@ const url = `${SITE.url}/services/${service.slug}`;
       description: pageDescription,
       serviceType: service.schemaServiceType,
     }}
+    faq={service.faqs}
   />
 
   <article class="pillar">
@@ -71,6 +72,26 @@ const url = `${SITE.url}/services/${service.slug}`;
         <h2 class="pillar__h2 display">Quote. Schedule. Rest easy.</h2>
         <HowItWorksFlow />
       </section>
+
+      {service.faqs && service.faqs.length > 0 && (
+        <section class="pillar__faq" data-reveal>
+          <p class="eyebrow">Common questions</p>
+          <h2 class="pillar__h2 display">Before you call, in case it helps.</h2>
+          <ul class="pillar__faq-list reveal-stagger" data-reveal>
+            {service.faqs.map((f) => (
+              <li>
+                <details class="pillar__faq-item">
+                  <summary class="pillar__faq-q">
+                    <span>{f.q}</span>
+                    <span class="pillar__faq-mark" aria-hidden="true"></span>
+                  </summary>
+                  <p class="pillar__faq-a">{f.a}</p>
+                </details>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
 
       {relatedSlugs && relatedSlugs.length > 0 && (
         <section class="pillar__related" data-reveal>
@@ -170,7 +191,7 @@ const url = `${SITE.url}/services/${service.slug}`;
   }
   .pillar__art:hover {
     border-color: var(--c-accent);
-    box-shadow: 0 12px 28px -20px rgba(245, 166, 35, 0.4);
+    box-shadow: 0 12px 28px -20px color-mix(in srgb, var(--c-accent) 40%, transparent);
   }
 
   .pillar__body {
@@ -228,6 +249,60 @@ const url = `${SITE.url}/services/${service.slug}`;
     color: var(--c-accent);
     font-family: var(--ff-display);
     font-weight: 600;
+  }
+
+  .pillar__faq-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    border-top: 1px solid var(--c-line);
+  }
+  .pillar__faq-item {
+    border-bottom: 1px solid var(--c-line);
+  }
+  .pillar__faq-q {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--s-4);
+    padding: var(--s-5) 0;
+    cursor: pointer;
+    list-style: none;
+    font-family: var(--ff-display);
+    font-weight: 600;
+    font-size: 1.1875rem;
+    letter-spacing: var(--ls-snug);
+    color: var(--c-ink);
+    transition: color var(--d-fast) var(--ease-out);
+  }
+  .pillar__faq-q::-webkit-details-marker { display: none; }
+  .pillar__faq-q:hover { color: var(--c-accent-deep); }
+  /* Plus/minus mark drawn from borders so it needs no icon font. */
+  .pillar__faq-mark {
+    position: relative;
+    flex: 0 0 auto;
+    width: 14px;
+    height: 14px;
+    margin-top: 4px;
+  }
+  .pillar__faq-mark::before,
+  .pillar__faq-mark::after {
+    content: "";
+    position: absolute;
+    background: var(--c-accent-deep);
+    transition: transform var(--d-fast) var(--ease-out), opacity var(--d-fast) var(--ease-out);
+  }
+  .pillar__faq-mark::before { inset: 6px 0; height: 2px; }
+  .pillar__faq-mark::after { inset: 0 6px; width: 2px; }
+  .pillar__faq-item[open] .pillar__faq-mark::after { transform: scaleY(0); opacity: 0; }
+  .pillar__faq-item[open] .pillar__faq-q { color: var(--c-accent-deep); }
+  .pillar__faq-a {
+    margin: 0;
+    padding: 0 var(--s-8) var(--s-6) 0;
+    color: var(--c-ink-muted);
+    max-width: 68ch;
+    font-size: 1.0625rem;
+    line-height: var(--lh-relaxed);
   }
 
   .pillar__final-cta {

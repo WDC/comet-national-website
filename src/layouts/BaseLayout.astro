@@ -11,20 +11,29 @@ interface Props extends PageSeo {
   bodyClass?: string;
 }
 const { bodyClass, ...rest } = Astro.props;
+
+// The sticky mobile call bar's CTA is "Get a Quote" — pointless (and it overlaps
+// the form) on the quote page itself, so hide it there. The `has-call-bar` class
+// gates the body padding that reserves room for the bar.
+const path = Astro.url.pathname.replace(/\/+$/, "") || "/";
+const showCallBar = path !== "/get-a-quote";
+const bodyClass2 = [bodyClass, showCallBar ? "has-call-bar" : null]
+  .filter(Boolean)
+  .join(" ") || undefined;
 ---
 <!doctype html>
 <html lang="en">
   <head>
     <BaseHead {...rest} />
   </head>
-  <body class={bodyClass}>
+  <body class={bodyClass2}>
     <a href="#main" class="skip-link">Skip to content</a>
     <Header />
     <main id="main">
       <slot />
     </main>
     <Footer />
-    <StickyMobileCallBar />
+    {showCallBar && <StickyMobileCallBar />}
 
     <script>
       import { bootMotion } from "@lib/motion";
@@ -44,9 +53,11 @@ const { bodyClass, ...rest } = Astro.props;
         z-index: 9999;
       }
       .skip-link:focus { top: 0; }
-      /* Reserve room above sticky mobile bar */
+      /* Reserve room above the sticky mobile bar — only on routes that render
+         it, and include the notch safe-area so the bar never covers content on
+         devices with a home indicator. */
       @media (max-width: 720px) {
-        body { padding-bottom: 64px; }
+        body.has-call-bar { padding-bottom: calc(64px + env(safe-area-inset-bottom)); }
       }
     </style>
   </body>

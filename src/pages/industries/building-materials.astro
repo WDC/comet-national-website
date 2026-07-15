@@ -6,11 +6,11 @@ import { INDUSTRIES } from "@lib/services";
 
 const industry = INDUSTRIES.find((i) => i.slug === "building-materials")!;
 const description =
-  "Building-materials freight from an Atlanta carrier. Partial flatbed for long product, dry van for boxed, and warehouse staging for seasonal swings. Distributor-friendly billing, single-touchpoint dispatch.";
+  "Building-materials freight from an Atlanta carrier. Partial flatbed for long product, dry van for boxed, warehouse staging for the seasonal swings.";
 ---
 <IndustryLayout
   industry={industry}
-  pageTitle="Building Materials Freight Shipping | Distributor Logistics | Comet National"
+  pageTitle="Building Materials Freight | Comet National"
   pageDescription={description}
 >
   <MaterialsStack slot="hero-art" />

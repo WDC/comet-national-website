@@ -3,8 +3,10 @@ import TrailerMorph from "@components/animations/TrailerMorph.astro";
 import { SERVICES } from "@lib/services";
 import Caps from "@components/ui/Caps.astro";
 
-// Card grid of all services — the "self-qualify fast" device from PLAN.md
-const featured = SERVICES.slice(0, 9);
+// Card grid of every service — the "self-qualify fast" device from PLAN.md.
+// Show all modes so signature services (e.g. distressed-load recovery) aren't
+// cut off; the count drives the "see all" affordance below.
+const featured = SERVICES;
 ---
 <section class="modes section">
   <div class="container-content">
@@ -25,7 +27,7 @@ const featured = SERVICES.slice(0, 9);
       {featured.map((s, i) => (
         <li class="modes__cell reveal" style={`--reveal-delay: ${i * 60}ms;`} data-reveal>
           <a href={`/services/${s.slug}`} class="modes__cell-link link-arrow">
-            <span class="mono modes__cell-num">0{i + 1}</span>
+            <span class="mono modes__cell-num">{String(i + 1).padStart(2, "0")}</span>
             <span class="modes__cell-title"><Caps text={s.title} /></span>
             <span class="modes__cell-blurb"><Caps text={s.blurb} /></span>
             <span class="modes__cell-cta">Explore <span class="arrow" aria-hidden="true">→</span></span>
@@ -33,6 +35,12 @@ const featured = SERVICES.slice(0, 9);
         </li>
       ))}
     </ul>
+
+    <div class="modes__footer" data-reveal>
+      <a href="/services" class="modes__all link-arrow">
+        See all {featured.length} services in detail <span class="arrow" aria-hidden="true">→</span>
+      </a>
+    </div>
   </div>
 </section>
 
@@ -128,13 +136,30 @@ const featured = SERVICES.slice(0, 9);
     font-weight: 600;
     font-size: var(--t-small);
     letter-spacing: var(--ls-snug);
-    color: var(--c-accent);
+    color: var(--c-accent-deep);
   }
-  .modes__cell:hover .modes__cell-cta { color: var(--c-accent-hover); }
+  .modes__cell:hover .modes__cell-cta { color: var(--c-accent-deep); }
+
+  .modes__footer {
+    margin-top: var(--s-8);
+    display: flex;
+    justify-content: flex-end;
+  }
+  .modes__all {
+    font-family: var(--ff-display);
+    font-weight: 600;
+    font-size: var(--t-small);
+    letter-spacing: var(--ls-snug);
+    color: var(--c-accent-deep);
+    display: inline-flex;
+    align-items: baseline;
+    gap: 6px;
+  }
 
   @media (max-width: 960px) {
     .modes__head { grid-template-columns: 1fr; gap: var(--s-6); }
     .modes__grid { grid-template-columns: repeat(2, 1fr); }
+    .modes__footer { justify-content: flex-start; }
   }
   @media (max-width: 560px) {
     .modes__grid { grid-template-columns: 1fr; }

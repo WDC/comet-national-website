@@ -1,6 +1,6 @@
 ---
 title: "What a Transload Facility Does, and When It Saves You a Week"
-summary: "A transload dock changes freight from one mode to another without long-term storage. Here is how it turns a container stuck at the port into a truck already rolling."
+summary: "A transload dock changes freight from one mode to another without long-term storage — turning a container stuck at the port into a truck already rolling."
 publishedDate: 2026-05-28
 draft: false
 author: "Comet National"
