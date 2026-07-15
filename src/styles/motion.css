@@ -18,122 +18,15 @@
   transform: none;
 }
 
-/* SVG draw — animates stroke-dashoffset from full to 0 */
-@keyframes svg-draw {
-  to {
-    stroke-dashoffset: 0;
-  }
-}
-.draw {
-  stroke-dasharray: var(--draw-length, 1000);
-  stroke-dashoffset: var(--draw-length, 1000);
-}
-.is-visible .draw,
-.anim-on .draw {
-  animation: svg-draw 1.6s var(--ease-out) forwards;
-  animation-delay: var(--draw-delay, 0ms);
-}
-
-/* Pulse — used for the Atlanta hub dot */
-@keyframes pulse-dot {
-  0%, 100% {
-    transform: scale(1);
-    opacity: 1;
-  }
-  50% {
-    transform: scale(1.4);
-    opacity: 0.55;
-  }
-}
-.pulse {
-  transform-origin: center;
-  animation: pulse-dot 2.4s var(--ease-in-out) infinite;
-}
-
-/* Traveling dot along a path (Prompt 1 — hero network) */
-@keyframes travel {
-  to {
-    offset-distance: 100%;
-  }
-}
-.travel {
-  offset-rotate: 0deg;
-  animation: travel var(--travel-duration, 3s) linear infinite;
-  animation-delay: var(--travel-delay, 0ms);
-}
-
-/* Trailer morph (Prompt 4) — cross-fade between trailer paths */
-@keyframes trailer-cycle {
-  0%, 20% { opacity: 1; }
-  25%, 95% { opacity: 0; }
-  100% { opacity: 0; }
-}
-.trailer-state {
-  opacity: 0;
-  animation: trailer-cycle 8s steps(1, end) infinite;
-}
-
-/* Flatbed LTL pack-in (Prompt 5) */
-@keyframes slide-in-right {
-  from { transform: translateX(80px); opacity: 0; }
-  to   { transform: translateX(0);    opacity: 1; }
-}
-.anim-on .slide-pack > * {
-  opacity: 0;
-  animation: slide-in-right 700ms var(--ease-out) forwards;
-}
-.anim-on .slide-pack > *:nth-child(1) { animation-delay: 200ms; }
-.anim-on .slide-pack > *:nth-child(2) { animation-delay: 600ms; }
-.anim-on .slide-pack > *:nth-child(3) { animation-delay: 1000ms; }
-
-/* Transload pallet flow (Prompt 6) */
-@keyframes pallet-cross {
-  0%   { transform: translateX(0);   opacity: 0; }
-  10%  { opacity: 1; }
-  90%  { opacity: 1; }
-  100% { transform: translateX(140px); opacity: 0; }
-}
-.pallet-flow > * {
-  animation: pallet-cross 3s linear infinite;
-}
-.pallet-flow > *:nth-child(2) { animation-delay: 0.6s; }
-.pallet-flow > *:nth-child(3) { animation-delay: 1.2s; }
-.pallet-flow > *:nth-child(4) { animation-delay: 1.8s; }
-
-/* Cross-dock consolidate / deconsolidate (Prompt 7) */
-@keyframes consolidate {
-  0%, 40% { transform: translateX(0); }
-  50%, 90% { transform: translateX(60px); }
-  100% { transform: translateX(0); }
-}
-
-/* Distressed → recovered (Prompt 8) */
-@keyframes tilt-then-right {
-  0%, 30% { transform: rotate(-8deg) translateY(2px); }
-  60%, 100% { transform: none; }
-}
-@keyframes pulse-warn {
-  0%, 60% { opacity: 1; }
-  61%, 100% { opacity: 0; }
-}
-@keyframes appear-check {
-  0%, 60% { opacity: 0; }
-  70%, 100% { opacity: 1; }
-}
-.anim-on .tilt-pallets { animation: tilt-then-right 3s var(--ease-out) forwards; transform-origin: center bottom; }
-.anim-on .pulse-warn   { animation: pulse-warn 3s linear forwards; }
-.anim-on .appear-check { animation: appear-check 3s linear forwards; opacity: 0; }
-
-/* Number count-up (Prompt 9) — JS-driven, but underline draws via CSS */
-@keyframes underline-draw {
-  to { transform: scaleX(1); }
-}
-.anim-on .stat-underline {
-  transform: scaleX(0);
-  transform-origin: left;
-  animation: underline-draw 600ms var(--ease-out) forwards;
-  animation-delay: 1500ms;
-}
+/* ----------------------------------------------------------------------------
+ * NOTE — the freight/cargo scene animations (network draw, pulse rings, trailer
+ * morph, pack-in, pallet flow, cross-dock, distressed recovery, stat count-up)
+ * are no longer CSS @keyframes. They are driven by GSAP through the shared
+ * `scene()` foundation in src/lib/gsapMotion.ts, so there is a single source of
+ * timing truth and every piece shares the hero's motion vocabulary. The reveal
+ * helpers below (`.reveal`, `.reveal-stagger`, `.section-bar`) remain pure CSS —
+ * they are lightweight, page-wide, and gated by IntersectionObserver.
+ * --------------------------------------------------------------------------- */
 
 /* ----------------------------------------------------------------------------
  * Shared interaction primitives — hovers, focuses, skeletons, section loaders.

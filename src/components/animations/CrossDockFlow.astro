@@ -1,10 +1,16 @@
 ---
 /**
- * Prompt 7 — Cross-dock consolidation/deconsolidation.
- * Three small trucks → one large truck and back. Loop.
+ * Prompt 7 — Cross-dock consolidation.
+ *
+ * Three small inbound trucks drive in from the left (staggered) toward the dock;
+ * the dock flashes brass and emits the house pulse ring on consolidation; the
+ * inbound loads are absorbed and one big outbound truck drives out to the right.
+ * Looping, gated to the viewport. Same brass pulse + travel language as the hero.
+ *
+ * Reduced motion: inbound trucks arrived at the dock + outbound truck present.
  */
 ---
-<div class="crossdock-viz" data-anim>
+<div class="crossdock-viz" data-crossdock>
   <svg viewBox="0 0 520 240" role="img" aria-label="Cross-docking flow: three small inbound trucks consolidated into one outbound truck, and the reverse">
     <!-- Dock building -->
     <g transform="translate(200, 80)">
@@ -15,11 +21,14 @@
         DOCK
       </text>
     </g>
+    <!-- Dock consolidation flash + pulse ring -->
+    <rect class="cd-dockglow" data-dockglow x="200" y="80" width="120" height="80" fill="var(--c-accent)" opacity="0" />
+    <circle class="cd-pulse" data-pulse cx="260" cy="120" r="8" />
 
     <!-- Inbound: 3 small trucks (left) -->
     <g class="cd-inbound">
-      {[40, 100, 160].map((y, i) => (
-        <g transform={`translate(40, ${y})`} style={`animation-delay: ${i * 0.4}s`} class="cd-truck-in">
+      {[40, 100, 160].map((y) => (
+        <g transform={`translate(40, ${y})`} data-truck-in>
           <rect x="0" y="0" width="50" height="20" fill="none" stroke="var(--c-pine)" stroke-width="1.25" />
           <rect x="-12" y="4" width="14" height="14" fill="var(--c-pine)" />
           <circle cx="6" cy="22" r="3" fill="none" stroke="var(--c-pine)" stroke-width="1" />
@@ -30,7 +39,7 @@
     </g>
 
     <!-- Outbound: 1 big truck (right) -->
-    <g class="cd-outbound" transform="translate(360, 90)">
+    <g class="cd-outbound" data-outbound transform="translate(360, 90)">
       <rect x="0" y="0" width="120" height="50" fill="none" stroke="var(--c-pine)" stroke-width="1.5" />
       <rect x="-22" y="14" width="20" height="22" fill="var(--c-pine)" />
       <rect x="6" y="6" width="108" height="38" fill="var(--c-accent)" />
@@ -52,16 +61,56 @@
 
 <style>
   .crossdock-viz svg { width: 100%; height: auto; display: block; }
-  .cd-truck-in {
-    transform-origin: left center;
-    animation: cd-inbound-cycle 4s var(--ease-in-out) infinite;
-  }
-  @keyframes cd-inbound-cycle {
-    0%, 15% { transform: translate(0, 0); opacity: 1; }
-    35%, 60% { transform: translate(140px, 0); opacity: 1; }
-    65%, 100% { transform: translate(140px, 0); opacity: 0; }
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .cd-truck-in { animation: none !important; }
-  }
+  .cd-pulse { fill: none; stroke: var(--c-accent); stroke-width: 2; opacity: 0; }
+  .cd-dockglow { opacity: 0; }
 </style>
+
+<script>
+  import { scene, pulseRing, EASE, DUR } from "@lib/gsapMotion";
+
+  const root = document.querySelector<HTMLElement>("[data-crossdock]");
+  if (root) {
+    const trucksIn = [...root.querySelectorAll<SVGGElement>("[data-truck-in]")];
+    const outbound = root.querySelector<SVGGElement>("[data-outbound]");
+    const dockGlow = root.querySelector<SVGRectElement>("[data-dockglow]");
+    const pulse = root.querySelector<SVGCircleElement>("[data-pulse]");
+
+    const IN_X = 140; // inbound trucks drive right into the dock
+    const OUT_X = 200; // outbound truck drives off the right edge
+
+    const setStatic = (g: typeof import("gsap").gsap) => {
+      g.set(trucksIn, { x: IN_X, opacity: 1 });
+      g.set(outbound, { x: 0, opacity: 1 });
+      if (dockGlow) g.set(dockGlow, { opacity: 0 });
+      if (pulse) g.set(pulse, { opacity: 0 });
+    };
+
+    scene(
+      root,
+      (tl, g) => {
+        g.set(trucksIn, { x: 0, opacity: 1 });
+        g.set(outbound, { x: 0, opacity: 0 });
+        if (dockGlow) g.set(dockGlow, { opacity: 0 });
+
+        // Inbound trucks drive in, staggered.
+        tl.to(trucksIn, { x: IN_X, duration: DUR.slow, ease: EASE.inOut, stagger: 0.25 }, 0.2);
+
+        // Consolidation: dock flashes brass + house pulse ring.
+        const consolidate = 0.2 + DUR.slow + 0.5;
+        tl.to(dockGlow, { opacity: 0.4, duration: DUR.fast, ease: EASE.out }, consolidate)
+          .to(dockGlow, { opacity: 0, duration: DUR.base }, consolidate + DUR.fast);
+        if (pulse) pulseRing(tl, pulse, { from: 8, to: 34, duration: 0.6, at: consolidate });
+
+        // Inbound loads absorbed into the dock.
+        tl.to(trucksIn, { opacity: 0, duration: DUR.base }, consolidate + 0.15);
+
+        // Outbound truck emerges and drives out to the right.
+        const out = consolidate + DUR.base;
+        tl.to(outbound, { opacity: 1, duration: DUR.fast }, out)
+          .to(outbound, { x: OUT_X, duration: DUR.travel, ease: EASE.inOut }, out)
+          .to(outbound, { opacity: 0, duration: DUR.base }, out + DUR.travel - DUR.base);
+      },
+      { loop: true, repeatDelay: 0.4, reduced: setStatic },
+    );
+  }
+</script>

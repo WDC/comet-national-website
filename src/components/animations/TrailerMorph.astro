@@ -1,11 +1,20 @@
 ---
 /**
- * Prompt 4 — Mode selector / trailer morph.
- * 4 trailer states (flatbed, dry van, reefer, hotshot) cross-fade in a loop.
- * Pure CSS animation. Hover the parent or focus a state button to lock in.
+ * Mode selector / trailer morph.
+ *
+ * Four trailer states (flatbed → dry van → reefer → hotshot) cross-fade in a
+ * GSAP loop with the cab persistent: each state fades + slightly scales in
+ * (EASE.inOut), holds ~1.6s, then fades out as the next arrives. The loop is
+ * gated to the viewport (see gsapMotion.scene).
+ *
+ * Interactivity: hovering the parent pauses the loop; hovering or focusing one
+ * of the four mode chips pauses and snaps to that state. Leaving the component
+ * resumes the loop. Chips stay links to their service pages.
+ *
+ * Reduced motion: show the flatbed state only, static, loop disabled.
  */
 ---
-<div class="trailer-morph">
+<div class="trailer-morph" data-morph>
   <svg viewBox="0 0 360 140" class="trailer-svg" role="img" aria-label="Animated truck trailer cycling through flatbed, dry van, refrigerated and hotshot configurations">
     <!-- Ground line -->
     <line x1="10" y1="115" x2="350" y2="115" stroke="var(--c-line)" stroke-width="1" />
@@ -19,7 +28,7 @@
     </g>
 
     <!-- State 1: Flatbed -->
-    <g class="trailer-state state-flatbed" style="animation-delay: 0s;">
+    <g class="trailer-mode-state" data-state>
       <rect x="88" y="92" width="220" height="6" fill="var(--c-accent)" />
       <!-- crate -->
       <rect x="160" y="58" width="56" height="34" fill="none" stroke="var(--c-pine)" stroke-width="1.5" />
@@ -29,7 +38,7 @@
     </g>
 
     <!-- State 2: Dry van -->
-    <g class="trailer-state state-van" style="animation-delay: 2s;">
+    <g class="trailer-mode-state" data-state>
       <rect x="88" y="50" width="220" height="48" fill="none" stroke="var(--c-pine)" stroke-width="1.5" />
       <line x1="88" y1="60" x2="308" y2="60" stroke="var(--c-pine)" stroke-width="0.75" opacity="0.6" />
       <rect x="290" y="58" width="14" height="36" fill="none" stroke="var(--c-pine)" stroke-width="0.75" />
@@ -38,7 +47,7 @@
     </g>
 
     <!-- State 3: Reefer (with small snowflake) -->
-    <g class="trailer-state state-reefer" style="animation-delay: 4s;">
+    <g class="trailer-mode-state" data-state>
       <rect x="88" y="50" width="220" height="48" fill="var(--c-accent)" opacity="0.08" stroke="var(--c-pine)" stroke-width="1.5" />
       <rect x="88" y="40" width="36" height="12" fill="none" stroke="var(--c-pine)" stroke-width="1.25" />
       <!-- snowflake -->
@@ -53,7 +62,7 @@
     </g>
 
     <!-- State 4: Hotshot (shorter trailer) -->
-    <g class="trailer-state state-hotshot" style="animation-delay: 6s;">
+    <g class="trailer-mode-state" data-state>
       <rect x="88" y="92" width="140" height="6" fill="var(--c-accent)" />
       <rect x="120" y="68" width="40" height="24" fill="none" stroke="var(--c-pine)" stroke-width="1.5" />
       <circle cx="115" cy="115" r="9" fill="none" stroke="var(--c-pine)" stroke-width="1.5" />
@@ -63,10 +72,10 @@
 
   <!-- Mode chips below — clickable, routes to service -->
   <div class="trailer-modes">
-    <a class="trailer-mode" href="/services/flatbed-ltl"><span>Flatbed</span></a>
-    <a class="trailer-mode" href="/services/dry-van-ltl"><span>Dry Van</span></a>
-    <a class="trailer-mode" href="/services/refrigerated"><span>Refrigerated</span></a>
-    <a class="trailer-mode" href="/services/hotshot"><span>Hotshot</span></a>
+    <a class="trailer-mode" data-mode href="/services/flatbed-ltl"><span>Flatbed</span></a>
+    <a class="trailer-mode" data-mode href="/services/dry-van-ltl"><span>Dry Van</span></a>
+    <a class="trailer-mode" data-mode href="/services/refrigerated"><span>Refrigerated</span></a>
+    <a class="trailer-mode" data-mode href="/services/hotshot"><span>Hotshot</span></a>
   </div>
 </div>
 
@@ -81,6 +90,8 @@
     height: auto;
     margin-inline: auto;
   }
+  /* States are revealed by GSAP; start hidden so they don't stack pre-hydration. */
+  [data-state] { opacity: 0; }
   .trailer-modes {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -102,8 +113,64 @@
     border-color: var(--c-accent);
     color: var(--c-accent);
   }
-  @media (prefers-reduced-motion: reduce) {
-    .trailer-state { animation: none; opacity: 1; }
-    .state-van, .state-reefer, .state-hotshot { display: none; }
-  }
 </style>
+
+<script>
+  import { scene, ensureGsap, EASE, DUR } from "@lib/gsapMotion";
+
+  const root = document.querySelector<HTMLElement>("[data-morph]");
+  if (root) {
+    const g = ensureGsap();
+    const states = [...root.querySelectorAll<SVGGElement>("[data-state]")];
+    const chips = [...root.querySelectorAll<HTMLAnchorElement>("[data-mode]")];
+
+    const fade = DUR.base; //   cross-fade duration
+    const hold = DUR.travel; // time each state stays lit
+
+    const setStatic = (gg: typeof import("gsap").gsap) => {
+      // Flatbed only, static.
+      states.forEach((s, i) => gg.set(s, { opacity: i === 0 ? 1 : 0, scale: 1, transformOrigin: "center" }));
+    };
+
+    const tl = scene(
+      root,
+      (t, gg) => {
+        gg.set(states, { transformOrigin: "center" });
+        states.forEach((s, i) => {
+          const start = i * (fade + hold);
+          t.fromTo(
+            s,
+            { opacity: 0, scale: 0.96 },
+            { opacity: 1, scale: 1, duration: fade, ease: EASE.inOut },
+            start,
+          );
+          t.to(
+            s,
+            { opacity: 0, scale: 0.98, duration: fade, ease: EASE.inOut },
+            start + fade + hold,
+          );
+        });
+      },
+      { loop: true, start: "top 85%", reduced: setStatic },
+    );
+
+    // Interactivity — only wired when the loop actually exists (not reduced motion).
+    if (tl) {
+      const snapTo = (index: number) => {
+        tl.pause();
+        states.forEach((s, i) => g.set(s, { opacity: i === index ? 1 : 0, scale: 1 }));
+      };
+      const resume = () => tl.play();
+
+      // Parent hover freezes the loop at the current frame; leaving resumes.
+      root.addEventListener("mouseenter", () => tl.pause());
+      root.addEventListener("mouseleave", resume);
+
+      chips.forEach((chip, i) => {
+        chip.addEventListener("mouseenter", () => snapTo(i));
+        chip.addEventListener("focus", () => snapTo(i));
+        chip.addEventListener("blur", resume);
+      });
+    }
+  }
+</script>

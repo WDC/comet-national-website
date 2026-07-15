@@ -1,8 +1,14 @@
 ---
 /**
- * Prompt 9 — Stat count-up band.
- * Numbers tick up on scroll-into-view (via lib/motion.ts runCountUps).
- * Underline draws below each finished number.
+ * Stat count-up band.
+ *
+ * On scroll-in (play once): each number rises in (y + opacity) while a GSAP
+ * proxy tweens {v:0}→target (~1.5s, EASE.out) and writes the formatted value in
+ * on every update; once a number lands, its brass underline draws (scaleX 0→1,
+ * EASE.draw). Same motion vocabulary as the rest of the suite (see
+ * gsapMotion.scene).
+ *
+ * Reduced motion: final formatted values shown, underlines full.
  *
  * Phase 1 stats are placeholders per user direction — backfill in Sanity later.
  */
@@ -19,12 +25,12 @@ const stats: Stat[] = [
   { label: "Atlanta dock", value: 1, suffix: " — every mode" },
 ];
 ---
-<div class="stat-band" data-anim>
+<div class="stat-band" data-stat-band>
   {stats.map((s) => (
     <div class="stat-band__stat">
-      <span class="stat-band__num display" data-count={s.value} data-format={s.format ?? ""}>0</span>
+      <span class="stat-band__num display" data-num data-count={s.value} data-format={s.format ?? ""}>0</span>
       {s.suffix && <span class="stat-band__suffix mono">{s.suffix}</span>}
-      <span class="stat-band__underline stat-underline" aria-hidden="true"></span>
+      <span class="stat-band__underline" data-underline aria-hidden="true"></span>
       <span class="stat-band__label">{s.label}</span>
     </div>
   ))}
@@ -63,6 +69,9 @@ const stats: Stat[] = [
     background: var(--c-accent);
     display: block;
     margin-top: var(--s-2);
+    /* Drawn on by GSAP (scaleX 0→1); start retracted so there's no flash. */
+    transform: scaleX(0);
+    transform-origin: left center;
   }
   .stat-band__label {
     margin-top: var(--s-2);
@@ -76,3 +85,69 @@ const stats: Stat[] = [
     .stat-band { grid-template-columns: repeat(2, 1fr); }
   }
 </style>
+
+<script>
+  import { scene, EASE, DUR } from "@lib/gsapMotion";
+
+  // Preserve the original format logic exactly (was lib/motion.ts formatNumber).
+  function formatNumber(value: number, format?: string): string {
+    if (format === "plus") return `${value.toLocaleString("en-US")}+`;
+    if (format === "k") return `${(value / 1000).toFixed(1)}k`;
+    return value.toLocaleString("en-US");
+  }
+
+  const root = document.querySelector<HTMLElement>("[data-stat-band]");
+  if (root) {
+    const nums = [...root.querySelectorAll<HTMLElement>("[data-num]")];
+    const underlines = [...root.querySelectorAll<HTMLElement>("[data-underline]")];
+
+    const setStatic = (g: typeof import("gsap").gsap) => {
+      nums.forEach((num) => {
+        num.textContent = formatNumber(Number(num.dataset.count) || 0, num.dataset.format);
+      });
+      g.set(nums, { y: 0, opacity: 1 });
+      g.set(underlines, { scaleX: 1, transformOrigin: "left center" });
+    };
+
+    scene(
+      root,
+      (tl, g) => {
+        g.set(nums, { y: 16, opacity: 0 });
+        g.set(underlines, { scaleX: 0, transformOrigin: "left center" });
+
+        nums.forEach((num, i) => {
+          const target = Number(num.dataset.count) || 0;
+          const fmt = num.dataset.format;
+          const proxy = { v: 0 };
+          const at = i * 0.12;
+
+          // Number rises in.
+          tl.to(num, { y: 0, opacity: 1, duration: DUR.base, ease: EASE.out }, at);
+          // Count up, writing the formatted value on every frame.
+          tl.to(
+            proxy,
+            {
+              v: target,
+              duration: DUR.travel,
+              ease: EASE.out,
+              onUpdate: () => {
+                num.textContent = formatNumber(Math.round(proxy.v), fmt);
+              },
+            },
+            at,
+          );
+          // Underline draws once the number lands.
+          const underline = underlines[i];
+          if (underline) {
+            tl.to(
+              underline,
+              { scaleX: 1, duration: DUR.draw, ease: EASE.draw },
+              at + DUR.travel - 0.1,
+            );
+          }
+        });
+      },
+      { start: "top 80%", reduced: setStatic },
+    );
+  }
+</script>

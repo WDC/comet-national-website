@@ -1,0 +1,146 @@
+---
+/**
+ * Service hero — Hotshot / expedited.
+ *
+ * A short hotshot rig (compact cab + short deck carrying a crate) sits at the
+ * origin. On scroll-in the direct route draws in fast, the origin dot lands, the
+ * destination emits the house brass pulse ring, speed lines flick past the cab,
+ * and a brass shipment dot DASHES the route on a tight repeat via `travelAlong`
+ * (MotionPath) while an ETA proxy counts down — all snappier than the heavy-haul
+ * hero to read as urgency. Same motion language as the hero freight network.
+ *
+ * Reduced motion: route drawn, origin resolved, ETA arrived, no dashing dot.
+ */
+---
+<div class="hotshot-dash" data-hotshot-dash>
+  <svg viewBox="0 0 380 190" role="img" aria-label="Animated hotshot rig dashing a direct expedited route to its destination">
+    <!-- Direct route — drawn first, fast -->
+    <path id="hs-route" data-route
+          d="M72 96 C 150 52, 250 48, 334 74"
+          fill="none" stroke="var(--c-accent)" stroke-width="1.5" stroke-linecap="round" />
+
+    <!-- Route endpoint markers -->
+    <circle data-origin cx="72" cy="96" r="4" fill="var(--c-accent)" />
+    <circle data-pulse cx="334" cy="74" r="6" />
+    <circle cx="334" cy="74" r="3" fill="var(--c-accent)" />
+
+    <!-- Route labels -->
+    <text x="72" y="86" text-anchor="middle" font-family="var(--ff-mono)" font-size="9" fill="var(--c-ink-muted)" letter-spacing="0.12em">ORIGIN</text>
+    <text x="334" y="96" text-anchor="middle" font-family="var(--ff-mono)" font-size="9" fill="var(--c-ink-muted)" letter-spacing="0.12em">DESTINATION</text>
+
+    <!-- Live ETA countdown (proxy-tweened) -->
+    <text data-eta x="203" y="34" text-anchor="middle" font-family="var(--ff-mono)" font-size="11" fill="var(--c-accent-deep)" letter-spacing="0.14em">ETA 12 MIN</text>
+
+    <!-- Ground -->
+    <line x1="20" y1="150" x2="360" y2="150" stroke="var(--c-pine)" stroke-width="1.5" />
+
+    <!-- Speed lines flicking past the cab -->
+    <g stroke="var(--c-accent)" stroke-width="1.5" fill="none" stroke-linecap="round">
+      <line data-speed x1="8" y1="112" x2="24" y2="112" />
+      <line data-speed x1="4" y1="122" x2="22" y2="122" />
+      <line data-speed x1="10" y1="132" x2="26" y2="132" />
+    </g>
+
+    <!-- Hotshot rig: compact cab + short deck with a crate -->
+    <g>
+      <!-- Cab -->
+      <rect x="28" y="112" width="30" height="26" fill="none" stroke="var(--c-pine)" stroke-width="1.5" />
+      <rect x="32" y="116" width="16" height="11" fill="var(--c-pine)" />
+      <!-- Short deck -->
+      <rect x="58" y="130" width="70" height="7" fill="var(--c-line)" />
+      <line x1="58" y1="130" x2="128" y2="130" stroke="var(--c-pine)" stroke-width="1.5" />
+      <!-- Crate on the deck -->
+      <rect x="74" y="106" width="44" height="24" fill="var(--c-accent)" opacity="0.92" />
+      <circle cx="80" cy="112" r="1.6" fill="var(--c-accent-ink)" opacity="0.55" />
+      <circle cx="112" cy="112" r="1.6" fill="var(--c-accent-ink)" opacity="0.55" />
+      <circle cx="80" cy="124" r="1.6" fill="var(--c-accent-ink)" opacity="0.55" />
+      <circle cx="112" cy="124" r="1.6" fill="var(--c-accent-ink)" opacity="0.55" />
+      <!-- Wheels -->
+      <circle cx="42" cy="140" r="7" fill="none" stroke="var(--c-pine)" stroke-width="1.25" />
+      <circle cx="84" cy="140" r="7" fill="none" stroke="var(--c-pine)" stroke-width="1.25" />
+      <circle cx="116" cy="140" r="7" fill="none" stroke="var(--c-pine)" stroke-width="1.25" />
+    </g>
+
+    <!-- Traveling brass dot dashing the route -->
+    <circle data-travel r="4" />
+
+    <!-- Bottom caption -->
+    <text x="190" y="178" text-anchor="middle" font-family="var(--ff-mono)" font-size="10" fill="var(--c-ink-muted)" letter-spacing="0.16em">
+      EXPEDITED · DIRECT · DRIVER DEDICATED
+    </text>
+  </svg>
+</div>
+
+<style>
+  .hotshot-dash svg { width: 100%; height: auto; display: block; }
+  .hotshot-dash [data-travel] { fill: var(--c-pine-deep); filter: drop-shadow(0 0 4px var(--c-accent)); }
+  .hotshot-dash [data-pulse] { fill: none; stroke: var(--c-accent); stroke-width: 1.5; opacity: 0; }
+</style>
+
+<script>
+  import { scene, prepDraw, pulseRing, travelAlong, EASE, DUR } from "@lib/gsapMotion";
+
+  const root = document.querySelector<HTMLElement>("[data-hotshot-dash]");
+  if (root) {
+    const route = root.querySelector<SVGPathElement>("[data-route]");
+    const origin = root.querySelector<SVGCircleElement>("[data-origin]");
+    const pulse = root.querySelector<SVGCircleElement>("[data-pulse]");
+    const speeds = [...root.querySelectorAll<SVGLineElement>("[data-speed]")];
+    const travel = root.querySelector<SVGCircleElement>("[data-travel]");
+    const eta = root.querySelector<SVGTextElement>("[data-eta]");
+
+    const setStatic = (g: typeof import("gsap").gsap) => {
+      if (route) prepDraw(route, false);
+      speeds.forEach((s) => prepDraw(s, false));
+      g.set(origin, { scale: 1, transformOrigin: "center", opacity: 1 });
+      g.set(travel, { opacity: 0 });
+      if (eta) eta.textContent = "ETA 00 MIN";
+    };
+
+    scene(
+      root,
+      (tl, g) => {
+        if (route) prepDraw(route);
+        speeds.forEach((s) => prepDraw(s));
+        g.set(origin, { scale: 0, transformOrigin: "center" });
+        g.set(travel, { opacity: 0 });
+
+        // Direct route draws in fast.
+        if (route) tl.to(route, { strokeDashoffset: 0, duration: DUR.base, ease: EASE.draw });
+
+        // Origin dot lands.
+        tl.to(origin, { scale: 1, duration: DUR.fast, ease: EASE.settle }, "-=0.15");
+
+        // Destination emits the house brass pulse ring.
+        if (pulse) pulseRing(tl, pulse, { from: 6, to: 24, at: "-=0.05" });
+
+        // Speed lines flick past the cab.
+        tl.to(speeds, { strokeDashoffset: 0, duration: DUR.fast, ease: EASE.draw, stagger: 0.05 }, "-=0.4");
+
+        // ETA counts down as the run begins (proxy tween).
+        if (eta) {
+          const p = { v: 12 };
+          tl.to(
+            p,
+            {
+              v: 0,
+              duration: 1.1,
+              ease: EASE.linear,
+              onUpdate: () => {
+                eta.textContent = `ETA ${String(Math.ceil(p.v)).padStart(2, "0")} MIN`;
+              },
+            },
+            "<",
+          );
+        }
+
+        // Brass shipment dot dashes the route on a tight repeat.
+        if (travel) {
+          tl.to(travel, { opacity: 1, duration: 0.15 }, ">-0.15");
+          travelAlong(tl, travel, "#hs-route", { duration: 1.1, repeat: -1, at: "<" });
+        }
+      },
+      { start: "top 80%", reduced: setStatic },
+    );
+  }
+</script>

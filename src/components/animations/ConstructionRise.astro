@@ -1,12 +1,17 @@
 ---
 /**
  * Industry hero — Construction.
- * Beam-by-beam, the building rises above a static flatbed. Lines draw on scroll
- * using the shared `.draw` keyframe; a traveling dot follows the delivery route
- * via `.travel`. Pure SVG + CSS — same framework as home-page animations.
+ *
+ * Beam-by-beam, the building rises above a static flatbed. On scroll-in the 4
+ * vertical beams draw upward (staggered), the 3 floor decks draw across, and the
+ * crown emits the house brass pulse ring. A delivery dot then runs the dashed
+ * route from flatbed to building on repeat via `travelAlong` (MotionPath) — same
+ * motion language as the home-page freight network.
+ *
+ * Reduced motion: building fully drawn, crown resolved, no traveling dot.
  */
 ---
-<div class="construction-rise" data-anim>
+<div class="construction-rise" data-construction-rise>
   <svg viewBox="0 0 520 280" role="img" aria-label="Animated building rising above a flatbed truck delivering steel">
     <!-- Ground line -->
     <line x1="20" y1="240" x2="500" y2="240" stroke="var(--c-pine)" stroke-width="1.5" />
@@ -28,29 +33,22 @@
     <!-- Rising building (right side) — 4 beams drawn vertically + 3 floors drawn horizontally -->
     <g class="building" transform="translate(280, 0)">
       <!-- Vertical beams -->
-      <line x1="20" y1="240" x2="20" y2="60" stroke="var(--c-accent)" stroke-width="2"
-            class="draw" style="--draw-length: 180; --draw-delay: 200ms" />
-      <line x1="70" y1="240" x2="70" y2="60" stroke="var(--c-accent)" stroke-width="2"
-            class="draw" style="--draw-length: 180; --draw-delay: 400ms" />
-      <line x1="130" y1="240" x2="130" y2="60" stroke="var(--c-accent)" stroke-width="2"
-            class="draw" style="--draw-length: 180; --draw-delay: 600ms" />
-      <line x1="190" y1="240" x2="190" y2="60" stroke="var(--c-accent)" stroke-width="2"
-            class="draw" style="--draw-length: 180; --draw-delay: 800ms" />
+      <line data-beam x1="20" y1="240" x2="20" y2="60" stroke="var(--c-accent)" stroke-width="2" />
+      <line data-beam x1="70" y1="240" x2="70" y2="60" stroke="var(--c-accent)" stroke-width="2" />
+      <line data-beam x1="130" y1="240" x2="130" y2="60" stroke="var(--c-accent)" stroke-width="2" />
+      <line data-beam x1="190" y1="240" x2="190" y2="60" stroke="var(--c-accent)" stroke-width="2" />
       <!-- Floor decks -->
-      <line x1="20" y1="180" x2="190" y2="180" stroke="var(--c-pine)" stroke-width="1.5"
-            class="draw" style="--draw-length: 170; --draw-delay: 1000ms" />
-      <line x1="20" y1="120" x2="190" y2="120" stroke="var(--c-pine)" stroke-width="1.5"
-            class="draw" style="--draw-length: 170; --draw-delay: 1200ms" />
-      <line x1="20" y1="60" x2="190" y2="60" stroke="var(--c-pine)" stroke-width="1.5"
-            class="draw" style="--draw-length: 170; --draw-delay: 1400ms" />
+      <line data-deck x1="20" y1="180" x2="190" y2="180" stroke="var(--c-pine)" stroke-width="1.5" />
+      <line data-deck x1="20" y1="120" x2="190" y2="120" stroke="var(--c-pine)" stroke-width="1.5" />
+      <line data-deck x1="20" y1="60" x2="190" y2="60" stroke="var(--c-pine)" stroke-width="1.5" />
       <!-- Crown indicator -->
-      <circle cx="105" cy="50" r="5" fill="var(--c-accent)" class="pulse" opacity="0.9" />
+      <circle data-pulse cx="105" cy="50" r="5" />
+      <circle data-crown cx="105" cy="50" r="5" fill="var(--c-accent)" opacity="0.9" />
     </g>
 
     <!-- Route line + traveling dot from flatbed to building -->
-    <path id="cn-route" d="M210 220 Q 250 220 280 230" fill="none" stroke="var(--c-line)" stroke-width="1" stroke-dasharray="3 4" />
-    <circle r="3" fill="var(--c-accent)" class="travel"
-            style="offset-path: path('M210 220 Q 250 220 280 230'); --travel-duration: 3.4s; --travel-delay: 1600ms;" />
+    <path id="cn-route" data-route d="M210 220 Q 250 220 280 230" fill="none" stroke="var(--c-line)" stroke-width="1" stroke-dasharray="3 4" />
+    <circle data-travel r="3" />
 
     <!-- Label -->
     <text x="260" y="32" text-anchor="middle" font-family="var(--ff-display)" font-size="14" font-weight="700" fill="var(--c-ink)" letter-spacing="-0.01em">
@@ -64,9 +62,53 @@
 
 <style>
   .construction-rise svg { width: 100%; height: auto; display: block; }
-  @media (prefers-reduced-motion: reduce) {
-    .construction-rise .draw { stroke-dashoffset: 0 !important; }
-    .construction-rise .travel { display: none; }
-    .construction-rise .pulse { animation: none; }
-  }
+  .construction-rise [data-travel] { fill: var(--c-pine-deep); filter: drop-shadow(0 0 4px var(--c-accent)); }
+  .construction-rise [data-pulse] { fill: none; stroke: var(--c-accent); stroke-width: 1.5; opacity: 0; }
 </style>
+
+<script>
+  import { scene, prepDraw, pulseRing, travelAlong, EASE, DUR } from "@lib/gsapMotion";
+
+  const root = document.querySelector<HTMLElement>("[data-construction-rise]");
+  if (root) {
+    const beams = [...root.querySelectorAll<SVGLineElement>("[data-beam]")];
+    const decks = [...root.querySelectorAll<SVGLineElement>("[data-deck]")];
+    const pulse = root.querySelector<SVGCircleElement>("[data-pulse]");
+    const crown = root.querySelector<SVGCircleElement>("[data-crown]");
+    const travel = root.querySelector<SVGCircleElement>("[data-travel]");
+
+    const setStatic = (g: typeof import("gsap").gsap) => {
+      beams.forEach((b) => prepDraw(b, false));
+      decks.forEach((d) => prepDraw(d, false));
+      g.set(crown, { scale: 1, transformOrigin: "center", opacity: 0.9 });
+      g.set(travel, { opacity: 0 });
+    };
+
+    scene(
+      root,
+      (tl, g) => {
+        beams.forEach((b) => prepDraw(b));
+        decks.forEach((d) => prepDraw(d));
+        g.set(crown, { scale: 0, transformOrigin: "center" });
+        g.set(travel, { opacity: 0 });
+
+        // Vertical beams rise, one after another.
+        tl.to(beams, { strokeDashoffset: 0, duration: DUR.draw, ease: EASE.draw, stagger: 0.15 });
+
+        // Floor decks draw across.
+        tl.to(decks, { strokeDashoffset: 0, duration: DUR.base, ease: EASE.draw, stagger: 0.15 }, "-=0.3");
+
+        // Crown lands and emits the house brass pulse ring.
+        tl.to(crown, { scale: 1, duration: DUR.fast, ease: EASE.settle }, "-=0.2");
+        if (pulse) pulseRing(tl, pulse, { from: 5, to: 24, at: "<" });
+
+        // Delivery dot runs the dashed route on repeat.
+        if (travel) {
+          tl.to(travel, { opacity: 1, duration: 0.2 }, ">-0.4");
+          travelAlong(tl, travel, "#cn-route", { duration: DUR.travel, repeat: -1, at: "<" });
+        }
+      },
+      { start: "top 80%", reduced: setStatic },
+    );
+  }
+</script>

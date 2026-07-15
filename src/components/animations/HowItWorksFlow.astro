@@ -1,7 +1,14 @@
 ---
 /**
- * Prompt 3 — How It Works, 3 steps.
- * Triggered on scroll. Each node lights up sequentially, connecting line draws between.
+ * How It Works — 3 steps.
+ *
+ * On scroll-in (play once): each circular node lights up sequentially — border +
+ * background settle to brass with a subtle scale pop (EASE.settle) ~0.4s apart —
+ * and a thin brass connector bar draws (scaleX 0→1, EASE.draw) across the gap
+ * between consecutive nodes, timed between the two node pops. Same motion
+ * language as the rest of the suite (see gsapMotion.scene).
+ *
+ * Reduced motion: all nodes lit, connectors full — a clean static end-state.
  */
 const steps = [
   { id: 1, title: "Get a quote", body: "One call, every mode. We match the right trailer to your load." },
@@ -9,11 +16,11 @@ const steps = [
   { id: 3, title: "Rest easy", body: "Real updates, real people. We solve the whole problem." },
 ];
 ---
-<div class="how-flow" data-anim>
+<div class="how-flow" data-how-flow>
   <ol class="how-flow__steps">
     {steps.map((s, i) => (
       <li class="how-flow__step" style={`--i: ${i}`}>
-        <div class="how-flow__node">
+        <div class="how-flow__node" data-node>
           <span class="how-flow__num mono">0{s.id}</span>
           <svg class="how-flow__icon" viewBox="0 0 32 32" aria-hidden="true">
             {s.id === 1 && <path d="M6 8 L26 8 L26 24 L18 24 L14 28 L14 24 L6 24 Z" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linejoin="round" />}
@@ -26,16 +33,7 @@ const steps = [
           <p class="how-flow__desc">{s.body}</p>
         </div>
         {i < steps.length - 1 && (
-          <svg class="how-flow__connector" viewBox="0 0 100 10" preserveAspectRatio="none" aria-hidden="true">
-            <line
-              x1="0" y1="5" x2="100" y2="5"
-              stroke="var(--c-accent)"
-              stroke-width="1.5"
-              stroke-linecap="round"
-              class="draw"
-              style={`--draw-length: 100; --draw-delay: ${300 + i * 500}ms`}
-            />
-          </svg>
+          <span class="how-flow__connector" data-connector aria-hidden="true"></span>
         )}
       </li>
     ))}
@@ -53,6 +51,7 @@ const steps = [
     align-items: start;
   }
   .how-flow__step {
+    position: relative;
     display: grid;
     gap: var(--s-4);
     text-align: center;
@@ -62,7 +61,6 @@ const steps = [
   .how-flow__step:nth-child(1) { grid-column: 1; }
   .how-flow__step:nth-child(2) { grid-column: 3; }
   .how-flow__step:nth-child(3) { grid-column: 5; }
-  .how-flow__step .how-flow__connector { display: none; }
 
   .how-flow__node {
     width: 92px;
@@ -74,13 +72,6 @@ const steps = [
     place-items: center;
     background: var(--c-bg-elevated);
     position: relative;
-    transition: border-color var(--d-base) var(--ease-out), color var(--d-base) var(--ease-out), background var(--d-base) var(--ease-out);
-    transition-delay: calc(var(--i) * 500ms);
-  }
-  .anim-on .how-flow__node {
-    border-color: var(--c-accent);
-    background: var(--c-accent);
-    color: var(--c-accent-ink);
   }
   .how-flow__num {
     position: absolute;
@@ -103,16 +94,16 @@ const steps = [
     max-width: 28ch;
   }
 
-  /* Connector lines between nodes — sit in the empty grid cells */
-  .how-flow__steps > .how-flow__step:nth-child(1)::after,
-  .how-flow__steps > .how-flow__step:nth-child(2)::after {
-    content: "";
+  /* Connector bar — sits between this node and the next, drawn by GSAP. */
+  .how-flow__connector {
     position: absolute;
-    height: 1.5px;
+    top: 45px; /* node vertical center (92px / 2, minus half the 2px bar) */
+    left: calc(50% + 46px); /* right edge of this node */
+    width: calc(100% - 92px); /* reaches the left edge of the next node */
+    height: 2px;
     background: var(--c-accent);
-    transform-origin: left;
     transform: scaleX(0);
-    transition: transform 700ms var(--ease-out);
+    transform-origin: left center;
   }
 
   @media (max-width: 760px) {
@@ -121,5 +112,67 @@ const steps = [
       gap: var(--s-8);
     }
     .how-flow__step:nth-child(n) { grid-column: 1; }
+    .how-flow__connector { display: none; }
   }
 </style>
+
+<script>
+  import { scene, EASE, DUR } from "@lib/gsapMotion";
+
+  const root = document.querySelector<HTMLElement>("[data-how-flow]");
+  if (root) {
+    const nodes = [...root.querySelectorAll<HTMLElement>("[data-node]")];
+    const connectors = [...root.querySelectorAll<HTMLElement>("[data-connector]")];
+
+    const cs = getComputedStyle(root);
+    const accent = cs.getPropertyValue("--c-accent").trim();
+    const accentInk = cs.getPropertyValue("--c-accent-ink").trim();
+
+    const setStatic = (g: typeof import("gsap").gsap) => {
+      g.set(nodes, {
+        scale: 1,
+        transformOrigin: "center",
+        borderColor: accent,
+        backgroundColor: accent,
+        color: accentInk,
+      });
+      g.set(connectors, { scaleX: 1, transformOrigin: "left center" });
+    };
+
+    scene(
+      root,
+      (tl, g) => {
+        g.set(nodes, { transformOrigin: "center" });
+        g.set(connectors, { scaleX: 0, transformOrigin: "left center" });
+
+        nodes.forEach((node, i) => {
+          const at = i * 0.4;
+          // Node lights up to brass with a subtle scale pop.
+          tl.fromTo(
+            node,
+            { scale: 0.85 },
+            {
+              scale: 1,
+              borderColor: accent,
+              backgroundColor: accent,
+              color: accentInk,
+              duration: DUR.base,
+              ease: EASE.settle,
+            },
+            at,
+          );
+          // Connector draws across the gap, timed between the two node pops.
+          const connector = connectors[i];
+          if (connector) {
+            tl.to(
+              connector,
+              { scaleX: 1, duration: DUR.base, ease: EASE.draw },
+              at + 0.2,
+            );
+          }
+        });
+      },
+      { start: "top 80%", reduced: setStatic },
+    );
+  }
+</script>

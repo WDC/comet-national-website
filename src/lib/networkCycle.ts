@@ -13,22 +13,18 @@
  * Reduced motion: renders the first hub fully drawn, static, no travel.
  */
 import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { ensureGsap, reducedMotion as reduced } from './gsapMotion';
 
 export interface NetStop {
   hub: { label: string; x: number; y: number };
   dests: { x: number; y: number }[];
 }
 
-const reduced = () =>
-  typeof window !== 'undefined' &&
-  window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
 export interface CycleOpts {
   /** viewBox width — used to decide which side the hub label sits on. */
   vbW: number;
   /** Optional ScrollTrigger vars to gate the start (e.g. Coverage below fold). */
-  scrollTrigger?: ScrollTrigger.Vars;
+  scrollTrigger?: gsap.TimelineVars['scrollTrigger'];
 }
 
 export function runNetworkCycle(
@@ -81,7 +77,7 @@ export function runNetworkCycle(
 
   // Static end-state for reduced motion: first hub, lanes drawn, no motion.
   if (reduced()) {
-    const s = tour[0];
+    const s = tour[0]!;
     moveMarker(s.hub.x, s.hub.y);
     placeLabel(s.hub.x, s.hub.y, s.hub.label);
     configLanes(s.hub, s.dests);
@@ -99,7 +95,7 @@ export function runNetworkCycle(
   if (label) gsap.set(label, { opacity: 0 });
   if (core) gsap.set(core, { scale: 0, transformOrigin: 'center' });
 
-  if (opts.scrollTrigger) gsap.registerPlugin(ScrollTrigger);
+  ensureGsap();
 
   const master = gsap.timeline({
     repeat: -1,
@@ -142,7 +138,7 @@ export function runNetworkCycle(
 
     // Shipments travel each lane.
     aShips.forEach((sp, i) => {
-      const d = dests[i];
+      const d = dests[i]!;
       seg
         .to(sp, { opacity: 1, duration: 0.2 }, `dwell+=${0.1 + i * 0.22}`)
         .to(sp, { attr: { cx: d.x, cy: d.y }, duration: 1.5, ease: 'none' }, '<')

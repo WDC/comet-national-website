@@ -1,0 +1,138 @@
+---
+/**
+ * Reefer chain reveal — the temperature-controlled companion to the hero
+ * network, for the refrigerated service page.
+ *
+ * On scroll-in: the reefer trailer + nose unit draw in (house stroke-draw),
+ * a digital readout counts DOWN from 70°F to 34°F while a brass "cold" fill
+ * sweeps the trailer interior from the nose end, and a snowflake pulses to
+ * signal the box holding setpoint. Same motion vocabulary as the hero hub
+ * (draws → EASE.draw, fills → EASE.out) so it reads as one hand.
+ *
+ * Reduced motion: box drawn, readout at 34°F, cold fill full, snowflake set.
+ * (See gsapMotion.scene.)
+ */
+---
+<div class="reefer" data-reefer>
+  <svg
+    viewBox="0 0 380 190"
+    role="img"
+    aria-label="Refrigerated trailer cooling from 70 to 34 degrees Fahrenheit, temperature-controlled and logged coast to coast"
+    preserveAspectRatio="xMidYMid meet"
+  >
+    <!-- Trailer box + reefer nose unit (drawn on reveal) -->
+    <path
+      class="reefer-body" data-body
+      d="M40 52 L300 52 L300 128 L40 128 Z"
+      fill="none" stroke="var(--c-pine)" stroke-width="1.5"
+    />
+    <path
+      class="reefer-nose" data-nose
+      d="M40 66 L22 66 L22 114 L40 114"
+      fill="none" stroke="var(--c-pine)" stroke-width="1.5"
+    />
+
+    <!-- Cold fill — sweeps across the interior from the nose as it cools -->
+    <rect
+      class="reefer-cold" data-cold
+      x="52" y="64" width="244" height="52"
+      fill="var(--c-accent)" opacity="0.85"
+    />
+
+    <!-- Nose unit grille (structure) -->
+    <g stroke="var(--c-line)" stroke-width="1" fill="none">
+      <circle cx="31" cy="90" r="6" stroke="var(--c-pine)" />
+      <path d="M31 84 L31 96 M25 90 L37 90" />
+    </g>
+
+    <!-- Wheels -->
+    <g fill="none" stroke="var(--c-pine)" stroke-width="1.25">
+      <circle cx="92" cy="138" r="8" />
+      <circle cx="250" cy="138" r="8" />
+      <circle cx="284" cy="138" r="8" />
+    </g>
+
+    <!-- Snowflake — pulses to signal the box is holding cold -->
+    <g class="reefer-snow" data-snow transform="translate(206,34)">
+      <path
+        d="M0 -8 L0 8 M-6.9 -4 L6.9 4 M-6.9 4 L6.9 -4
+           M0 -8 L-2.4 -5 M0 -8 L2.4 -5 M0 8 L-2.4 5 M0 8 L2.4 5"
+        fill="none" stroke="var(--c-accent)" stroke-width="1.3" stroke-linecap="round"
+      />
+      <circle r="1.6" fill="var(--c-accent)" />
+    </g>
+
+    <!-- Temperature readout -->
+    <rect x="228" y="26" width="52" height="17" fill="var(--c-line-soft)" stroke="var(--c-pine)" stroke-width="1" />
+    <text
+      class="reefer-temp" data-readout
+      x="254" y="38" text-anchor="middle"
+      font-family="var(--ff-mono)" font-size="11" fill="var(--c-ink)" letter-spacing="0.06em"
+    >70°F</text>
+
+    <!-- Caption -->
+    <text
+      x="190" y="180" text-anchor="middle"
+      font-family="var(--ff-display)" font-size="10" font-weight="700"
+      fill="var(--c-ink)" letter-spacing="0.06em"
+    >TEMP-CONTROLLED · LOGGED · COAST TO COAST</text>
+  </svg>
+</div>
+
+<style>
+  .reefer svg { width: 100%; height: auto; display: block; }
+</style>
+
+<script>
+  import { scene, prepDraw, EASE, DUR } from "@lib/gsapMotion";
+
+  const root = document.querySelector<HTMLElement>("[data-reefer]");
+  if (root) {
+    const body = root.querySelector<SVGPathElement>("[data-body]");
+    const nose = root.querySelector<SVGPathElement>("[data-nose]");
+    const cold = root.querySelector<SVGRectElement>("[data-cold]");
+    const snow = root.querySelector<SVGGElement>("[data-snow]");
+    const readout = root.querySelector<SVGTextElement>("[data-readout]");
+    const temp = { v: 70 };
+    const writeTemp = () => {
+      if (readout) readout.textContent = `${Math.round(temp.v)}°F`;
+    };
+
+    const setStatic = (g: typeof import("gsap").gsap) => {
+      if (body) prepDraw(body, false);
+      if (nose) prepDraw(nose, false);
+      g.set(cold, { scaleX: 1, transformOrigin: "left center" });
+      g.set(snow, { scale: 1, transformOrigin: "center", opacity: 1 });
+      temp.v = 34;
+      writeTemp();
+    };
+
+    scene(
+      root,
+      (tl, g) => {
+        if (body) prepDraw(body);
+        if (nose) prepDraw(nose);
+        g.set(cold, { scaleX: 0, transformOrigin: "left center" });
+        g.set(snow, { scale: 0.6, transformOrigin: "center", opacity: 0 });
+        temp.v = 70;
+        writeTemp();
+
+        // Box draws in first.
+        tl.to(nose, { strokeDashoffset: 0, duration: DUR.base, ease: EASE.draw })
+          .to(body, { strokeDashoffset: 0, duration: DUR.draw, ease: EASE.draw }, "<0.1");
+
+        // Cold fill sweeps the interior while the readout counts down.
+        tl.to(cold, { scaleX: 1, duration: DUR.travel, ease: EASE.out }, "-=0.3")
+          .to(temp, { v: 34, duration: DUR.travel, ease: EASE.out, onUpdate: writeTemp }, "<");
+
+        // Snowflake settles, then holds a subtle pulse.
+        tl.to(snow, { scale: 1, opacity: 1, duration: DUR.base, ease: EASE.settle }, "-=1.0")
+          .to(snow, {
+            scale: 1.15, duration: DUR.slow, ease: EASE.inOut,
+            transformOrigin: "center", repeat: 5, yoyo: true,
+          }, ">-0.1");
+      },
+      { start: "top 78%", reduced: setStatic },
+    );
+  }
+</script>

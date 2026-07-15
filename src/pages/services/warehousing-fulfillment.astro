@@ -1,6 +1,7 @@
 ---
 export const prerender = true;
 import ServicePillarLayout from "@layouts/ServicePillarLayout.astro";
+import WarehouseFlow from "@components/animations/WarehouseFlow.astro";
 import { getService } from "@lib/services";
 
 const service = getService("warehousing-fulfillment")!;
@@ -15,45 +16,7 @@ const relatedSlugs = ["cross-docking", "transloading", "freight-brokerage"];
   pageDescription={description}
   relatedSlugs={relatedSlugs}
 >
-  {/* TODO: replace with custom animation (Phase 3) */}
-  <div slot="hero-art" class="art-placeholder" data-anim-placeholder="warehousing-fulfillment">
-    <svg viewBox="0 0 380 180" aria-hidden="true">
-      <line x1="20" y1="150" x2="360" y2="150" stroke="var(--c-pine)" stroke-width="1.5" />
-      <g stroke="var(--c-pine)" stroke-width="1.25" fill="none">
-        <line x1="40" y1="50" x2="40" y2="150" />
-        <line x1="40" y1="50" x2="180" y2="50" />
-        <line x1="40" y1="80" x2="180" y2="80" />
-        <line x1="40" y1="110" x2="180" y2="110" />
-        <line x1="180" y1="50" x2="180" y2="150" />
-        <line x1="220" y1="50" x2="220" y2="150" />
-        <line x1="220" y1="50" x2="360" y2="50" />
-        <line x1="220" y1="80" x2="360" y2="80" />
-        <line x1="220" y1="110" x2="360" y2="110" />
-        <line x1="360" y1="50" x2="360" y2="150" />
-      </g>
-      <g fill="var(--c-accent)" opacity="0.9">
-        <rect x="48" y="58" width="20" height="18" />
-        <rect x="76" y="58" width="20" height="18" />
-        <rect x="104" y="58" width="20" height="18" />
-        <rect x="48" y="88" width="20" height="18" />
-        <rect x="104" y="88" width="20" height="18" />
-        <rect x="132" y="88" width="20" height="18" />
-        <rect x="48" y="118" width="20" height="18" />
-        <rect x="76" y="118" width="20" height="18" />
-        <rect x="228" y="58" width="20" height="18" />
-        <rect x="256" y="58" width="20" height="18" />
-        <rect x="284" y="58" width="20" height="18" />
-        <rect x="312" y="58" width="20" height="18" />
-        <rect x="228" y="88" width="20" height="18" />
-        <rect x="256" y="88" width="20" height="18" />
-        <rect x="312" y="88" width="20" height="18" />
-        <rect x="228" y="118" width="20" height="18" />
-        <rect x="284" y="118" width="20" height="18" />
-      </g>
-      <text x="200" y="30" text-anchor="middle" font-family="var(--ff-display)" font-size="13" font-weight="700" fill="var(--c-ink)">STORE · PICK · STAGE · SHIP</text>
-      <text x="200" y="172" text-anchor="middle" font-family="var(--ff-mono)" font-size="10" fill="var(--c-ink-muted)" letter-spacing="0.16em">LILBURN · I-85 CORRIDOR</text>
-    </svg>
-  </div>
+  <WarehouseFlow slot="hero-art" />
 
   <section data-reveal>
     <p class="eyebrow">Who warehousing is for</p>

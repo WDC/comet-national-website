@@ -1,19 +1,17 @@
 /**
- * Lightweight motion helpers. Pure DOM + IntersectionObserver.
- * No external animation library — every animation lives in CSS @keyframes.
+ * Lightweight reveal helper. Pure DOM + IntersectionObserver.
  *
- * Two utilities, both global per-page (registered once by Header.astro):
- *   1. observeReveals() — toggles `.is-visible` on `[data-reveal]` elements
- *      when they enter the viewport. Composes with `.reveal` CSS.
- *   2. observeAnimOn() — toggles `.anim-on` on `[data-anim]` elements when
- *      they enter, plus `data-count` count-ups on numerics inside.
+ * observeReveals() toggles `.is-visible` on `[data-reveal]` elements when they
+ * enter the viewport, composing with the `.reveal` / `.reveal-stagger` /
+ * `.section-bar` CSS in styles/motion.css. This stays intentionally tiny and
+ * dependency-free because it runs on every page for section fade-ups.
  *
- * Both honor `prefers-reduced-motion` (CSS handles the no-op; JS skips the count-up).
+ * The richer freight/cargo scene animations (hero network, coverage map, service
+ * illustrations, stat count-up, …) are driven by GSAP through the shared
+ * `scene()` foundation in lib/gsapMotion.ts — not by this module.
+ *
+ * Honors `prefers-reduced-motion` via CSS (see the catch-all in tokens.css).
  */
-
-const prefersReducedMotion = () =>
-  typeof window !== "undefined" &&
-  window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 export function observeReveals(root: ParentNode = document) {
   const items = root.querySelectorAll<HTMLElement>("[data-reveal]");
@@ -32,66 +30,13 @@ export function observeReveals(root: ParentNode = document) {
   items.forEach((el) => io.observe(el));
 }
 
-export function observeAnimOn(root: ParentNode = document) {
-  const items = root.querySelectorAll<HTMLElement>("[data-anim]");
-  if (!items.length) return;
-  const io = new IntersectionObserver(
-    (entries) => {
-      for (const e of entries) {
-        if (e.isIntersecting) {
-          e.target.classList.add("anim-on");
-          runCountUps(e.target as HTMLElement);
-          io.unobserve(e.target);
-        }
-      }
-    },
-    { threshold: 0.3, rootMargin: "0px 0px -10% 0px" },
-  );
-  items.forEach((el) => io.observe(el));
-}
-
-function runCountUps(scope: HTMLElement) {
-  const reduce = prefersReducedMotion();
-  const nodes = scope.querySelectorAll<HTMLElement>("[data-count]");
-  nodes.forEach((node) => {
-    const end = Number(node.dataset.count);
-    if (!Number.isFinite(end)) return;
-    if (reduce) {
-      node.textContent = formatNumber(end, node.dataset.format);
-      return;
-    }
-    const start = 0;
-    const duration = 1500;
-    const t0 = performance.now();
-    const fmt = node.dataset.format;
-    const step = (now: number) => {
-      const p = Math.min(1, (now - t0) / duration);
-      const eased = 1 - Math.pow(1 - p, 3); // ease-out cubic
-      const value = Math.round(start + (end - start) * eased);
-      node.textContent = formatNumber(value, fmt);
-      if (p < 1) requestAnimationFrame(step);
-    };
-    requestAnimationFrame(step);
-  });
-}
-
-function formatNumber(value: number, format?: string): string {
-  if (format === "plus") return `${value.toLocaleString("en-US")}+`;
-  if (format === "k") return `${(value / 1000).toFixed(1)}k`;
-  return value.toLocaleString("en-US");
-}
-
 export function bootMotion() {
   if (typeof window === "undefined") return;
-  // Defer until idle so it never blocks LCP
-  const start = () => {
-    observeReveals();
-    observeAnimOn();
-  };
+  // Defer until idle so it never blocks LCP.
   if ("requestIdleCallback" in window) {
     (window as Window & { requestIdleCallback: (cb: () => void) => void })
-      .requestIdleCallback(start);
+      .requestIdleCallback(observeReveals);
   } else {
-    setTimeout(start, 1);
+    setTimeout(observeReveals, 1);
   }
 }

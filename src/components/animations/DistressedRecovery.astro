@@ -1,18 +1,24 @@
 ---
 /**
- * Prompt 8 — Distressed load recovery.
- * Tilted pallet stack with pulsing warning. Then straightens, wrap line draws,
- * warning fades, checkmark appears.
+ * Distressed load recovery.
+ *
+ * A pallet stack starts tilted with a pulsing red warning triangle. On scroll-in
+ * the stack rotates upright (back.out, pivoting on its base), the warning pulses
+ * a couple of times then swaps to a green success check (fade + scale pop), and
+ * the wrap rectangle draws around the now-upright stack. Same motion language as
+ * CoverageReveal (see lib/gsapMotion.scene).
+ *
+ * Reduced motion: upright, wrapped, green check shown, no warning — static.
  */
 ---
-<div class="distressed-viz" data-anim>
+<div class="distressed-viz" data-distressed>
   <svg viewBox="0 0 360 240" role="img" aria-label="Animated distressed load being restacked, rewrapped, and recovered">
     <!-- Flatbed deck -->
     <rect x="20" y="170" width="320" height="14" fill="var(--c-line)" />
     <line x1="20" y1="170" x2="340" y2="170" stroke="var(--c-pine)" stroke-width="1.5" />
 
-    <!-- Pallet stack — starts tilted, animates to upright -->
-    <g class="tilt-pallets" transform="translate(150 170)">
+    <!-- Pallet stack — starts tilted, rotates upright -->
+    <g data-stack transform="translate(150 170)">
       <rect x="-40" y="-40" width="80" height="14" fill="var(--c-accent)" />
       <rect x="-38" y="-58" width="76" height="14" fill="var(--c-accent)" opacity="0.92" />
       <rect x="-36" y="-76" width="72" height="14" fill="var(--c-accent)" opacity="0.85" />
@@ -20,21 +26,19 @@
     </g>
 
     <!-- Wrap line — draws around the upright stack at the end -->
-    <g class="wrap-group" transform="translate(150 170)">
-      <rect class="draw" x="-42" y="-100" width="84" height="86"
-            fill="none" stroke="var(--c-ink)" stroke-width="1.25"
-            stroke-dasharray="340" stroke-dashoffset="340"
-            style="--draw-length: 340; --draw-delay: 1600ms" />
+    <g transform="translate(150 170)">
+      <rect data-wrap x="-42" y="-100" width="84" height="86"
+            fill="none" stroke="var(--c-ink)" stroke-width="1.25" />
     </g>
 
-    <!-- Warning triangle — pulses, then fades -->
-    <g class="pulse-warn" transform="translate(150 70)">
+    <!-- Warning triangle — pulses, then swaps to the check -->
+    <g data-warn transform="translate(150 70)">
       <path d="M0 -20 L18 14 L-18 14 Z" fill="var(--c-warn)" />
       <text x="0" y="9" text-anchor="middle" fill="var(--c-bg)" font-family="var(--ff-display)" font-weight="700" font-size="18">!</text>
     </g>
 
-    <!-- Check (appears at end) -->
-    <g class="appear-check" transform="translate(150 70)">
+    <!-- Check — pops in as the warning resolves -->
+    <g data-check transform="translate(150 70)">
       <circle r="20" fill="var(--c-success)" />
       <path d="M-9 0 L-3 6 L9 -6" stroke="var(--c-bg)" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" />
     </g>
@@ -48,10 +52,55 @@
 
 <style>
   .distressed-viz svg { width: 100%; height: auto; display: block; max-width: 460px; margin-inline: auto; }
-  @media (prefers-reduced-motion: reduce) {
-    .tilt-pallets { transform: translate(150px, 170px) !important; }
-    .pulse-warn { opacity: 0 !important; }
-    .appear-check { opacity: 1 !important; }
-    .wrap-group .draw { stroke-dashoffset: 0 !important; }
-  }
+  /* The check starts hidden; JS (or the reduced painter) reveals it. */
+  .distressed-viz [data-check] { opacity: 0; }
 </style>
+
+<script>
+  import { scene, prepDraw, EASE, DUR } from "@lib/gsapMotion";
+
+  const root = document.querySelector<HTMLElement>("[data-distressed]");
+  if (root) {
+    const stack = root.querySelector<SVGGElement>("[data-stack]");
+    const warn = root.querySelector<SVGGElement>("[data-warn]");
+    const check = root.querySelector<SVGGElement>("[data-check]");
+    const wrap = root.querySelector<SVGRectElement>("[data-wrap]");
+
+    const setStatic = (g: typeof import("gsap").gsap) => {
+      g.set(stack, { rotation: 0, transformOrigin: "center bottom" });
+      if (wrap) prepDraw(wrap, false);
+      g.set(warn, { opacity: 0 });
+      g.set(check, { opacity: 1, scale: 1, transformOrigin: "center center" });
+    };
+
+    scene(
+      root,
+      (tl, g) => {
+        g.set(stack, { rotation: -8, transformOrigin: "center bottom" });
+        if (wrap) prepDraw(wrap);
+        g.set(warn, { opacity: 1, scale: 1, transformOrigin: "center center" });
+        g.set(check, { opacity: 0, scale: 0, transformOrigin: "center center" });
+
+        // Warning pulses a couple of times — flag the problem.
+        tl.fromTo(
+          warn,
+          { scale: 1 },
+          { scale: 1.18, duration: 0.4, ease: EASE.inOut, repeat: 3, yoyo: true },
+        );
+
+        // Stack rotates upright, pivoting on its base.
+        tl.to(stack, { rotation: 0, duration: DUR.slow, ease: EASE.settle }, "-=0.2");
+
+        // Warning resolves to a green check with a small pop.
+        tl.to(warn, { opacity: 0, scale: 0.5, duration: DUR.fast, ease: EASE.out }, "-=0.1");
+        tl.to(check, { opacity: 1, scale: 1, duration: DUR.base, ease: EASE.settle }, "<0.1");
+
+        // Wrap rectangle draws around the upright stack.
+        if (wrap) {
+          tl.to(wrap, { strokeDashoffset: 0, duration: DUR.draw, ease: EASE.draw }, "-=0.2");
+        }
+      },
+      { start: "top 80%", reduced: setStatic },
+    );
+  }
+</script>
