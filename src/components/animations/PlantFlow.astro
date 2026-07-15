@@ -1,11 +1,16 @@
 ---
 /**
  * Industry hero — Manufacturing & Industrial.
- * Pallets flow from a docked trailer into a factory skyline using the shared
- * `.pallet-flow` keyframe (same primitive as TransloadFlow). Smoke stacks pulse.
+ *
+ * Brass pallets flow from the docked trailer into the factory across an ~88px
+ * span, each carrying the house drop-shadow trail. Smoke puffs rise off the two
+ * stacks and fade, staggered, on a loop. Same brass travel language as the hero,
+ * TransloadFlow and CoverageReveal. Looping, gated to the viewport.
+ *
+ * Reduced motion: pallets resting mid-span, puffs faint and static.
  */
 ---
-<div class="plant-flow" data-anim>
+<div class="plant-flow" data-plant>
   <svg viewBox="0 0 520 260" role="img" aria-label="Animated factory skyline receiving pallets from a docked trailer">
     <!-- Ground -->
     <line x1="20" y1="220" x2="500" y2="220" stroke="var(--c-pine)" stroke-width="1.5" />
@@ -45,16 +50,16 @@
       </g>
     </g>
 
-    <!-- Smoke puffs (pulse) -->
-    <circle cx="335" cy="100" r="6" fill="var(--c-line)" class="pulse" opacity="0.65" />
-    <circle cx="440" cy="56" r="5" fill="var(--c-line)" class="pulse" opacity="0.55" style="animation-delay: 600ms" />
+    <!-- Smoke puffs (rise + fade, staggered) -->
+    <circle class="pf-puff" data-puff cx="335" cy="100" r="6" fill="var(--c-line)" opacity="0" />
+    <circle class="pf-puff" data-puff cx="440" cy="56" r="5" fill="var(--c-line)" opacity="0" />
 
     <!-- Pallets flowing from trailer into factory -->
-    <g class="pallet-flow" transform="translate(180, 190)">
-      <rect width="22" height="14" fill="var(--c-accent)" />
-      <rect width="22" height="14" fill="var(--c-accent)" />
-      <rect width="22" height="14" fill="var(--c-accent)" />
-      <rect width="22" height="14" fill="var(--c-accent)" />
+    <g class="pf-pallets">
+      <rect class="pf-pallet" data-pallet x="180" y="190" width="22" height="14" />
+      <rect class="pf-pallet" data-pallet x="180" y="190" width="22" height="14" />
+      <rect class="pf-pallet" data-pallet x="180" y="190" width="22" height="14" />
+      <rect class="pf-pallet" data-pallet x="180" y="190" width="22" height="14" />
     </g>
 
     <!-- Direction arrow -->
@@ -74,18 +79,59 @@
 
 <style>
   .plant-flow svg { width: 100%; height: auto; display: block; }
-  /* Override pallet-flow translation distance to match the inbound→factory span (~88px) */
-  .plant-flow .pallet-flow > * {
-    animation-name: pallet-cross-plant;
-  }
-  @keyframes pallet-cross-plant {
-    0%   { transform: translateX(0);   opacity: 0; }
-    10%  { opacity: 1; }
-    90%  { opacity: 1; }
-    100% { transform: translateX(88px); opacity: 0; }
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .plant-flow .pallet-flow > * { animation: none !important; opacity: 1 !important; }
-    .plant-flow .pulse { animation: none !important; }
-  }
+  .pf-pallet { fill: var(--c-accent); filter: drop-shadow(0 0 4px var(--c-accent)); }
 </style>
+
+<script>
+  import { scene, EASE, DUR } from "@lib/gsapMotion";
+
+  const root = document.querySelector<HTMLElement>("[data-plant]");
+  if (root) {
+    const pallets = [...root.querySelectorAll<SVGRectElement>("[data-pallet]")];
+    const puffs = [...root.querySelectorAll<SVGCircleElement>("[data-puff]")];
+
+    const SPAN = 88; // inbound → factory span (unchanged from the CSS original)
+
+    const setStatic = (g: typeof import("gsap").gsap) => {
+      pallets.forEach((p, i) => g.set(p, { x: i * 22, opacity: 1 }));
+      g.set(puffs, { opacity: 0.35, y: -6 });
+    };
+
+    scene(
+      root,
+      (tl, g) => {
+        g.set(pallets, { x: 0, opacity: 0 });
+        g.set(puffs, { opacity: 0, y: 0 });
+
+        // Pallets flow across the span, carrying the brass trail.
+        const CYCLE = DUR.travel / 2;
+        pallets.forEach((p, i) => {
+          const t = i * CYCLE;
+          tl.set(p, { x: 0, opacity: 0 }, t)
+            .to(p, { opacity: 1, duration: DUR.fast }, t)
+            .to(p, { x: SPAN, duration: DUR.travel, ease: EASE.linear }, t)
+            .to(p, { opacity: 0, duration: DUR.fast }, t + DUR.travel - DUR.fast);
+        });
+
+        // Smoke puffs rise off the stacks and fade — staggered, looping with the scene.
+        puffs.forEach((puff, i) => {
+          tl.fromTo(
+            puff,
+            { y: 0, opacity: 0 },
+            {
+              keyframes: [
+                { opacity: 0.55, y: -6, duration: 0.3 },
+                { opacity: 0.45, y: -16, duration: 0.6 },
+                { opacity: 0, y: -26, duration: 0.5 },
+              ],
+              ease: EASE.out,
+              repeat: 2,
+            },
+            i * 0.7,
+          );
+        });
+      },
+      { loop: true, reduced: setStatic },
+    );
+  }
+</script>

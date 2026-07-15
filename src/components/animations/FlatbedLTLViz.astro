@@ -1,17 +1,28 @@
 ---
 /**
- * Prompt 5 — Flatbed LTL "pay for the space you use".
- * Top-down flatbed: 3 brass blocks slide in from right and snap into place,
- * filling ~60% of the deck. Bracket + label animate over the used portion.
+ * Flatbed LTL — "pay for the space you use".
+ *
+ * Top-down partial flatbed. On scroll-in three brass blocks slide in from the
+ * right and snap into place (staggered, back.out), filling ~60% of the deck.
+ * The bracket over the used portion then draws on, the used-portion tick marks
+ * flash as it lands, and the "You pay for this" / "NOT THIS" labels fade in.
+ * Same motion language as CoverageReveal (see lib/gsapMotion.scene).
+ *
+ * Reduced motion: blocks placed, bracket drawn, labels visible — static.
  */
 ---
-<div class="flatbed-viz" data-anim>
+<div class="flatbed-viz" data-flatbed>
   <svg viewBox="0 0 480 220" role="img" aria-label="Top-down view of a partial flatbed showing the linear feet you actually pay for">
     <!-- Deck outline -->
     <rect x="20" y="60" width="440" height="100" fill="none" stroke="var(--c-pine)" stroke-width="1.5" />
-    <!-- Tick marks every ~10ft equivalent -->
+    <!-- Tick marks every ~5ft equivalent; the ones under the used portion flash -->
     {Array.from({ length: 9 }).map((_, i) => (
-      <line x1={64 + i * 48} y1={156} x2={64 + i * 48} y2={164} stroke="var(--c-pine)" stroke-width="1" />
+      <line
+        data-tick
+        data-tick-used={i < 4 ? "" : undefined}
+        x1={64 + i * 48} y1={156} x2={64 + i * 48} y2={164}
+        stroke="var(--c-pine)" stroke-width="1"
+      />
     ))}
     {Array.from({ length: 9 }).map((_, i) => (
       <text x={64 + i * 48} y={180} text-anchor="middle" font-family="var(--ff-mono)" font-size="9" fill="var(--c-ink-muted)" letter-spacing="0.08em">
@@ -22,11 +33,11 @@
     <!-- Cab indicator -->
     <rect x="0" y="76" width="20" height="68" fill="var(--c-line)" />
 
-    <!-- Cargo blocks (slide in from right) -->
-    <g class="slide-pack" transform="translate(36, 0)">
-      <rect x="0" y="76" width="90" height="68" fill="var(--c-accent)" />
-      <rect x="98" y="76" width="60" height="68" fill="var(--c-accent)" />
-      <rect x="166" y="76" width="50" height="68" fill="var(--c-accent)" />
+    <!-- Cargo blocks (slide in from the right, snap into place) -->
+    <g transform="translate(36, 0)">
+      <rect data-block x="0" y="76" width="90" height="68" fill="var(--c-accent)" />
+      <rect data-block x="98" y="76" width="60" height="68" fill="var(--c-accent)" />
+      <rect data-block x="166" y="76" width="50" height="68" fill="var(--c-accent)" />
     </g>
 
     <!-- "Empty space" treatment (right side) -->
@@ -36,13 +47,13 @@
     <rect x="260" y="60" width="200" height="100" fill="url(#diag)" opacity="0.5" />
 
     <!-- Bracket + label over used portion -->
-    <g class="flatbed-viz__label">
-      <path d="M36 50 L36 42 L252 42 L252 50" fill="none" stroke="var(--c-accent)" stroke-width="1.25" />
+    <g data-label>
+      <path data-bracket d="M36 50 L36 42 L252 42 L252 50" fill="none" stroke="var(--c-accent)" stroke-width="1.25" />
       <text x="144" y="34" text-anchor="middle" font-family="var(--ff-display)" font-size="14" font-weight="700" fill="var(--c-ink)" letter-spacing="-0.01em">
         You pay for this
       </text>
     </g>
-    <g class="flatbed-viz__empty-label">
+    <g data-label>
       <text x="360" y="34" text-anchor="middle" font-family="var(--ff-mono)" font-size="11" fill="var(--c-ink-muted)" letter-spacing="0.12em">
         NOT THIS
       </text>
@@ -57,15 +68,55 @@
 
 <style>
   .flatbed-viz svg { width: 100%; height: auto; display: block; }
-  .flatbed-viz__label, .flatbed-viz__empty-label {
-    opacity: 0;
-    transition: opacity 500ms var(--ease-out) 1400ms;
-  }
-  .anim-on .flatbed-viz__label,
-  .anim-on .flatbed-viz__empty-label { opacity: 1; }
-
-  @media (prefers-reduced-motion: reduce) {
-    .flatbed-viz .slide-pack > * { opacity: 1 !important; animation: none !important; }
-    .flatbed-viz__label, .flatbed-viz__empty-label { opacity: 1; }
-  }
+  /* Animated-in pieces start hidden; JS (or the reduced painter) reveals them. */
+  .flatbed-viz [data-block],
+  .flatbed-viz [data-label] { opacity: 0; }
 </style>
+
+<script>
+  import { scene, prepDraw, EASE, DUR } from "@lib/gsapMotion";
+
+  const root = document.querySelector<HTMLElement>("[data-flatbed]");
+  if (root) {
+    const blocks = [...root.querySelectorAll<SVGRectElement>("[data-block]")];
+    const bracket = root.querySelector<SVGPathElement>("[data-bracket]");
+    const usedTicks = [...root.querySelectorAll<SVGLineElement>("[data-tick-used]")];
+    const labels = [...root.querySelectorAll<SVGGElement>("[data-label]")];
+
+    const setStatic = (g: typeof import("gsap").gsap) => {
+      g.set(blocks, { x: 0, opacity: 1 });
+      if (bracket) prepDraw(bracket, false);
+      g.set(usedTicks, { strokeWidth: 1 });
+      g.set(labels, { opacity: 1 });
+    };
+
+    scene(
+      root,
+      (tl, g) => {
+        g.set(blocks, { x: 260, opacity: 0 });
+        if (bracket) prepDraw(bracket);
+        g.set(labels, { opacity: 0 });
+
+        // Blocks slide in from the right and snap into place.
+        tl.to(blocks, { x: 0, opacity: 1, duration: DUR.slow, ease: EASE.settle, stagger: 0.12 });
+
+        // Bracket over the used portion draws on.
+        if (bracket) {
+          tl.to(bracket, { strokeDashoffset: 0, duration: DUR.draw, ease: EASE.draw }, "-=0.2");
+        }
+
+        // Used-portion tick marks flash as the bracket lands.
+        tl.fromTo(
+          usedTicks,
+          { strokeWidth: 1 },
+          { strokeWidth: 2.5, duration: 0.15, ease: EASE.settle, stagger: 0.04, repeat: 1, yoyo: true },
+          "<0.4",
+        );
+
+        // Labels fade in.
+        tl.to(labels, { opacity: 1, duration: DUR.base, ease: EASE.out, stagger: 0.1 }, "-=0.1");
+      },
+      { start: "top 80%", reduced: setStatic },
+    );
+  }
+</script>

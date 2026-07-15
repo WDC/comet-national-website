@@ -1,0 +1,138 @@
+---
+/**
+ * Brokerage match — pairing a shipper's load to the right vetted carrier.
+ *
+ * On scroll-in (play once): the LOAD card settles in, candidate match lines
+ * draw from the load toward four carrier nodes (staggered, faint), the nodes
+ * pop, then ONE best carrier is chosen — its match line brightens to brass,
+ * the node emits the house pulse ring and gets a green check while the others
+ * dim back. Same motion language as the hero hub / coverage map.
+ *
+ * Reduced motion: best match line drawn + checked, other candidates dim.
+ */
+const LOAD = { x: 88, y: 95 };
+const CARRIERS = [32, 74, 116, 158] as const; // node y positions at x = 316
+const NODE_X = 316;
+const BEST = 1; // chosen carrier index (y = 74)
+---
+<div class="brokerage" data-brokerage>
+  <svg
+    viewBox="0 0 380 190"
+    role="img"
+    aria-label="A shipper's load being matched to the best of four vetted carriers, with the chosen carrier confirmed by a green check"
+    preserveAspectRatio="xMidYMid meet"
+  >
+    <!-- Candidate match lines: load → each carrier (faint) -->
+    <g class="bm-lines">
+      {CARRIERS.map((y) => (
+        <line class="bm-line" data-line x1={LOAD.x} y1={LOAD.y} x2={NODE_X} y2={y} opacity="0.45" />
+      ))}
+    </g>
+
+    <!-- Winning line, brass, drawn over the chosen candidate on selection -->
+    <line class="bm-win" data-win x1={LOAD.x} y1={LOAD.y} x2={NODE_X} y2={CARRIERS[BEST]} />
+
+    <!-- LOAD card -->
+    <g class="bm-load" data-load>
+      <rect x="20" y="68" width="68" height="54" rx="2" fill="var(--c-pine)" stroke="var(--c-accent)" stroke-width="1.25" />
+      <text x="54" y="90" text-anchor="middle" font-family="var(--ff-mono)" font-size="11" fill="var(--c-accent)" letter-spacing="0.14em">LOAD</text>
+      <line x1="30" y1="100" x2="78" y2="100" stroke="var(--c-line)" stroke-width="1" opacity="0.5" />
+      <text x="54" y="113" text-anchor="middle" font-family="var(--ff-mono)" font-size="8" fill="var(--c-line)" letter-spacing="0.1em">1 SHIPPER</text>
+    </g>
+
+    <!-- Carrier nodes -->
+    <g class="bm-nodes">
+      {CARRIERS.map((y) => (
+        <g class="bm-node" data-node transform={`translate(${NODE_X}, ${y})`}>
+          <circle r="7" fill="var(--c-pine)" stroke="var(--c-line)" stroke-width="1" />
+          <circle r="3" fill="var(--c-accent)" />
+        </g>
+      ))}
+    </g>
+
+    <!-- Pulse ring on the chosen carrier -->
+    <circle class="bm-pulse" data-pulse cx={NODE_X} cy={CARRIERS[BEST]} r="7" />
+
+    <!-- Green check on the chosen carrier -->
+    <g class="bm-check" data-check transform={`translate(${NODE_X + 16}, ${CARRIERS[BEST] - 16})`}>
+      <circle r="9" fill="var(--c-success)" />
+      <path d="M-4 0 L-1 3 L4.5 -3" stroke="var(--c-bg)" stroke-width="1.75" fill="none" stroke-linecap="round" stroke-linejoin="round" />
+    </g>
+
+    <!-- Caption -->
+    <text x="190" y="182" text-anchor="middle" font-family="var(--ff-mono)" font-size="9" fill="var(--c-ink-muted)" letter-spacing="0.1em">
+      MATCHED · VETTED CARRIERS · ONE POINT OF CONTACT
+    </text>
+  </svg>
+</div>
+
+<style>
+  .brokerage svg { width: 100%; height: auto; display: block; }
+  .bm-line { stroke: var(--c-line-soft); stroke-width: 1.25; }
+  .bm-win { stroke: var(--c-accent); stroke-width: 1.75; }
+  .bm-pulse { fill: none; stroke: var(--c-accent); stroke-width: 2; opacity: 0; }
+</style>
+
+<script>
+  import { scene, prepDraw, pulseRing, EASE, DUR } from "@lib/gsapMotion";
+
+  const root = document.querySelector<HTMLElement>("[data-brokerage]");
+  if (root) {
+    const load = root.querySelector<SVGGElement>("[data-load]");
+    const lines = [...root.querySelectorAll<SVGLineElement>("[data-line]")];
+    const win = root.querySelector<SVGLineElement>("[data-win]");
+    const nodes = [...root.querySelectorAll<SVGGElement>("[data-node]")];
+    const pulse = root.querySelector<SVGCircleElement>("[data-pulse]");
+    const check = root.querySelector<SVGGElement>("[data-check]");
+    const BEST = 1; // must match BEST above
+
+    const setStatic = (g: typeof import("gsap").gsap) => {
+      g.set(load, { opacity: 1, scale: 1, transformOrigin: "center" });
+      lines.forEach((l, i) => {
+        prepDraw(l, false);
+        g.set(l, { opacity: i === BEST ? 0.45 : 0.15 });
+      });
+      if (win) prepDraw(win, false);
+      nodes.forEach((n, i) =>
+        g.set(n, { scale: 1, transformOrigin: "center", opacity: i === BEST ? 1 : 0.25 }),
+      );
+      g.set(check, { opacity: 1, scale: 1, transformOrigin: "center" });
+    };
+
+    scene(
+      root,
+      (tl, g) => {
+        g.set(load, { opacity: 0, scale: 0.6, transformOrigin: "center" });
+        lines.forEach((l) => prepDraw(l));
+        if (win) prepDraw(win);
+        g.set(nodes, { scale: 0, transformOrigin: "center" });
+        g.set(check, { opacity: 0, scale: 0, transformOrigin: "center" });
+
+        // Load card settles in.
+        tl.to(load, { opacity: 1, scale: 1, duration: DUR.base, ease: EASE.settle });
+
+        // Candidate match lines draw out, faint and staggered.
+        tl.to(lines, { strokeDashoffset: 0, duration: DUR.draw, ease: EASE.draw, stagger: 0.1 }, "-=0.1");
+
+        // Carrier nodes pop as each line lands.
+        tl.to(nodes, { scale: 1, duration: DUR.fast, ease: EASE.settle, stagger: 0.1 }, "<0.3");
+
+        // Selection: dim the losers.
+        const otherLines = lines.filter((_, i) => i !== BEST);
+        const otherNodes = nodes.filter((_, i) => i !== BEST);
+        tl.to(otherLines, { opacity: 0.15, duration: DUR.base }, "+=0.15");
+        tl.to(otherNodes, { opacity: 0.25, duration: DUR.base }, "<");
+
+        // Chosen line brightens to brass.
+        tl.to(win, { strokeDashoffset: 0, duration: DUR.draw, ease: EASE.draw }, "<");
+
+        // House pulse ring from the chosen carrier.
+        if (pulse) pulseRing(tl, pulse, { from: 7, to: 26, at: "-=0.4" });
+
+        // Green check confirms the match.
+        tl.to(check, { opacity: 1, scale: 1, duration: DUR.base, ease: EASE.settle }, "-=1.1");
+      },
+      { start: "top 78%", reduced: setStatic },
+    );
+  }
+</script>

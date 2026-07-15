@@ -1,22 +1,26 @@
 ---
 /**
  * Industry hero — Machinery & Equipment.
- * Step-deck silhouette with a piece of heavy iron on the lower deck. The
- * planned route draws using `.draw`, then a traveling dot follows it via
- * `.travel`. Same primitives as FreightNetwork.
+ *
+ * Step-deck silhouette with a piece of heavy iron on the lower deck. On
+ * scroll-in the planned route arc draws, the origin dot lands, the destination
+ * emits the house brass pulse ring, and the chain straps draw down in sequence.
+ * A brass shipment dot then runs the curved route on repeat via `travelAlong`
+ * (MotionPath) — same motion language as the hero freight network.
+ *
+ * Reduced motion: route + straps drawn, destination resolved, no traveling dot.
  */
 ---
-<div class="heavy-haul" data-anim>
+<div class="heavy-haul" data-heavy-haul>
   <svg viewBox="0 0 520 260" role="img" aria-label="Animated step-deck trailer with heavy machinery and a planned route">
     <!-- Route arc — drawn first -->
-    <path id="hh-route"
+    <path id="hh-route" data-route
           d="M70 70 C 170 30, 320 30, 460 80"
-          fill="none" stroke="var(--c-accent)" stroke-width="1.5" stroke-linecap="round"
-          class="draw" style="--draw-length: 460; --draw-delay: 200ms" />
+          fill="none" stroke="var(--c-accent)" stroke-width="1.5" stroke-linecap="round" />
 
     <!-- Route endpoint markers -->
-    <circle cx="70" cy="70" r="4" fill="var(--c-accent)" />
-    <circle cx="460" cy="80" r="6" fill="none" stroke="var(--c-accent)" stroke-width="1.5" class="pulse" />
+    <circle data-origin cx="70" cy="70" r="4" fill="var(--c-accent)" />
+    <circle data-pulse cx="460" cy="80" r="6" />
     <circle cx="460" cy="80" r="3" fill="var(--c-accent)" />
 
     <!-- Route labels -->
@@ -57,9 +61,9 @@
 
       <!-- Chain straps -->
       <g stroke="var(--c-pine)" stroke-width="1.25" fill="none">
-        <line x1="130" y1="-44" x2="130" y2="14" class="draw" style="--draw-length: 58; --draw-delay: 1400ms" />
-        <line x1="180" y1="-44" x2="180" y2="14" class="draw" style="--draw-length: 58; --draw-delay: 1550ms" />
-        <line x1="230" y1="-44" x2="230" y2="14" class="draw" style="--draw-length: 58; --draw-delay: 1700ms" />
+        <line data-strap x1="130" y1="-44" x2="130" y2="14" />
+        <line data-strap x1="180" y1="-44" x2="180" y2="14" />
+        <line data-strap x1="230" y1="-44" x2="230" y2="14" />
       </g>
 
       <!-- Wheels -->
@@ -70,8 +74,7 @@
     </g>
 
     <!-- Traveling dot on the route -->
-    <circle r="4" fill="var(--c-accent)" class="travel"
-            style="offset-path: path('M70 70 C 170 30, 320 30, 460 80'); --travel-duration: 4.4s; --travel-delay: 1800ms;" />
+    <circle data-travel r="4" />
 
     <!-- Permit / pilot mono badges -->
     <g font-family="var(--ff-mono)" font-size="9" fill="var(--c-ink-muted)" letter-spacing="0.12em">
@@ -88,9 +91,55 @@
 
 <style>
   .heavy-haul svg { width: 100%; height: auto; display: block; }
-  @media (prefers-reduced-motion: reduce) {
-    .heavy-haul .draw { stroke-dashoffset: 0 !important; }
-    .heavy-haul .travel { display: none; }
-    .heavy-haul .pulse { animation: none; }
-  }
+  .heavy-haul [data-travel] { fill: var(--c-pine-deep); filter: drop-shadow(0 0 4px var(--c-accent)); }
+  .heavy-haul [data-pulse] { fill: none; stroke: var(--c-accent); stroke-width: 1.5; opacity: 0; }
 </style>
+
+<script>
+  import { scene, prepDraw, pulseRing, travelAlong, EASE, DUR } from "@lib/gsapMotion";
+
+  const root = document.querySelector<HTMLElement>("[data-heavy-haul]");
+  if (root) {
+    const route = root.querySelector<SVGPathElement>("[data-route]");
+    const origin = root.querySelector<SVGCircleElement>("[data-origin]");
+    const pulse = root.querySelector<SVGCircleElement>("[data-pulse]");
+    const straps = [...root.querySelectorAll<SVGLineElement>("[data-strap]")];
+    const travel = root.querySelector<SVGCircleElement>("[data-travel]");
+
+    const setStatic = (g: typeof import("gsap").gsap) => {
+      if (route) prepDraw(route, false);
+      straps.forEach((s) => prepDraw(s, false));
+      g.set(origin, { scale: 1, transformOrigin: "center", opacity: 1 });
+      g.set(travel, { opacity: 0 });
+    };
+
+    scene(
+      root,
+      (tl, g) => {
+        if (route) prepDraw(route);
+        straps.forEach((s) => prepDraw(s));
+        g.set(origin, { scale: 0, transformOrigin: "center" });
+        g.set(travel, { opacity: 0 });
+
+        // Route arc draws in.
+        if (route) tl.to(route, { strokeDashoffset: 0, duration: DUR.draw, ease: EASE.draw });
+
+        // Origin dot lands.
+        tl.to(origin, { scale: 1, duration: DUR.fast, ease: EASE.settle }, "-=0.2");
+
+        // Destination emits the house brass pulse ring.
+        if (pulse) pulseRing(tl, pulse, { from: 6, to: 26, at: "-=0.1" });
+
+        // Chain straps draw down, one after another.
+        tl.to(straps, { strokeDashoffset: 0, duration: DUR.base, ease: EASE.draw, stagger: 0.15 }, "-=1.1");
+
+        // Brass shipment dot runs the arc on repeat.
+        if (travel) {
+          tl.to(travel, { opacity: 1, duration: 0.2 }, ">-0.2");
+          travelAlong(tl, travel, "#hh-route", { duration: DUR.travel * 2, repeat: -1, at: "<" });
+        }
+      },
+      { start: "top 80%", reduced: setStatic },
+    );
+  }
+</script>

@@ -1,0 +1,133 @@
+---
+/**
+ * Truckload seal reveal — the dedicated-FTL argument, for the full-truckload
+ * service page. One trailer, one customer: it fills completely and gets sealed.
+ *
+ * On scroll-in: the dry van draws in, a brass cargo block grows from the rear
+ * to fill the whole interior (snap-settle), then a seal/padlock on the rear
+ * door draws and a green check confirms with the house brass pulse ring. Same
+ * motion vocabulary as the hero hub (draws → EASE.draw, cargo → EASE.settle,
+ * live node → pulseRing).
+ *
+ * Reduced motion: trailer full, sealed, check shown. (See gsapMotion.scene.)
+ */
+---
+<div class="tls" data-truckload>
+  <svg
+    viewBox="0 0 380 190"
+    role="img"
+    aria-label="A dry van trailer filled completely and sealed, dedicated to a single load"
+    preserveAspectRatio="xMidYMid meet"
+  >
+    <defs>
+      <clipPath id="tlsInterior">
+        <rect x="52" y="62" width="244" height="56" />
+      </clipPath>
+    </defs>
+
+    <!-- Cargo fill — grows from the rear to fill the whole interior -->
+    <g clip-path="url(#tlsInterior)">
+      <rect
+        class="tls-cargo" data-cargo
+        x="52" y="62" width="244" height="56"
+        fill="var(--c-accent)"
+      />
+    </g>
+
+    <!-- Trailer box (drawn on reveal) -->
+    <path
+      class="tls-body" data-body
+      d="M40 50 L300 50 L300 130 L40 130 Z"
+      fill="none" stroke="var(--c-pine)" stroke-width="1.5"
+    />
+    <!-- Rear door seam + handle (structure, rear = right) -->
+    <g stroke="var(--c-pine)" stroke-width="1.25" fill="none">
+      <line x1="284" y1="50" x2="284" y2="130" />
+      <path d="M290 84 L290 96" />
+    </g>
+
+    <!-- Wheels -->
+    <g fill="none" stroke="var(--c-pine)" stroke-width="1.25">
+      <circle cx="92" cy="140" r="8" />
+      <circle cx="250" cy="140" r="8" />
+      <circle cx="284" cy="140" r="8" />
+    </g>
+
+    <!-- Seal / padlock on the rear door (drawn on reveal) -->
+    <path
+      class="tls-seal" data-seal
+      d="M300 92 A6 6 0 0 1 312 92 M298 92 L314 92 L314 106 L298 106 Z"
+      fill="none" stroke="var(--c-pine-deep)" stroke-width="1.5" stroke-linecap="round"
+    />
+    <circle cx="306" cy="99" r="1.6" fill="var(--c-pine-deep)" />
+
+    <!-- Sealed confirmation — pulse ring + green check -->
+    <circle class="tls-pulse" data-pulse cx="338" cy="70" r="8" />
+    <path
+      class="tls-check" data-check
+      d="M331 70 L336 76 L346 62"
+      fill="none" stroke="var(--c-success)" stroke-width="2.5"
+      stroke-linecap="round" stroke-linejoin="round"
+    />
+
+    <!-- Caption -->
+    <text
+      x="190" y="180" text-anchor="middle"
+      font-family="var(--ff-display)" font-size="10" font-weight="700"
+      fill="var(--c-ink)" letter-spacing="0.06em"
+    >SEALED · DEDICATED · YOUR LOAD ALONE</text>
+  </svg>
+</div>
+
+<style>
+  .tls svg { width: 100%; height: auto; display: block; }
+  .tls-pulse { fill: none; stroke: var(--c-accent); stroke-width: 2; opacity: 0; }
+</style>
+
+<script>
+  import { scene, prepDraw, pulseRing, EASE, DUR } from "@lib/gsapMotion";
+
+  const root = document.querySelector<HTMLElement>("[data-truckload]");
+  if (root) {
+    const body = root.querySelector<SVGPathElement>("[data-body]");
+    const cargo = root.querySelector<SVGRectElement>("[data-cargo]");
+    const seal = root.querySelector<SVGPathElement>("[data-seal]");
+    const check = root.querySelector<SVGPathElement>("[data-check]");
+    const pulse = root.querySelector<SVGCircleElement>("[data-pulse]");
+
+    const setStatic = (g: typeof import("gsap").gsap) => {
+      if (body) prepDraw(body, false);
+      if (seal) prepDraw(seal, false);
+      if (check) prepDraw(check, false);
+      g.set(cargo, { scaleX: 1, transformOrigin: "right center" });
+      g.set(check, { opacity: 1 });
+      g.set(pulse, { opacity: 0 });
+    };
+
+    scene(
+      root,
+      (tl, g) => {
+        if (body) prepDraw(body);
+        if (seal) prepDraw(seal);
+        if (check) prepDraw(check);
+        g.set(cargo, { scaleX: 0, transformOrigin: "right center" });
+        g.set(check, { opacity: 1 });
+        g.set(pulse, { opacity: 0 });
+
+        // Trailer draws in.
+        tl.to(body, { strokeDashoffset: 0, duration: DUR.draw, ease: EASE.draw });
+
+        // Cargo fills the whole interior from the rear, snapping in.
+        tl.to(cargo, { scaleX: 1, duration: DUR.slow, ease: EASE.settle }, "-=0.2");
+
+        // Seal draws on the door.
+        tl.to(seal, { strokeDashoffset: 0, duration: DUR.base, ease: EASE.draw }, "-=0.1");
+
+        // Green check confirms, then the house pulse ring.
+        tl.to(check, { strokeDashoffset: 0, duration: DUR.fast, ease: EASE.draw }, "-=0.05");
+        if (pulse) pulseRing(tl, pulse, { from: 8, to: 28, at: "-=0.15" });
+      },
+      { start: "top 78%", reduced: setStatic },
+    );
+  }
+</script>

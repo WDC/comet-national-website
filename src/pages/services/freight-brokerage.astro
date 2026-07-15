@@ -1,6 +1,7 @@
 ---
 export const prerender = true;
 import ServicePillarLayout from "@layouts/ServicePillarLayout.astro";
+import BrokerageMatch from "@components/animations/BrokerageMatch.astro";
 import { getService } from "@lib/services";
 
 const service = getService("freight-brokerage")!;
@@ -15,38 +16,7 @@ const relatedSlugs = ["full-truckload", "transloading", "warehousing-fulfillment
   pageDescription={description}
   relatedSlugs={relatedSlugs}
 >
-  {/* TODO: replace with custom animation (Phase 3) */}
-  <div slot="hero-art" class="art-placeholder" data-anim-placeholder="freight-brokerage">
-    <svg viewBox="0 0 380 180" aria-hidden="true">
-      <circle cx="80" cy="90" r="34" fill="none" stroke="var(--c-pine)" stroke-width="1.5" />
-      <circle cx="80" cy="90" r="14" fill="var(--c-accent)" />
-      <text x="80" y="148" text-anchor="middle" font-family="var(--ff-mono)" font-size="10" fill="var(--c-ink)" letter-spacing="0.12em">ONE CALL</text>
-      <g stroke="var(--c-pine)" stroke-width="1.25" fill="none">
-        <path d="M120 80 L200 50" />
-        <path d="M120 90 L200 90" />
-        <path d="M120 100 L200 130" />
-        <path d="M195 47 L200 50 L196 54" />
-        <path d="M195 87 L200 90 L196 93" />
-        <path d="M195 127 L200 130 L196 133" />
-      </g>
-      <g fill="var(--c-accent)" opacity="0.9">
-        <rect x="210" y="40" width="60" height="20" />
-        <rect x="210" y="80" width="60" height="20" />
-        <rect x="210" y="120" width="60" height="20" />
-      </g>
-      <g font-family="var(--ff-mono)" font-size="9" fill="var(--c-accent-ink)" letter-spacing="0.06em">
-        <text x="240" y="54" text-anchor="middle">FLATBED</text>
-        <text x="240" y="94" text-anchor="middle">DRY VAN</text>
-        <text x="240" y="134" text-anchor="middle">REEFER</text>
-      </g>
-      <g stroke="var(--c-pine)" stroke-width="1" fill="none" opacity="0.55">
-        <path d="M280 50 L340 50" />
-        <path d="M280 90 L340 90" />
-        <path d="M280 130 L340 130" />
-      </g>
-      <text x="200" y="20" text-anchor="middle" font-family="var(--ff-display)" font-size="13" font-weight="700" fill="var(--c-ink)">ONE CALL · EVERY MODE</text>
-    </svg>
-  </div>
+  <BrokerageMatch slot="hero-art" />
 
   <section data-reveal>
     <p class="eyebrow">Who brokerage is for</p>

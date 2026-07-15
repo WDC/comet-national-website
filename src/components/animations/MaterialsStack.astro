@@ -1,11 +1,17 @@
 ---
 /**
  * Industry hero — Building Materials.
- * Three layers of distribution freight slide-in from the right onto a flatbed,
- * using the shared `.slide-pack` pattern (same primitive as FlatbedLTLViz).
+ *
+ * Bundled distribution freight loads onto a flatbed. On scroll-in three bundles
+ * slide in from the right and snap into place (staggered, back.out), the vertical
+ * strap lines then draw down over them (stagger), and the labels fade in.
+ * Same motion language as CoverageReveal (see lib/gsapMotion.scene) and the
+ * FlatbedLTL viz — one loading gesture across the site.
+ *
+ * Reduced motion: loaded and strapped — static.
  */
 ---
-<div class="materials-stack" data-anim>
+<div class="materials-stack" data-materials>
   <svg viewBox="0 0 520 240" role="img" aria-label="Animated flatbed loading with bundled building-materials freight">
     <!-- Ground -->
     <line x1="20" y1="200" x2="500" y2="200" stroke="var(--c-pine)" stroke-width="1.5" />
@@ -31,40 +37,38 @@
       <line x1="380" y1="170" x2="380" y2="160" />
     </g>
 
-    <!-- Sliding pack: 3 stacked bundle types (slide in from the right) -->
-    <g class="slide-pack">
-      <!-- Bundle 1: doors/wide cartons -->
-      <g transform="translate(60, 90)">
-        <rect x="0" y="0" width="100" height="78" fill="var(--c-accent)" opacity="0.92" />
-        <line x1="0" y1="20" x2="100" y2="20" stroke="var(--c-accent-ink)" stroke-width="0.75" opacity="0.55" />
-        <line x1="0" y1="42" x2="100" y2="42" stroke="var(--c-accent-ink)" stroke-width="0.75" opacity="0.55" />
-        <line x1="0" y1="62" x2="100" y2="62" stroke="var(--c-accent-ink)" stroke-width="0.75" opacity="0.55" />
-      </g>
-      <!-- Bundle 2: cabinetry / sheet goods -->
-      <g transform="translate(170, 70)">
-        <rect x="0" y="0" width="130" height="98" fill="var(--c-accent)" opacity="0.92" />
-        <line x1="65" y1="0" x2="65" y2="98" stroke="var(--c-accent-ink)" stroke-width="0.75" opacity="0.55" />
-      </g>
-      <!-- Bundle 3: trim / long lumber -->
-      <g transform="translate(310, 130)">
-        <rect x="0" y="0" width="100" height="38" fill="var(--c-accent)" opacity="0.92" />
-        <line x1="0" y1="14" x2="100" y2="14" stroke="var(--c-accent-ink)" stroke-width="0.75" opacity="0.55" />
-        <line x1="0" y1="26" x2="100" y2="26" stroke="var(--c-accent-ink)" stroke-width="0.75" opacity="0.55" />
-      </g>
+    <!-- Bundles slide in from the right and snap into place -->
+    <!-- Bundle 1: doors/wide cartons -->
+    <g data-bundle transform="translate(60, 90)">
+      <rect x="0" y="0" width="100" height="78" fill="var(--c-accent)" opacity="0.92" />
+      <line x1="0" y1="20" x2="100" y2="20" stroke="var(--c-accent-ink)" stroke-width="0.75" opacity="0.55" />
+      <line x1="0" y1="42" x2="100" y2="42" stroke="var(--c-accent-ink)" stroke-width="0.75" opacity="0.55" />
+      <line x1="0" y1="62" x2="100" y2="62" stroke="var(--c-accent-ink)" stroke-width="0.75" opacity="0.55" />
+    </g>
+    <!-- Bundle 2: cabinetry / sheet goods -->
+    <g data-bundle transform="translate(170, 70)">
+      <rect x="0" y="0" width="130" height="98" fill="var(--c-accent)" opacity="0.92" />
+      <line x1="65" y1="0" x2="65" y2="98" stroke="var(--c-accent-ink)" stroke-width="0.75" opacity="0.55" />
+    </g>
+    <!-- Bundle 3: trim / long lumber -->
+    <g data-bundle transform="translate(310, 130)">
+      <rect x="0" y="0" width="100" height="38" fill="var(--c-accent)" opacity="0.92" />
+      <line x1="0" y1="14" x2="100" y2="14" stroke="var(--c-accent-ink)" stroke-width="0.75" opacity="0.55" />
+      <line x1="0" y1="26" x2="100" y2="26" stroke="var(--c-accent-ink)" stroke-width="0.75" opacity="0.55" />
     </g>
 
-    <!-- Strap lines drawn over after pack arrives -->
+    <!-- Strap lines draw down after the pack arrives -->
     <g stroke="var(--c-pine)" stroke-width="1.25" fill="none">
-      <line x1="100" y1="160" x2="100" y2="184" class="draw" style="--draw-length: 24; --draw-delay: 1500ms" />
-      <line x1="230" y1="160" x2="230" y2="184" class="draw" style="--draw-length: 24; --draw-delay: 1650ms" />
-      <line x1="360" y1="160" x2="360" y2="184" class="draw" style="--draw-length: 24; --draw-delay: 1800ms" />
+      <line data-strap x1="100" y1="160" x2="100" y2="184" />
+      <line data-strap x1="230" y1="160" x2="230" y2="184" />
+      <line data-strap x1="360" y1="160" x2="360" y2="184" />
     </g>
 
-    <!-- Label -->
-    <text x="260" y="36" text-anchor="middle" font-family="var(--ff-display)" font-size="14" font-weight="700" fill="var(--c-ink)" letter-spacing="-0.01em">
+    <!-- Labels -->
+    <text data-label x="260" y="36" text-anchor="middle" font-family="var(--ff-display)" font-size="14" font-weight="700" fill="var(--c-ink)" letter-spacing="-0.01em">
       Partial flatbed. Pay for the space you use.
     </text>
-    <text x="260" y="226" text-anchor="middle" font-family="var(--ff-mono)" font-size="10" fill="var(--c-ink-muted)" letter-spacing="0.16em">
+    <text data-label x="260" y="226" text-anchor="middle" font-family="var(--ff-mono)" font-size="10" fill="var(--c-ink-muted)" letter-spacing="0.16em">
       DISTRIBUTION FREIGHT · BUILT FOR DEALERS
     </text>
   </svg>
@@ -72,8 +76,43 @@
 
 <style>
   .materials-stack svg { width: 100%; height: auto; display: block; }
-  @media (prefers-reduced-motion: reduce) {
-    .materials-stack .slide-pack > * { opacity: 1 !important; animation: none !important; }
-    .materials-stack .draw { stroke-dashoffset: 0 !important; }
-  }
+  /* Animated-in pieces start hidden; JS (or the reduced painter) reveals them. */
+  .materials-stack [data-bundle],
+  .materials-stack [data-label] { opacity: 0; }
 </style>
+
+<script>
+  import { scene, prepDraw, EASE, DUR } from "@lib/gsapMotion";
+
+  const root = document.querySelector<HTMLElement>("[data-materials]");
+  if (root) {
+    const bundles = [...root.querySelectorAll<SVGGElement>("[data-bundle]")];
+    const straps = [...root.querySelectorAll<SVGLineElement>("[data-strap]")];
+    const labels = [...root.querySelectorAll<SVGTextElement>("[data-label]")];
+
+    const setStatic = (g: typeof import("gsap").gsap) => {
+      g.set(bundles, { x: 0, opacity: 1 });
+      straps.forEach((s) => prepDraw(s, false));
+      g.set(labels, { opacity: 1 });
+    };
+
+    scene(
+      root,
+      (tl, g) => {
+        g.set(bundles, { x: 280, opacity: 0 });
+        straps.forEach((s) => prepDraw(s));
+        g.set(labels, { opacity: 0 });
+
+        // Bundles slide in from the right and snap into place.
+        tl.to(bundles, { x: 0, opacity: 1, duration: DUR.slow, ease: EASE.settle, stagger: 0.14 });
+
+        // Vertical strap lines draw down over the load.
+        tl.to(straps, { strokeDashoffset: 0, duration: DUR.draw, ease: EASE.draw, stagger: 0.09 }, "-=0.1");
+
+        // Labels fade in.
+        tl.to(labels, { opacity: 1, duration: DUR.base, ease: EASE.out, stagger: 0.12 }, "-=0.2");
+      },
+      { start: "top 80%", reduced: setStatic },
+    );
+  }
+</script>

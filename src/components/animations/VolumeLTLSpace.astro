@@ -1,0 +1,97 @@
+---
+/**
+ * Service hero — Volume LTL (partial truckload).
+ *
+ * An enclosed trailer ~55% filled — the "bigger than LTL, smaller than a
+ * truckload" argument. On scroll-in a brass block grows from the left to ~55%
+ * (scaleX 0→1, EASE.settle); the remainder is a faint diagonal-hatch "NOT PAID"
+ * area. A bracket then draws over the paid portion (prepDraw + EASE.draw) and
+ * the labels fade in — same motion language as the flatbed "linear feet" viz.
+ *
+ * Reduced motion: block filled, bracket drawn, labels visible. (scene → reduced)
+ */
+---
+<div class="volume-ltl-space" data-volume-ltl-space>
+  <svg viewBox="0 0 380 190" role="img" aria-label="Enclosed trailer about 55 percent full — the volume LTL sweet spot between standard LTL and a full truckload, showing the linear feet you actually pay for">
+    <defs>
+      <pattern id="vlDiag" patternUnits="userSpaceOnUse" width="6" height="6" patternTransform="rotate(45)">
+        <line x1="0" y1="0" x2="0" y2="6" stroke="var(--c-line)" stroke-width="1" />
+      </pattern>
+    </defs>
+
+    <!-- Ground -->
+    <line x1="18" y1="138" x2="362" y2="138" stroke="var(--c-pine)" stroke-width="1.5" />
+
+    <!-- Cab (static) -->
+    <rect x="20" y="66" width="34" height="46" fill="none" stroke="var(--c-pine)" stroke-width="1.5" />
+    <rect x="24" y="70" width="15" height="12" fill="var(--c-pine)" />
+
+    <!-- Enclosed trailer outline (static) -->
+    <rect x="58" y="46" width="284" height="82" fill="none" stroke="var(--c-pine)" stroke-width="1.5" />
+
+    <!-- Unpaid remainder (diagonal hatch) -->
+    <rect x="220" y="52" width="116" height="72" fill="url(#vlDiag)" opacity="0.5" />
+
+    <!-- Paid space — grows from the left to ~55% -->
+    <rect data-block x="66" y="54" width="150" height="66" fill="var(--c-accent)" />
+
+    <!-- Wheels (static) -->
+    <circle cx="40" cy="136" r="9" fill="none" stroke="var(--c-pine)" stroke-width="1.25" />
+    <circle cx="296" cy="136" r="9" fill="none" stroke="var(--c-pine)" stroke-width="1.25" />
+    <circle cx="322" cy="136" r="9" fill="none" stroke="var(--c-pine)" stroke-width="1.25" />
+
+    <!-- Bracket over the paid portion -->
+    <path data-bracket d="M66 42 L66 36 L216 36 L216 42" fill="none" stroke="var(--c-accent)" stroke-width="1.25" />
+
+    <!-- Labels -->
+    <text data-label x="141" y="28" text-anchor="middle" font-family="var(--ff-display)" font-size="14" font-weight="700" fill="var(--c-ink)" letter-spacing="-0.01em">
+      6–28 LINEAR FEET
+    </text>
+    <text data-label x="278" y="92" text-anchor="middle" font-family="var(--ff-mono)" font-size="10" fill="var(--c-ink-muted)" letter-spacing="0.16em">
+      NOT PAID
+    </text>
+    <text data-label x="190" y="176" text-anchor="middle" font-family="var(--ff-mono)" font-size="10" fill="var(--c-ink-muted)" letter-spacing="0.16em">
+      BIGGER THAN LTL · SMALLER THAN A TRUCKLOAD
+    </text>
+  </svg>
+</div>
+
+<style>
+  .volume-ltl-space svg { width: 100%; height: auto; display: block; }
+</style>
+
+<script>
+  import { scene, prepDraw, EASE, DUR } from "@lib/gsapMotion";
+
+  const root = document.querySelector<HTMLElement>("[data-volume-ltl-space]");
+  if (root) {
+    const block = root.querySelector<SVGRectElement>("[data-block]");
+    const bracket = root.querySelector<SVGPathElement>("[data-bracket]");
+    const labels = [...root.querySelectorAll<SVGTextElement>("[data-label]")];
+
+    const setStatic = (g: typeof import("gsap").gsap) => {
+      g.set(block, { scaleX: 1, transformOrigin: "left center" });
+      if (bracket) prepDraw(bracket, false);
+      g.set(labels, { opacity: 1 });
+    };
+
+    scene(
+      root,
+      (tl, g) => {
+        g.set(block, { scaleX: 0, transformOrigin: "left center" });
+        if (bracket) prepDraw(bracket);
+        g.set(labels, { opacity: 0 });
+
+        // Paid space grows from the left and snaps to ~55%.
+        tl.to(block, { scaleX: 1, duration: DUR.slow, ease: EASE.settle });
+
+        // Bracket draws over the paid portion.
+        if (bracket) tl.to(bracket, { strokeDashoffset: 0, duration: DUR.draw, ease: EASE.draw }, "-=0.3");
+
+        // Labels fade in.
+        tl.to(labels, { opacity: 1, duration: DUR.base, ease: EASE.out, stagger: 0.08 }, "-=0.4");
+      },
+      { start: "top 80%", reduced: setStatic },
+    );
+  }
+</script>

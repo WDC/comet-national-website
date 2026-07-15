@@ -1,0 +1,121 @@
+---
+/**
+ * Service hero — Flatbed / open deck.
+ *
+ * An open flatbed deck with an oversized brass cargo block. On scroll-in the
+ * cargo settles onto the deck with a slight overshoot (EASE.settle), chain
+ * straps draw DOWN over it in sequence (`prepDraw` + stroke-dashoffset,
+ * staggered), corner protectors snap into place, and a green check draws in
+ * with the house brass pulse ring to confirm the load is secured. Same motion
+ * language as the machinery / heavy-haul hero.
+ *
+ * Reduced motion: cargo strapped, corners set, check + secured state painted.
+ */
+---
+<div class="open-deck-secure" data-open-deck-secure>
+  <svg viewBox="0 0 380 190" role="img" aria-label="Animated open flatbed deck with an oversized cargo block being strapped and secured">
+    <!-- Ground -->
+    <line x1="20" y1="150" x2="360" y2="150" stroke="var(--c-pine)" stroke-width="1.5" />
+
+    <!-- Flatbed deck -->
+    <rect x="44" y="120" width="280" height="8" fill="var(--c-line)" />
+    <line x1="44" y1="120" x2="324" y2="120" stroke="var(--c-pine)" stroke-width="1.5" />
+
+    <!-- Wheels -->
+    <circle cx="86" cy="140" r="9" fill="none" stroke="var(--c-pine)" stroke-width="1.25" />
+    <circle cx="122" cy="140" r="9" fill="none" stroke="var(--c-pine)" stroke-width="1.25" />
+    <circle cx="264" cy="140" r="9" fill="none" stroke="var(--c-pine)" stroke-width="1.25" />
+    <circle cx="300" cy="140" r="9" fill="none" stroke="var(--c-pine)" stroke-width="1.25" />
+
+    <!-- Oversized brass cargo block (settles onto the deck) -->
+    <g data-cargo>
+      <rect x="108" y="72" width="150" height="48" fill="var(--c-accent)" opacity="0.92" />
+      <rect x="150" y="56" width="66" height="16" fill="var(--c-accent)" opacity="0.92" />
+      <circle cx="118" cy="82" r="2" fill="var(--c-accent-ink)" opacity="0.55" />
+      <circle cx="248" cy="82" r="2" fill="var(--c-accent-ink)" opacity="0.55" />
+      <circle cx="118" cy="110" r="2" fill="var(--c-accent-ink)" opacity="0.55" />
+      <circle cx="248" cy="110" r="2" fill="var(--c-accent-ink)" opacity="0.55" />
+    </g>
+
+    <!-- Chain straps drawn down over the cargo -->
+    <g stroke="var(--c-pine)" stroke-width="1.5" fill="none" stroke-linecap="round">
+      <line data-strap x1="132" y1="66" x2="132" y2="126" />
+      <line data-strap x1="168" y1="66" x2="168" y2="126" />
+      <line data-strap x1="204" y1="66" x2="204" y2="126" />
+      <line data-strap x1="240" y1="66" x2="240" y2="126" />
+    </g>
+
+    <!-- Corner protectors -->
+    <g fill="var(--c-accent-ink)" opacity="0.7">
+      <rect data-corner x="108" y="72" width="9" height="9" />
+      <rect data-corner x="249" y="72" width="9" height="9" />
+      <rect data-corner x="108" y="111" width="9" height="9" />
+      <rect data-corner x="249" y="111" width="9" height="9" />
+    </g>
+
+    <!-- Secured confirmation: green check + brass pulse ring -->
+    <circle data-pulse cx="300" cy="86" r="8" />
+    <path data-check d="M292 86 l5 6 l11 -14" fill="none" stroke="var(--c-success)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+    <text data-secured x="300" y="112" text-anchor="middle" font-family="var(--ff-mono)" font-size="9" fill="var(--c-success)" letter-spacing="0.14em">SECURED</text>
+
+    <!-- Bottom caption -->
+    <text x="190" y="178" text-anchor="middle" font-family="var(--ff-mono)" font-size="10" fill="var(--c-ink-muted)" letter-spacing="0.16em">
+      SECURED · TARPED · PERMITTED
+    </text>
+  </svg>
+</div>
+
+<style>
+  .open-deck-secure svg { width: 100%; height: auto; display: block; }
+  .open-deck-secure [data-pulse] { fill: none; stroke: var(--c-accent); stroke-width: 1.5; opacity: 0; }
+</style>
+
+<script>
+  import { scene, prepDraw, pulseRing, EASE, DUR } from "@lib/gsapMotion";
+
+  const root = document.querySelector<HTMLElement>("[data-open-deck-secure]");
+  if (root) {
+    const cargo = root.querySelector<SVGGElement>("[data-cargo]");
+    const straps = [...root.querySelectorAll<SVGLineElement>("[data-strap]")];
+    const corners = [...root.querySelectorAll<SVGRectElement>("[data-corner]")];
+    const check = root.querySelector<SVGPathElement>("[data-check]");
+    const pulse = root.querySelector<SVGCircleElement>("[data-pulse]");
+    const secured = root.querySelector<SVGTextElement>("[data-secured]");
+
+    const setStatic = (g: typeof import("gsap").gsap) => {
+      straps.forEach((s) => prepDraw(s, false));
+      if (check) prepDraw(check, false);
+      g.set(cargo, { y: 0, opacity: 1 });
+      g.set(corners, { scale: 1, opacity: 0.7, transformOrigin: "center" });
+      g.set([check, secured], { opacity: 1 });
+    };
+
+    scene(
+      root,
+      (tl, g) => {
+        straps.forEach((s) => prepDraw(s));
+        if (check) prepDraw(check);
+        g.set(cargo, { y: -46, opacity: 0 });
+        g.set(corners, { scale: 0, opacity: 0, transformOrigin: "center" });
+        g.set([check, secured], { opacity: 0 });
+
+        // Cargo settles onto the deck with a slight overshoot.
+        tl.to(cargo, { y: 0, opacity: 1, duration: DUR.slow, ease: EASE.settle });
+
+        // Chain straps draw down over the cargo, one after another.
+        tl.to(straps, { strokeDashoffset: 0, duration: DUR.base, ease: EASE.draw, stagger: 0.12 }, "-=0.1");
+
+        // Corner protectors snap into place.
+        tl.to(corners, { scale: 1, opacity: 0.7, duration: DUR.fast, ease: EASE.settle, stagger: 0.06 }, "-=0.3");
+
+        // Green check draws in to confirm secured.
+        if (check) tl.to(check, { strokeDashoffset: 0, opacity: 1, duration: DUR.base, ease: EASE.draw }, "-=0.1");
+        if (secured) tl.to(secured, { opacity: 1, duration: DUR.fast }, "<");
+
+        // House brass pulse ring on the confirmation.
+        if (pulse) pulseRing(tl, pulse, { from: 8, to: 28, at: "-=0.3" });
+      },
+      { start: "top 80%", reduced: setStatic },
+    );
+  }
+</script>
