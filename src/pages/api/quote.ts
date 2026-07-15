@@ -120,7 +120,7 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
       text: [
         `Hi ${data.name.split(" ")[0]},`,
         ``,
-        `Thanks for the quote request. A dispatcher will reach out within one business hour.`,
+        `Thanks for the quote request. A dispatcher will typically reach out within one business hour.`,
         ``,
         `If it's urgent, call us at ${SITE.phone}.`,
         ``,

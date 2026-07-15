@@ -31,7 +31,7 @@
           "value": "flatbedltl.com"
         }
       ],
-      "destination": "https://cometnational.com/why-comet/everyone-wins",
+      "destination": "https://cometnational.com/services/volume-ltl",
       "permanent": true
     },
     {
@@ -42,7 +42,7 @@
           "value": "flatbedltl.com"
         }
       ],
-      "destination": "https://cometnational.com/insights/:slug",
+      "destination": "https://cometnational.com/blog/:slug",
       "permanent": true
     },
     {
@@ -152,7 +152,7 @@
           "value": "transload911.com"
         }
       ],
-      "destination": "https://cometnational.com/insights/:slug",
+      "destination": "https://cometnational.com/blog/:slug",
       "permanent": true
     },
     {

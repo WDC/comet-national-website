@@ -1,0 +1,136 @@
+---
+export const prerender = true;
+import BaseLayout from "@layouts/BaseLayout.astro";
+import Button from "@components/ui/Button.astro";
+import { SITE } from "@lib/site";
+
+const reasons = [
+  {
+    title: "Steady freight, honest rates",
+    body: "Flatbed, step-deck, RGN, reefer, dry van, and hotshot lanes out of metro Atlanta and across 48 states. We price fairly and we don't nickel-and-dime the settlement.",
+  },
+  {
+    title: "Paid on time",
+    body: "Clean paperwork in, payment out on schedule. Quick-pay options for carriers who want them. No chasing, no games.",
+  },
+  {
+    title: "A dispatcher who answers",
+    body: "One team, real people, real phones. When a load shifts or a dock runs late, you reach someone who can actually make a decision.",
+  },
+];
+
+const requirements = [
+  "Active MC / USDOT authority in good standing",
+  "Certificate of insurance — cargo and auto liability to our standards",
+  "Signed carrier packet and W-9",
+  "FMCSA-current safety rating",
+];
+---
+<BaseLayout
+  title={`Carriers — Haul for Comet National`}
+  description={`Owner-operators and carrier partners: run flatbed, step-deck, reefer, dry van, and hotshot freight with Comet National out of Atlanta. Steady lanes, fair rates, dispatchers who answer. Get set up today.`}
+>
+  <section class="car section section-bar" data-reveal>
+    <div class="container-content">
+      <div class="reveal-stagger" data-reveal>
+        <p class="eyebrow">Carriers</p>
+        <h1 class="car__title display">
+          Run with a broker<br/>
+          <span class="car__accent">that picks up the phone.</span>
+        </h1>
+        <p class="car__lede">
+          We move the loads other brokers bounce — and we need carriers who can
+          handle them. If you run flatbed, step-deck, RGN, reefer, dry van, or
+          hotshot, let's get you set up.
+        </p>
+        <div class="car__actions">
+          <Button href={`tel:${SITE.phoneE164}`} size="lg">Call dispatch · {SITE.phone}</Button>
+          <a class="car__email display" href={`mailto:${SITE.email}?subject=Carrier%20setup`}>
+            or email <span class="car__email-addr">{SITE.email}</span>
+          </a>
+        </div>
+      </div>
+
+      <ul class="car__reasons reveal-stagger" data-reveal>
+        {reasons.map((r, i) => (
+          <li class="car__reason">
+            <span class="mono car__num">0{i + 1}</span>
+            <h2 class="car__reason-title display">{r.title}</h2>
+            <p class="car__reason-body">{r.body}</p>
+          </li>
+        ))}
+      </ul>
+
+      <div class="car__setup reveal-stagger" data-reveal>
+        <div class="car__setup-copy">
+          <p class="eyebrow">Get set up</p>
+          <h2 class="car__setup-title display">What we need to onboard you.</h2>
+          <p class="car__setup-body">
+            Send the packet below to <a href={`mailto:${SITE.email}?subject=Carrier%20setup`}>{SITE.email}</a>
+            {" "}or call dispatch and we'll walk you through it.
+          </p>
+        </div>
+        <ul class="car__reqs">
+          {requirements.map((req) => (
+            <li>{req}</li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .car__title { font-size: var(--t-h1); line-height: 1; margin-top: var(--s-3); max-width: 20ch; }
+  .car__accent { color: var(--c-accent); }
+  .car__lede { margin-top: var(--s-6); color: var(--c-ink-muted); max-width: 58ch; line-height: var(--lh-relaxed); }
+  .car__actions { margin-top: var(--s-8); display: flex; flex-wrap: wrap; gap: var(--s-5); align-items: center; }
+  .car__email { font-size: 1rem; font-weight: 600; color: var(--c-ink-muted); }
+  .car__email-addr { color: var(--c-ink); border-bottom: 1.5px solid var(--c-accent); padding-bottom: 2px; }
+  .car__email:hover .car__email-addr { color: var(--c-accent); }
+
+  .car__reasons {
+    list-style: none; padding: 0; margin: var(--s-16) 0 0;
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px;
+    background: var(--c-line); border: 1px solid var(--c-line);
+  }
+  .car__reason {
+    background: var(--c-bg-elevated); padding: var(--s-8);
+    display: grid; gap: var(--s-3); align-content: start;
+    position: relative; overflow: hidden;
+  }
+  .car__reason::before {
+    content: ""; position: absolute; inset: 0 0 auto 0; height: 2px;
+    background: var(--c-accent); transform: scaleX(0); transform-origin: left;
+    transition: transform var(--d-base) var(--ease-out);
+  }
+  .car__reason:hover::before { transform: scaleX(1); }
+  .car__num { font-size: var(--t-eyebrow); letter-spacing: var(--ls-wider); color: var(--c-accent); }
+  .car__reason-title { font-size: var(--t-h3); line-height: 1.05; color: var(--c-ink); }
+  .car__reason-body { color: var(--c-ink-muted); font-size: var(--t-small); line-height: var(--lh-relaxed); }
+
+  .car__setup {
+    margin-top: var(--s-12);
+    display: grid; grid-template-columns: 1fr 1fr; gap: var(--s-10);
+    padding: var(--s-10); background: var(--c-pine-deep); color: var(--c-bg);
+    align-items: center;
+  }
+  .car__setup .eyebrow { color: var(--c-accent); }
+  .car__setup-title { font-size: var(--t-h2); line-height: 1.05; color: var(--c-bg); margin-top: var(--s-3); max-width: 16ch; }
+  .car__setup-body { margin-top: var(--s-4); color: rgba(247, 246, 238, 0.72); line-height: var(--lh-relaxed); }
+  .car__setup-body a { color: var(--c-accent); border-bottom: 1px solid currentColor; }
+  .car__reqs { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--s-3); }
+  .car__reqs li {
+    padding-left: var(--s-5); position: relative;
+    color: rgba(247, 246, 238, 0.85); line-height: var(--lh-snug);
+  }
+  .car__reqs li::before {
+    content: ""; position: absolute; left: 0; top: 0.55em;
+    width: 6px; height: 6px; background: var(--c-accent); border-radius: 1px;
+  }
+
+  @media (max-width: 880px) {
+    .car__reasons { grid-template-columns: 1fr; }
+    .car__setup { grid-template-columns: 1fr; gap: var(--s-6); }
+  }
+</style>

@@ -1,0 +1,81 @@
+---
+export const prerender = true;
+import BaseLayout from "@layouts/BaseLayout.astro";
+import { SITE } from "@lib/site";
+---
+<BaseLayout
+  title={`Terms of Use | ${SITE.name}`}
+  description={`The terms that govern your use of ${SITE.url} and the freight-quote requests you submit through it.`}
+>
+  <section class="legal section section-bar" data-reveal>
+    <div class="container-content legal__inner reveal-stagger" data-reveal>
+      <p class="eyebrow">Legal</p>
+      <h1 class="legal__title display">Terms of Use</h1>
+
+      <p class="legal__notice mono" role="note">
+        DRAFT — baseline terms pending review by {SITE.name}'s counsel before launch.
+      </p>
+
+      <div class="prose legal__body">
+        <p>
+          These terms govern your use of {SITE.url} (the "Site"), operated by
+          {SITE.legalName} ("Comet National," "we," "us"). By using the Site you
+          agree to them.
+        </p>
+
+        <h2>Use of the Site</h2>
+        <p>
+          You may use the Site to learn about our services and request freight
+          quotes. Please don't misuse it — for example by interfering with its
+          operation, attempting unauthorized access, or submitting false
+          information.
+        </p>
+
+        <h2>Quotes &amp; service</h2>
+        <p>
+          Quote requests submitted through the Site are requests, not binding
+          contracts. Rates, transit times, and availability are confirmed
+          directly by our team, and any shipment is governed by the rate
+          confirmation and carrier/broker terms we provide at booking. Timeframes
+          described on the Site are typical targets, not guarantees.
+        </p>
+
+        <h2>Intellectual property</h2>
+        <p>
+          The content, branding, and design of the Site are owned by
+          {SITE.legalName} and may not be copied or reused without permission.
+        </p>
+
+        <h2>Disclaimers &amp; liability</h2>
+        <p>
+          The Site is provided "as is" without warranties of any kind. To the
+          extent permitted by law, {SITE.legalName} is not liable for indirect or
+          consequential damages arising from your use of the Site.
+        </p>
+
+        <h2>Contact</h2>
+        <p>
+          Questions about these terms? Reach us at
+          {" "}<a href={`mailto:${SITE.email}`}>{SITE.email}</a> or
+          {" "}<a href={`tel:${SITE.phoneE164}`}>{SITE.phone}</a>.
+        </p>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .legal__inner { max-width: 72ch; }
+  .legal__title { font-size: var(--t-h1); line-height: 1; margin-top: var(--s-3); }
+  .legal__notice {
+    margin-top: var(--s-5);
+    padding: var(--s-3) var(--s-4);
+    background: color-mix(in srgb, var(--c-warn) 12%, var(--c-bg));
+    border-left: 3px solid var(--c-warn);
+    color: var(--c-warn);
+    font-size: var(--t-small);
+    letter-spacing: var(--ls-wide);
+  }
+  .legal__body { margin-top: var(--s-8); }
+  .legal__body h2 { font-size: var(--t-h3); margin-top: var(--s-10); margin-bottom: var(--s-3); }
+</style>

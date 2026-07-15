@@ -1,0 +1,90 @@
+---
+export const prerender = true;
+import BaseLayout from "@layouts/BaseLayout.astro";
+import { SITE } from "@lib/site";
+---
+<BaseLayout
+  title={`Privacy Policy | ${SITE.name}`}
+  description={`How ${SITE.legalName} collects, uses, and protects the information you share when you request a freight quote or contact us.`}
+>
+  <section class="legal section section-bar" data-reveal>
+    <div class="container-content legal__inner reveal-stagger" data-reveal>
+      <p class="eyebrow">Legal</p>
+      <h1 class="legal__title display">Privacy Policy</h1>
+
+      <p class="legal__notice mono" role="note">
+        DRAFT — baseline policy pending review by {SITE.name}'s counsel before launch.
+      </p>
+
+      <div class="prose legal__body">
+        <p>
+          This policy explains what information {SITE.legalName} ("Comet National,"
+          "we," "us") collects, why we collect it, and the choices you have. It
+          applies to {SITE.url} and the forms on it.
+        </p>
+
+        <h2>Information we collect</h2>
+        <p>
+          When you request a quote or contact us, we collect the details you
+          provide — typically your name, company, phone number, email address,
+          and information about the freight you need moved. We also collect
+          standard technical data (such as IP address and browser type) through
+          server logs and privacy-respecting analytics.
+        </p>
+
+        <h2>How we use it</h2>
+        <p>
+          We use your information to respond to quote requests, arrange and manage
+          shipments, communicate with you about your freight, and improve our
+          service. We do not sell your personal information.
+        </p>
+
+        <h2>Sharing</h2>
+        <p>
+          We share information only as needed to move your freight — for example
+          with carriers, insurers, and the vendors that help us operate (such as
+          email and form-processing providers) — and where required by law.
+        </p>
+
+        <h2>Retention &amp; security</h2>
+        <p>
+          We keep information for as long as needed to provide our services and
+          meet legal and recordkeeping obligations, then dispose of it securely.
+          We use reasonable safeguards to protect it, though no method of
+          transmission or storage is completely secure.
+        </p>
+
+        <h2>Your choices</h2>
+        <p>
+          You can ask us to access, correct, or delete the personal information we
+          hold about you, or to stop contacting you, by emailing
+          {" "}<a href={`mailto:${SITE.email}`}>{SITE.email}</a> or calling
+          {" "}<a href={`tel:${SITE.phoneE164}`}>{SITE.phone}</a>.
+        </p>
+
+        <h2>Contact</h2>
+        <p>
+          {SITE.legalName}<br/>
+          {SITE.address.street}, {SITE.address.locality}, {SITE.address.region} {SITE.address.postal}<br/>
+          <a href={`mailto:${SITE.email}`}>{SITE.email}</a> · <a href={`tel:${SITE.phoneE164}`}>{SITE.phone}</a>
+        </p>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .legal__inner { max-width: 72ch; }
+  .legal__title { font-size: var(--t-h1); line-height: 1; margin-top: var(--s-3); }
+  .legal__notice {
+    margin-top: var(--s-5);
+    padding: var(--s-3) var(--s-4);
+    background: color-mix(in srgb, var(--c-warn) 12%, var(--c-bg));
+    border-left: 3px solid var(--c-warn);
+    color: var(--c-warn);
+    font-size: var(--t-small);
+    letter-spacing: var(--ls-wide);
+  }
+  .legal__body { margin-top: var(--s-8); }
+  .legal__body h2 { font-size: var(--t-h3); margin-top: var(--s-10); margin-bottom: var(--s-3); }
+</style>

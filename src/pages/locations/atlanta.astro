@@ -1,0 +1,120 @@
+---
+export const prerender = true;
+import BaseLayout from "@layouts/BaseLayout.astro";
+import Button from "@components/ui/Button.astro";
+import { SITE } from "@lib/site";
+import { localBusinessSchema } from "@lib/schema";
+import { SERVICES_BY_CATEGORY } from "@lib/services";
+
+const hoursLabel = "Mon–Fri · 8a–5p ET";
+const dockServices = [...SERVICES_BY_CATEGORY.facility, ...SERVICES_BY_CATEGORY.managed];
+---
+<BaseLayout
+  title={`Atlanta Freight & Warehousing Facility | ${SITE.name}`}
+  description={`Comet National's freight hub at ${SITE.address.street}, ${SITE.address.locality}, ${SITE.address.region}. Transload, cross-dock, and warehousing on the metro-Atlanta I-85 corridor. One team, every mode, since ${SITE.foundingYear}.`}
+  extraSchema={[localBusinessSchema()]}
+>
+  <section class="loc section section-bar" data-reveal>
+    <div class="container-content">
+      <div class="reveal-stagger" data-reveal>
+        <p class="eyebrow">Locations · Atlanta</p>
+        <h1 class="loc__title display">
+          Our metro-Atlanta dock,<br/>just off I-85.
+        </h1>
+        <p class="loc__lede">
+          Every mode we run is dispatched and coordinated from one facility in
+          {" "}{SITE.address.locality}, {SITE.address.region}. It's where freight gets
+          transloaded, cross-docked, staged, and stored — the hub behind
+          "one call solves the whole problem."
+        </p>
+      </div>
+
+      <div class="loc__grid reveal-stagger" data-reveal>
+        <div class="loc__card loc__card--nap">
+          <p class="eyebrow">Facility</p>
+          <address class="loc__addr display">
+            {SITE.address.street}<br/>
+            {SITE.address.locality}, {SITE.address.region} {SITE.address.postal}
+          </address>
+          <p class="loc__hours mono">{hoursLabel}</p>
+          <p class="loc__hours mono">24/7 for distressed-load recovery</p>
+          <div class="loc__actions">
+            <a class="loc__phone display" href={`tel:${SITE.phoneE164}`}>{SITE.phone}</a>
+            <a class="loc__email mono" href={`mailto:${SITE.email}`}>{SITE.email}</a>
+          </div>
+        </div>
+
+        <div class="loc__card">
+          <p class="eyebrow">Run from this dock</p>
+          <ul class="loc__services">
+            {dockServices.map((s) => (
+              <li><a href={`/services/${s.slug}`}>{s.title}</a></li>
+            ))}
+          </ul>
+          <p class="loc__note mono">Dock &amp; transload work by appointment.</p>
+        </div>
+
+        <div class="loc__card loc__card--cta">
+          <p class="eyebrow">From the dock to your door</p>
+          <h2 class="loc__cta-title display">Rooted in Atlanta. Reach across {SITE.areaServed.length > 1 ? "the US + Canada" : "the US"}.</h2>
+          <p class="loc__cta-body">
+            Lanes run out of this hub to 48 states and southern Canada. Tell us the
+            load — we'll put the right trailer under it.
+          </p>
+          <Button href="/get-a-quote" size="lg">Get a Quote</Button>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .loc__title { font-size: var(--t-h1); line-height: 1; margin-top: var(--s-3); max-width: 18ch; }
+  .loc__lede { margin-top: var(--s-6); color: var(--c-ink-muted); max-width: 60ch; line-height: var(--lh-relaxed); }
+
+  .loc__grid {
+    margin-top: var(--s-12);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--s-4);
+  }
+  .loc__card {
+    background: var(--c-bg-elevated);
+    border: 1px solid var(--c-line);
+    padding: var(--s-8);
+    display: grid;
+    gap: var(--s-3);
+    align-content: start;
+  }
+  .loc__card--cta {
+    grid-column: 1 / -1;
+    background: var(--c-pine-deep);
+    color: var(--c-bg);
+    border-color: var(--c-pine-deep);
+  }
+  .loc__card--cta .eyebrow { color: var(--c-accent); }
+
+  .loc__addr { font-style: normal; font-size: 1.35rem; line-height: 1.3; color: var(--c-ink); }
+  .loc__hours { color: var(--c-ink-muted); font-size: var(--t-eyebrow); letter-spacing: var(--ls-wide); text-transform: uppercase; }
+  .loc__actions { display: grid; gap: var(--s-2); margin-top: var(--s-4); }
+  .loc__phone {
+    font-size: 1.5rem; line-height: 1; color: var(--c-ink); width: max-content;
+    border-bottom: 2px solid var(--c-accent); padding-bottom: 4px;
+    transition: color var(--d-fast) var(--ease-out);
+  }
+  .loc__phone:hover { color: var(--c-accent); }
+  .loc__email { color: var(--c-ink-muted); }
+  .loc__email:hover { color: var(--c-accent); }
+
+  .loc__services { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--s-2); }
+  .loc__services a { color: var(--c-ink); font-family: var(--ff-display); font-weight: 600; }
+  .loc__services a:hover { color: var(--c-accent); }
+  .loc__note { color: var(--c-ink-soft); font-size: var(--t-eyebrow); text-transform: uppercase; letter-spacing: var(--ls-wide); margin-top: var(--s-2); }
+
+  .loc__cta-title { font-size: var(--t-h3); line-height: 1.05; color: var(--c-bg); max-width: 20ch; }
+  .loc__cta-body { color: rgba(247, 246, 238, 0.72); max-width: 52ch; line-height: var(--lh-relaxed); }
+
+  @media (max-width: 760px) {
+    .loc__grid { grid-template-columns: 1fr; }
+  }
+</style>
