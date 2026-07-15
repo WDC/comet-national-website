@@ -19,15 +19,15 @@ const values = [
   },
   {
     name: "Growth",
-    body: "We've been growing since day one — our capabilities, our reach, and our people.",
+    body: "We’ve been growing since day one — our capabilities, our reach, and our people.",
   },
   {
     name: "Trust",
-    body: "Earned load by load over decades. We protect your freight like it's our own.",
+    body: "Earned load by load over decades. We protect your freight like it’s our own.",
   },
   {
     name: "Tenacity",
-    body: "When something goes sideways, we don't stop until it's right. No excuses.",
+    body: "When something goes sideways, we don’t stop until it’s right. No excuses.",
   },
 ];
 
@@ -35,7 +35,7 @@ const differentiators = [
   {
     eyebrow: "One team.",
     title: "Every mode.",
-    body: "Flatbed, dry van, reefer, hotshot, transload, cross-dock, warehousing. One Atlanta team that has done all of it since 1970. You call once. We handle the rest.",
+    body: "Flatbed, dry van, reefer, hotshot, transload, cross-dock, warehousing. One Atlanta team that has done all of it since 1995. You call once. We handle the rest.",
   },
   {
     eyebrow: "You only pay for",
@@ -45,7 +45,7 @@ const differentiators = [
   {
     eyebrow: "When things go wrong",
     title: "We pick up the call.",
-    body: "Distressed load recovery is the 911 freight brokers don't answer. We restack, rewrap, document, and deliver. We make the bad day shorter.",
+    body: "Distressed load recovery is the 911 freight brokers don’t answer. We restack, rewrap, document, and deliver. We make the bad day shorter.",
   },
 ];
 ---
@@ -64,8 +64,8 @@ const differentiators = [
           <span class="why-hero__accent">solutions provider.</span>
         </h1>
         <p class="why-hero__lede">
-          Since {SITE.foundingYear}, Comet National has built its reputation one load at a time.
-          We're not a marketplace. We're not an algorithm. We're a team of people in Atlanta
+          Since {SITE.foundingYear}, Comet&nbsp;National has built its reputation one load at a time.
+          We’re not a marketplace. We’re not an algorithm. We’re a team of people in Atlanta
           who care deeply about freight, customers, and doing things right.
         </p>
         <div class="why-hero__actions">
@@ -85,13 +85,13 @@ const differentiators = [
           Started from a bedroom.<br/>Built on reputation.
         </h2>
         <p class="origin__body">
-          Comet National began in September 1992 when founder John Souter left a career in
+          Comet&nbsp;National began in September 1992 when founder John Souter left a career in
           transportation determined to do things differently. He had seen how the industry
           operated — the shortcuts, the indifference, the broken promises — and he believed
           shippers deserved better.
         </p>
         <p class="origin__body">
-          What started in Snellville, GA with a single focus — be the most reliable, most
+          What started in Snellville, <span class="sc">GA</span> with a single focus — be the most reliable, most
           transparent freight partner a shipper could find — grew into a multi-mode operation
           covering the entire country. The team changed. The building changed. The core
           promise never did.
@@ -126,7 +126,7 @@ const differentiators = [
         <div class="mv__card">
           <span class="mv__label mono">Mission</span>
           <blockquote class="mv__statement display">
-            "To consistently and professionally service the transportation needs of our customers."
+            “To consistently and professionally service the transportation needs of our customers.”
           </blockquote>
           <p class="mv__subtext">
             Not just move freight — service it. The distinction matters. It means we show up,
@@ -137,7 +137,7 @@ const differentiators = [
         <div class="mv__card mv__card--accent">
           <span class="mv__label mono">Vision</span>
           <blockquote class="mv__statement display">
-            "To be a highly-trusted solutions provider and advisor to our customers."
+            “To be a highly-trusted solutions provider and advisor to our customers.”
           </blockquote>
           <p class="mv__subtext">
             Trusted advisors solve problems before they become crises. We earn that position
@@ -170,7 +170,7 @@ const differentiators = [
   <section class="why-diff section section-inverse section-bar" data-reveal>
     <div class="container-content">
       <p class="eyebrow">04 · The Comet difference</p>
-      <h2 class="why-diff__heading display">Trucking is commodity.<br/>We aren't.</h2>
+      <h2 class="why-diff__heading display">Trucking is commodity.<br/>We aren’t.</h2>
 
       <ul class="why-diff__cards reveal-stagger" data-reveal>
         {differentiators.map((d, i) => (
@@ -194,7 +194,7 @@ const differentiators = [
         that <span class="why-cta__accent">actually shows up?</span>
       </h2>
       <p class="why-cta__body">
-        One call. Every mode. Atlanta-dispatched since 1992. Tell us what you need — we'll put
+        One call. Every mode. Atlanta-dispatched since 1992. Tell us what you need — we’ll put
         the right trailer under it.
       </p>
       <div class="why-cta__actions">
@@ -296,7 +296,7 @@ const differentiators = [
     border: 1px solid rgba(255, 255, 255, 0.08);
   }
   .mv__card {
-    background: var(--c-navy-deep);
+    background: var(--c-pine-deep);
     padding: var(--s-10);
     display: grid;
     gap: var(--s-5);
@@ -314,7 +314,7 @@ const differentiators = [
     transition: background var(--d-base) var(--ease-out);
   }
   .mv__card--accent::before { background: var(--c-accent); }
-  .mv__card:hover { background: var(--c-navy); }
+  .mv__card:hover { background: var(--c-pine); }
   .mv__label {
     font-size: var(--t-eyebrow);
     letter-spacing: var(--ls-wider);
@@ -407,7 +407,7 @@ const differentiators = [
     border: 1px solid rgba(255, 255, 255, 0.08);
   }
   .why-diff__card {
-    background: var(--c-navy-deep);
+    background: var(--c-pine-deep);
     padding: var(--s-8);
     display: grid;
     grid-template-rows: auto auto auto 1fr;
@@ -415,7 +415,7 @@ const differentiators = [
     position: relative;
     transition: background var(--d-base) var(--ease-out), transform var(--d-base) var(--ease-out);
   }
-  .why-diff__card:hover { background: var(--c-navy); transform: translateY(-2px); }
+  .why-diff__card:hover { background: var(--c-pine); transform: translateY(-2px); }
   .why-diff__card::before {
     content: "";
     position: absolute;

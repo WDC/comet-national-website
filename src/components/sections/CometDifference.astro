@@ -1,4 +1,5 @@
 ---
+import Caps from "@components/ui/Caps.astro";
 const cards = [
   {
     eyebrow: "You only pay for",
@@ -10,14 +11,14 @@ const cards = [
   {
     eyebrow: "One call.",
     title: "Every mode.",
-    body: "Flatbed, dry van, reefer, hotshot, transload, cross-dock, warehouse. One Atlanta team that has done all of it since 1970.",
+    body: "Flatbed, dry van, reefer, hotshot, transload, cross-dock, warehouse. One Atlanta team that has done all of it since 1995.",
     href: "/services",
     cta: "See every service",
   },
   {
     eyebrow: "When disaster strikes",
     title: "We pick up the call.",
-    body: "Distressed load recovery is the 911 freight brokers don't take. Restack, rewrap, document, deliver. We make the bad day shorter.",
+    body: "Distressed load recovery is the 911 freight brokers don’t take. Restack, rewrap, document, deliver. We make the bad day shorter.",
     href: "/services/distressed-load-recovery",
     cta: "Distressed-load recovery",
   },
@@ -26,7 +27,7 @@ const cards = [
 <section class="diff section section-inverse">
   <div class="container-content">
     <p class="eyebrow">03 · The Comet difference</p>
-    <h2 class="diff__heading display">Trucking is commodity. We aren't.</h2>
+    <h2 class="diff__heading display">Trucking is commodity. We aren’t.</h2>
 
     <ul class="diff__cards">
       {cards.map((c, i) => (
@@ -34,7 +35,7 @@ const cards = [
           <span class="mono diff__num">0{i + 1}</span>
           <p class="diff__eyebrow">{c.eyebrow}</p>
           <h3 class="diff__title">{c.title}</h3>
-          <p class="diff__body">{c.body}</p>
+          <p class="diff__body"><Caps text={c.body} /></p>
           <a href={c.href} class="diff__cta link-arrow">{c.cta} <span class="arrow" aria-hidden="true">→</span></a>
         </li>
       ))}
@@ -62,7 +63,7 @@ const cards = [
     border: 1px solid rgba(255, 255, 255, 0.08);
   }
   .diff__card {
-    background: var(--c-navy-deep);
+    background: var(--c-pine-deep);
     padding: var(--s-8);
     display: grid;
     grid-template-rows: auto auto auto 1fr auto;
@@ -71,7 +72,7 @@ const cards = [
     position: relative;
   }
   .diff__card:hover {
-    background: var(--c-navy);
+    background: var(--c-pine);
     transform: translateY(-2px);
   }
   .diff__card::before {

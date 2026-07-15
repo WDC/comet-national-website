@@ -1,55 +1,77 @@
 /* ----------------------------------------------------------------------------
  * Comet National — Design tokens
  * Single source of truth. Tailwind v4 @theme references these custom properties.
+ *
+ * Palette derives from the legacy Comet Express badge (Est. 1995):
+ * deep pine green pulled from the badge mark, cream ground, harvest-brass
+ * accent reserved for CTAs and animation highlights.
  * --------------------------------------------------------------------------- */
 
 :root {
-  /* Color — industrial palette */
-  --c-navy: #1a2332;
-  --c-navy-deep: #111824;
-  --c-charcoal: #2a2f3a;
-  --c-ink: #0d1117; /* near-black body text */
-  --c-ink-muted: #4b5563;
-  --c-ink-soft: #6b7280;
-  --c-line: #d4d8de;
-  --c-line-soft: #e6e8ec;
-  --c-bg: #fafaf8; /* near-white ground, slight warm cast */
-  --c-bg-elevated: #ffffff;
-  --c-bg-inverse: #0d1117;
-  --c-accent: #f5a623; /* safety amber */
-  --c-accent-hover: #ffb733;
-  --c-accent-ink: #1a1206; /* text on amber */
-  --c-warn: #c8331a; /* distressed-load red, used sparingly */
-  --c-success: #2f7d3b;
+  /* Color — heritage freight palette */
+  --c-pine: #2f462b; /* badge green — primary brand color */
+  --c-pine-deep: #22331f; /* dark sections, footer */
+  --c-moss: #46543f; /* secondary surfaces */
+  --c-ink: #161d12; /* near-black body text, green cast */
+  --c-ink-muted: #4e5a48;
+  --c-ink-soft: #6e7867;
+  --c-line: #d6d8cc;
+  --c-line-soft: #e6e7dc;
+  --c-bg: #f7f6ee; /* cream ground */
+  --c-bg-elevated: #fffefa;
+  --c-bg-inverse: #161d12;
+  --c-accent: #c29237; /* harvest brass */
+  --c-accent-hover: #d3a845;
+  --c-accent-deep: #8a6a1f; /* brass as text/outline on light grounds */
+  --c-accent-ink: #201607; /* text on brass */
+  --c-warn: #b23a24; /* distressed-load red, used sparingly */
+  --c-success: #3b7d34;
 
-  /* Type — fluid scale */
+  /* Type — fluid scale
+   * Sized for Equity's serif proportions (a touch larger than the old Inter
+   * setting so the smaller x-height reads at a comfortable optical size). */
   --t-display: clamp(2.75rem, 5vw + 1rem, 5.25rem);
   --t-h1: clamp(2.25rem, 3vw + 1rem, 3.75rem);
   --t-h2: clamp(1.625rem, 2vw + 0.75rem, 2.5rem);
   --t-h3: clamp(1.25rem, 1vw + 0.75rem, 1.625rem);
-  --t-h4: 1.125rem;
-  --t-body: 1.0625rem;
+  --t-h4: 1.1875rem;
+  --t-lede: clamp(1.1875rem, 0.6vw + 1.05rem, 1.375rem); /* hero / section ledes */
+  --t-body: 1.125rem; /* Equity body — ~18px */
+  --t-body-sm: 1.0625rem;
   --t-small: 0.875rem;
-  --t-mono: 0.875rem;
+  --t-mono: 0.8125rem;
   --t-eyebrow: 0.75rem; /* section numbers and labels */
 
-  /* Type families */
-  --ff-display: "Archivo Variable", "Archivo", system-ui, sans-serif;
-  --ff-body: "Inter Variable", "Inter", system-ui, sans-serif;
-  --ff-mono: "JetBrains Mono Variable", "JetBrains Mono", ui-monospace, monospace;
+  /* Type families
+   * MB Type, self-hosted (see fonts.css). Fallbacks are metric-matched
+   * @font-face aliases so the swap reflow stays small. */
+  --ff-display: "Concourse", "Concourse Fallback", system-ui, sans-serif;
+  --ff-ui: "Concourse", "Concourse Fallback", system-ui, sans-serif;
+  --ff-body: "Equity", "Equity Fallback", Georgia, "Times New Roman", serif;
+  --ff-mono: "Triplicate", "Triplicate Fallback", ui-monospace, "SFMono-Regular", Menlo, monospace;
+
+  /* OpenType feature sets — reused across base + components.
+   * Body prose: kerning, ligatures, contextual alternates, oldstyle
+   * proportional figures (text figures that sit on the baseline in running
+   * copy). Display/UI: lining proportional figures + case-aware punctuation.
+   * Tabular: lining figures on a fixed advance for columns/data. */
+  --fs-body: "kern" 1, "liga" 1, "calt" 1, "onum" 1, "pnum" 1;
+  --fs-display: "kern" 1, "liga" 1, "calt" 1, "lnum" 1, "pnum" 1, "case" 1;
+  --fs-tabular: "kern" 1, "lnum" 1, "tnum" 1;
 
   /* Line height */
   --lh-tight: 1.05;
   --lh-snug: 1.2;
-  --lh-base: 1.55;
-  --lh-relaxed: 1.7;
+  --lh-base: 1.6; /* Equity running text */
+  --lh-relaxed: 1.72;
 
   /* Letter spacing */
-  --ls-tight: -0.02em;
-  --ls-snug: -0.01em;
-  --ls-base: 0;
+  --ls-tight: -0.018em; /* Concourse display sizes */
+  --ls-snug: -0.008em;
+  --ls-base: 0; /* Equity body wants no tracking */
+  --ls-sc: 0.03em; /* small caps benefit from slight extra tracking */
   --ls-wide: 0.06em;
-  --ls-wider: 0.16em; /* eyebrows, mono labels */
+  --ls-wider: 0.15em; /* eyebrows, mono labels */
 
   /* Space — 4px base */
   --s-0: 0;

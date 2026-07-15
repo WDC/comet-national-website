@@ -2,7 +2,8 @@
 import { SITE } from "@lib/site";
 
 // Real customer references pulled from the legacy site testimonials.
-const clients = ["Sika", "Atlas Concrete", "Capital Steel", "GMC Group", "Pioneer Industrial", "Vulcan"];
+// Multi-word names carry a non-breaking space so a company never wraps mid-name.
+const clients = ["Sika", "Atlas Concrete", "Capital Steel", "GMC Group", "Pioneer Industrial", "Vulcan"];
 ---
 <section class="trust" aria-label="Trusted by industrial buyers">
   <div class="container-content trust__inner">

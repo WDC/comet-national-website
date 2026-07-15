@@ -161,7 +161,7 @@
 .reveal-stagger.is-visible > *:nth-child(6) { transition-delay: 460ms; }
 .reveal-stagger.is-visible > *:nth-child(n+7) { transition-delay: 540ms; }
 
-/* Section accent — a 2px amber bar that grows from left when the section enters.
+/* Section accent — a 2px brass bar that grows from left when the section enters.
    Apply to any block by adding `data-reveal` and the `.section-bar` class. */
 .section-bar {
   position: relative;
@@ -190,7 +190,7 @@
 }
 .hover-lift:hover {
   transform: translateY(-3px);
-  box-shadow: 0 10px 24px -16px rgba(13, 17, 23, 0.18);
+  box-shadow: 0 10px 24px -16px rgba(22, 29, 18, 0.18);
 }
 .hover-lift:active {
   transform: translateY(-1px);
@@ -256,23 +256,23 @@ a:hover .arrow { transform: translateX(4px); }
 /* Button press feedback — subtle scale on click; layered on Button.astro classes. */
 button,
 a[class*="bg-accent"],
-a[class*="bg-navy"] {
+a[class*="bg-pine"] {
   transition: transform var(--d-fast) var(--ease-out), background-color var(--d-fast) var(--ease-out), color var(--d-fast) var(--ease-out), border-color var(--d-fast) var(--ease-out), box-shadow var(--d-fast) var(--ease-out);
 }
 button:active:not(:disabled),
 a[class*="bg-accent"]:active,
-a[class*="bg-navy"]:active {
+a[class*="bg-pine"]:active {
   transform: translateY(1px) scale(0.99);
 }
 
 /* CTA glow — for primary Buttons, subtle shadow on hover */
 a[class*="bg-accent"]:hover,
 button[class*="bg-accent"]:hover {
-  box-shadow: 0 8px 20px -10px rgba(245, 166, 35, 0.55);
+  box-shadow: 0 8px 20px -10px rgba(194, 146, 55, 0.55);
 }
-a[class*="bg-navy"]:hover,
-button[class*="bg-navy"]:hover {
-  box-shadow: 0 8px 20px -12px rgba(13, 17, 23, 0.4);
+a[class*="bg-pine"]:hover,
+button[class*="bg-pine"]:hover {
+  box-shadow: 0 8px 20px -12px rgba(22, 29, 18, 0.4);
 }
 
 /* Skeleton + shimmer — for any content that loads async (forms post-submit, etc.) */
@@ -443,7 +443,7 @@ a:hover > svg.phone-icon { animation: phone-shake 600ms var(--ease-in-out); }
     box-shadow var(--d-fast) var(--ease-out);
 }
 .site-header.is-scrolled {
-  box-shadow: 0 4px 16px -12px rgba(13, 17, 23, 0.18);
+  box-shadow: 0 4px 16px -12px rgba(22, 29, 18, 0.18);
 }
 
 /* Logo hover micro-shift: comet trail glides right */

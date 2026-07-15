@@ -1,0 +1,21 @@
+---
+/**
+ * Renders a text string with acronyms (LTL, FTL, RGN, …) set as small caps.
+ * Use ONLY for visible text — never for values that also feed <title>, meta,
+ * aria-label, or JSON-LD (pass the raw string there instead).
+ *
+ *   <Caps text={service.title} />           → Flatbed <span class="sc">LTL</span>
+ *   <Caps text="Machinery & Equipment" />    → & is safely escaped
+ */
+import { smallCapsAcronyms } from "@lib/typography";
+
+interface Props {
+  text: string;
+  /** Optional element tag to render as (defaults to an inline <span>). */
+  as?: keyof HTMLElementTagNameMap;
+  class?: string;
+}
+const { text, as: Tag = "span", class: className } = Astro.props;
+const html = smallCapsAcronyms(text);
+---
+<Tag class={className} set:html={html} />

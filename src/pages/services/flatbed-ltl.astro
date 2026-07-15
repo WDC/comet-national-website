@@ -6,7 +6,7 @@ import { getService } from "@lib/services";
 
 const service = getService("flatbed-ltl")!;
 const description =
-  "Partial flatbed (Flatbed LTL) for pumps, big iron, generators, transformers, and raw materials. Pay only for the linear feet your freight occupies — not phantom density or full-trailer minimums. Atlanta-based since 1970.";
+  "Partial flatbed (Flatbed LTL) for pumps, big iron, generators, transformers, and raw materials. Pay only for the linear feet your freight occupies — not phantom density or full-trailer minimums. Atlanta-based since 1995.";
 
 const relatedSlugs = ["flatbed-open-deck", "volume-ltl", "transloading"];
 ---
@@ -22,8 +22,8 @@ const relatedSlugs = ["flatbed-open-deck", "volume-ltl", "transloading"];
     <p class="eyebrow">What we haul</p>
     <h2 class="pillar-section__h2 display">Anything heavy, anything awkward.</h2>
     <p class="pillar-section__lede">
-      The freight that doesn't fit a standard pallet, doesn't ride well in a van,
-      and doesn't deserve a full trailer minimum.
+      The freight that doesn’t fit a standard pallet, doesn’t ride well in a van,
+      and doesn’t deserve a full trailer minimum.
     </p>
     <ul class="cargo-grid reveal-stagger" data-reveal>
       {[
@@ -45,16 +45,16 @@ const relatedSlugs = ["flatbed-open-deck", "volume-ltl", "transloading"];
 
   <section class="cost-trap" data-reveal>
     <p class="eyebrow">Why Flatbed LTL — cost trap explainer</p>
-    <h2 class="pillar-section__h2 display">A $500 freight bill becomes $3,500. Here's how.</h2>
+    <h2 class="pillar-section__h2 display">A $500 freight bill becomes $3,500. Here’s how.</h2>
     <p class="pillar-section__lede">
-      Standard LTL carriers price by density and minimum class. The moment your freight breaks 12 linear
-      feet or hits "exceeds 750 cubic feet," accessorials kick in: <strong>Density Minimum Charge</strong>,
+      Standard <span class="sc">LTL</span> carriers price by density and minimum class. The moment your freight breaks 12 linear
+      feet or hits “exceeds 750&nbsp;cubic feet,” accessorials kick in: <strong>Density Minimum Charge</strong>,
       <strong>Linear Foot Charge</strong>, <strong>Over-Dimensional Surcharge</strong>. Stack them up and
-      the quote you got isn't the bill you pay.
+      the quote you got isn’t the bill you pay.
     </p>
     <div class="cost-trap__compare">
       <article class="cost-trap__card">
-        <h3 class="display">Standard LTL <small>— the trap</small></h3>
+        <h3 class="display">Standard <span class="sc">LTL</span> <small>— the trap</small></h3>
         <table>
           <tbody>
             <tr><th>Base rate</th><td class="mono">$500</td></tr>
@@ -66,7 +66,7 @@ const relatedSlugs = ["flatbed-open-deck", "volume-ltl", "transloading"];
         </table>
       </article>
       <article class="cost-trap__card cost-trap__card--ours">
-        <h3 class="display">Comet Flatbed LTL <small>— pay the space</small></h3>
+        <h3 class="display">Comet Flatbed <span class="sc">LTL</span> <small>— pay the space</small></h3>
         <table>
           <tbody>
             <tr><th>Linear feet quoted</th><td class="mono">16 ft</td></tr>
@@ -158,9 +158,9 @@ const relatedSlugs = ["flatbed-open-deck", "volume-ltl", "transloading"];
     transform: scale(1.06);
   }
   .cost-trap__card--ours {
-    background: var(--c-navy-deep);
+    background: var(--c-pine-deep);
     color: var(--c-bg);
-    border-color: var(--c-navy-deep);
+    border-color: var(--c-pine-deep);
   }
   .cost-trap__card h3 {
     font-size: 1.25rem;

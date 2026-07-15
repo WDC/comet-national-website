@@ -5,6 +5,7 @@ import ServiceSchema from "@components/seo/ServiceSchema.astro";
 import HowItWorksFlow from "@components/animations/HowItWorksFlow.astro";
 import { SITE } from "@lib/site";
 import { type ServiceItem, getService } from "@lib/services";
+import Caps from "@components/ui/Caps.astro";
 
 interface Props {
   service: ServiceItem;
@@ -45,11 +46,11 @@ const url = `${SITE.url}/services/${service.slug}`;
         <div class="pillar__hero-grid">
           <div class="reveal-stagger" data-reveal>
             <p class="eyebrow">Service · {service.category === "trailer" ? "By trailer" : service.category === "facility" ? "By facility" : "Managed"}</p>
-            <h1 class="pillar__headline display">{service.title}</h1>
+            <h1 class="pillar__headline display"><Caps text={service.title} /></h1>
             {service.equityLine && (
-              <p class="pillar__equity display">{service.equityLine}</p>
+              <p class="pillar__equity display"><Caps text={service.equityLine} /></p>
             )}
-            <p class="pillar__blurb">{service.blurb}</p>
+            <p class="pillar__blurb"><Caps text={service.blurb} /></p>
             <div class="pillar__cta">
               <Button href="/get-a-quote" size="lg">Get a Quote</Button>
               <a class="pillar__phone mono" href={`tel:${SITE.phoneE164}`}>or call {SITE.phone}</a>
@@ -81,8 +82,8 @@ const url = `${SITE.url}/services/${service.slug}`;
               return (
                 <li>
                   <a href={`/services/${s.slug}`} class="link-arrow">
-                    <span class="pillar__related-title display">{s.title}</span>
-                    <span class="pillar__related-blurb">{s.blurb}</span>
+                    <span class="pillar__related-title display"><Caps text={s.title} /></span>
+                    <span class="pillar__related-blurb"><Caps text={s.blurb} /></span>
                     <span class="pillar__related-cta arrow">→</span>
                   </a>
                 </li>
@@ -231,7 +232,7 @@ const url = `${SITE.url}/services/${service.slug}`;
 
   .pillar__final-cta {
     text-align: center;
-    background: var(--c-navy-deep);
+    background: var(--c-pine-deep);
     color: var(--c-bg);
     padding: var(--s-16);
     border-radius: var(--r-md);

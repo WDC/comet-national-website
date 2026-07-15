@@ -13,7 +13,7 @@ interface Stat {
   suffix?: string;
 }
 const stats: Stat[] = [
-  { label: "Years in business", value: new Date().getFullYear() - 1970, format: "plus" },
+  { label: "Years in business", value: new Date().getFullYear() - 1995, format: "plus" },
   { label: "Lanes served", value: 48, suffix: " states + Canada" },
   { label: "Loads moved", value: 50000, format: "plus" },
   { label: "Atlanta dock", value: 1, suffix: " — every mode" },
@@ -47,6 +47,10 @@ const stats: Stat[] = [
     letter-spacing: var(--ls-tight);
     color: var(--c-ink);
     font-weight: 800;
+    /* Tabular lining figures so the number holds a steady width as it counts up
+       and the digits align to the underline. */
+    font-feature-settings: "tnum" 1, "lnum" 1;
+    font-variant-numeric: tabular-nums lining-nums;
   }
   .stat-band__suffix {
     font-size: var(--t-small);

@@ -4,6 +4,7 @@ import Button from "@components/ui/Button.astro";
 import HowItWorksFlow from "@components/animations/HowItWorksFlow.astro";
 import { SITE } from "@lib/site";
 import { type IndustryItem, getService } from "@lib/services";
+import Caps from "@components/ui/Caps.astro";
 
 interface Props {
   industry: IndustryItem;
@@ -28,15 +29,15 @@ const title = pageTitle ?? `${industry.title} Freight | ${SITE.name}`;
         <div class="ind__hero-grid">
           <div>
             <p class="eyebrow">Industry · Built around how you buy</p>
-            <h1 class="ind__headline display reveal" data-reveal>{industry.title}</h1>
+            <h1 class="ind__headline display reveal" data-reveal><Caps text={industry.title} /></h1>
             {industry.equityLine && (
               <p class="ind__equity display reveal" data-reveal style="--reveal-delay: 120ms">
-                {industry.equityLine}
+                <Caps text={industry.equityLine} />
               </p>
             )}
             {industry.heroLede && (
               <p class="ind__lede reveal" data-reveal style="--reveal-delay: 240ms">
-                {industry.heroLede}
+                <Caps text={industry.heroLede} />
               </p>
             )}
             {industry.buyer && (
@@ -70,8 +71,8 @@ const title = pageTitle ?? `${industry.title} Freight | ${SITE.name}`;
             return (
               <li>
                 <a href={`/services/${s.slug}`}>
-                  <span class="ind__services-title display">{s.title}</span>
-                  <span class="ind__services-blurb">{s.blurb}</span>
+                  <span class="ind__services-title display"><Caps text={s.title} /></span>
+                  <span class="ind__services-blurb"><Caps text={s.blurb} /></span>
                   <span class="ind__services-cta">Explore service <span class="arrow" aria-hidden="true">→</span></span>
                 </a>
               </li>
@@ -207,7 +208,7 @@ const title = pageTitle ?? `${industry.title} Freight | ${SITE.name}`;
 
   .ind__final-cta {
     text-align: center;
-    background: var(--c-navy-deep);
+    background: var(--c-pine-deep);
     color: var(--c-bg);
     padding: var(--s-16);
     border-radius: var(--r-md);
