@@ -1,6 +1,7 @@
 ---
 import { resolveSeo, type PageSeo } from "@lib/seo";
 import { organizationSchema, websiteSchema, breadcrumbSchema, breadcrumbsFromPath, crumbTitles } from "@lib/schema";
+import { ogImageForPath } from "@lib/og/pages";
 import { SITE } from "@lib/site";
 import JsonLd from "@components/seo/JsonLd.astro";
 import "@styles/base.css";
@@ -12,7 +13,13 @@ interface Props extends PageSeo {
 }
 
 const { preloadHero, extraSchema = [], ...seoInput } = Astro.props;
-const seo = resolveSeo({ ...seoInput, pathname: Astro.url.pathname });
+// Per-page OG card (/og/<key>.png) when this route has one, unless the page set
+// its own ogImage explicitly (e.g. blog posts). Falls back to the site default.
+const seo = resolveSeo({
+  ...seoInput,
+  ogImage: seoInput.ogImage ?? ogImageForPath(Astro.url.pathname),
+  pathname: Astro.url.pathname,
+});
 
 const showBreadcrumbs = Astro.url.pathname.split("/").filter(Boolean).length >= 1;
 const sitewideSchemas: Array<Record<string, unknown>> = [
