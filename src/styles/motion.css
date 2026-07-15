@@ -4,8 +4,10 @@
  * Each animation is paused by default and activated by a parent class.
  * --------------------------------------------------------------------------- */
 
-/* Reveal helper — fade + rise. Used with IntersectionObserver class toggle. */
-.reveal {
+/* Reveal helper — fade + rise. Used with IntersectionObserver class toggle.
+   The hidden start state is gated on `html.js` (set inline in <head>) so no-JS
+   users and non-executing crawlers see content instead of empty sections. */
+html.js .reveal {
   opacity: 0;
   transform: translateY(12px);
   transition:
@@ -35,7 +37,7 @@
  * --------------------------------------------------------------------------- */
 
 /* Stagger variant of .reveal — children fade-up sequentially after parent visible. */
-.reveal-stagger > * {
+html.js .reveal-stagger > * {
   opacity: 0;
   transform: translateY(10px);
   transition:
@@ -306,7 +308,7 @@ a:hover > svg.phone-icon { animation: phone-shake 600ms var(--ease-in-out); }
 
 /* Image / SVG soft fade-in when entering view — for art tiles that already
    have their own animations, this just smooths first paint. */
-.media-fade {
+html.js .media-fade {
   opacity: 0;
   transition: opacity 600ms var(--ease-out);
 }

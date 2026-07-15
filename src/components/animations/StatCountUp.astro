@@ -24,11 +24,20 @@ const stats: Stat[] = [
   { label: "Loads moved", value: 50000, format: "plus" },
   { label: "Atlanta dock", value: 1, suffix: " — every mode" },
 ];
+
+// Server-render the final formatted value (mirrors the client formatNumber in
+// the script below) so no-JS visitors and crawlers read the real number instead
+// of a literal "0". With JS on, GSAP resets these to 0 and counts them up.
+function formatStat(value: number, format?: Stat["format"]): string {
+  if (format === "plus") return `${value.toLocaleString("en-US")}+`;
+  if (format === "k") return `${(value / 1000).toFixed(1)}k`;
+  return value.toLocaleString("en-US");
+}
 ---
 <div class="stat-band" data-stat-band>
   {stats.map((s) => (
     <div class="stat-band__stat">
-      <span class="stat-band__num display" data-num data-count={s.value} data-format={s.format ?? ""}>0</span>
+      <span class="stat-band__num display" data-num data-count={s.value} data-format={s.format ?? ""}>{formatStat(s.value, s.format)}</span>
       {s.suffix && <span class="stat-band__suffix mono">{s.suffix}</span>}
       <span class="stat-band__underline" data-underline aria-hidden="true"></span>
       <span class="stat-band__label">{s.label}</span>

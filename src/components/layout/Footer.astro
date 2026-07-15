@@ -57,10 +57,28 @@ const year = new Date().getFullYear();
     </nav>
   </div>
 
+  <!-- PLACEHOLDER — regulatory authority + insurance.
+       Freight/brokerage trust signals REQUIRED before launch. The client must
+       supply the real MC #, USDOT #, and cargo/liability insurance statement.
+       The loud styling is intentional so it can't be missed in review. -->
+  <div class="container-content">
+    <div class="site-footer__authority" role="note" data-placeholder>
+      <span class="site-footer__authority-tag">PLACEHOLDER</span>
+      <p class="site-footer__authority-copy">
+        MC #&nbsp;______ · USDOT #&nbsp;______ · Cargo &amp; auto-liability insurance statement.
+        <strong>Client to provide these authority numbers before launch.</strong>
+      </p>
+    </div>
+  </div>
+
   <div class="container-content site-footer__base">
     <div class="site-footer__legal mono">
       © {year} {SITE.legalName}. All rights reserved.
     </div>
+    <nav class="site-footer__legal-links" aria-label="Footer — Legal">
+      <a href="/privacy">Privacy Policy</a>
+      <a href="/terms">Terms of Use</a>
+    </nav>
     <div class="site-footer__socials">
       {SITE.socials.map((s) => (
         <a href={s.url} rel="noopener" target="_blank">{s.platform}</a>
@@ -122,14 +140,57 @@ const year = new Date().getFullYear();
   }
   .site-footer__col a:hover { color: var(--c-accent); }
 
+  /* PLACEHOLDER authority block — deliberately loud so the client can't ship
+     without supplying real MC/USDOT numbers and an insurance statement. */
+  .site-footer__authority {
+    display: flex;
+    align-items: center;
+    gap: var(--s-4);
+    margin-top: var(--s-8);
+    padding: var(--s-4) var(--s-5);
+    background: #ff0000;
+    border: 3px dashed #ffff00;
+    color: #ffffff;
+    border-radius: var(--r-sm);
+  }
+  .site-footer__authority-tag {
+    flex: none;
+    font-family: var(--ff-mono);
+    font-weight: 700;
+    font-size: 1rem;
+    letter-spacing: var(--ls-wider);
+    text-transform: uppercase;
+    background: #ffff00;
+    color: #000000;
+    padding: 4px 10px;
+  }
+  .site-footer__authority-copy {
+    margin: 0;
+    font-family: var(--ff-mono);
+    font-size: var(--t-small);
+    line-height: 1.5;
+    color: #ffffff;
+  }
+  .site-footer__authority-copy strong { color: #ffff00; }
+
   .site-footer__base {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: var(--s-4);
+    flex-wrap: wrap;
     padding-top: var(--s-6);
     font-size: var(--t-small);
     color: rgba(247, 246, 238, 0.55);
   }
+  .site-footer__legal-links {
+    display: flex;
+    gap: var(--s-5);
+    order: 3;
+    flex-basis: 100%;
+  }
+  .site-footer__legal-links a { color: rgba(247, 246, 238, 0.7); }
+  .site-footer__legal-links a:hover { color: var(--c-accent); }
   .site-footer__socials a {
     color: rgba(247, 246, 238, 0.78);
     margin-left: var(--s-4);

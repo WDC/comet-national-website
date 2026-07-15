@@ -42,11 +42,8 @@ export function websiteSchema() {
     url: SITE.url,
     name: SITE.name,
     publisher: { "@id": orgId },
-    potentialAction: {
-      "@type": "SearchAction",
-      target: `${SITE.url}/search?q={search_term_string}`,
-      "query-input": "required name=search_term_string",
-    },
+    // No Sitelinks Searchbox until an on-site /search endpoint ships (Phase 2).
+    // Emitting a SearchAction that points at a 404 is invalid markup.
   };
 }
 

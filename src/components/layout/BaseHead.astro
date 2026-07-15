@@ -29,6 +29,11 @@ if (showBreadcrumbs) {
 <meta name="format-detection" content="telephone=yes" />
 <meta name="generator" content={Astro.generator} />
 
+<!-- Set the JS flag before first paint so `.reveal` hidden states only apply
+     when JavaScript can un-hide them. No-JS users (and non-executing crawlers)
+     see fully rendered content instead of blank scroll-reveal slabs. -->
+<script is:inline>document.documentElement.classList.add("js");</script>
+
 <title>{seo.title}</title>
 <meta name="description" content={seo.description} />
 <link rel="canonical" href={seo.canonical} />

@@ -128,7 +128,7 @@ const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY ?? "";
         });
         const data = await res.json().catch(() => ({}));
         if (res.ok) {
-          status.textContent = "Got it. Dispatch will be in touch within one business hour.";
+          status.textContent = "Got it. Dispatch will typically be in touch within one business hour.";
           status.className = "quote-form__status is-ok";
           form.reset();
         } else {

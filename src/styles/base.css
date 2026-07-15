@@ -41,7 +41,12 @@
   --container-content: var(--content-max);
 }
 
-/* --- Reset --- */
+/* --- Reset --- *
+ * Wrapped in @layer base so Tailwind v4 utilities (emitted in @layer utilities)
+ * win over these element resets. Unlayered, `button { background: none }` beat
+ * `bg-accent` regardless of source order, so real <button> CTAs (the quote-form
+ * submit) rendered as unstyled text. */
+@layer base {
 *,
 *::before,
 *::after {
@@ -98,6 +103,7 @@ a {
   color: inherit;
   text-decoration: none;
 }
+} /* @layer base */
 
 /* --- Typography defaults --- */
 h1,

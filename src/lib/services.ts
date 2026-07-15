@@ -182,7 +182,7 @@ export const INDUSTRIES: IndustryItem[] = [
     ],
     challenges: [
       { challenge: "Jobsite access is tight", answer: "Flatbed with hand-unload, hotshot for back-lot drops, pup-trailer splits where a 53′ won’t fit." },
-      { challenge: "Inspection or pour deadlines", answer: "Hotshot dispatch within 2 hours · direct origin-to-destination · no consolidation stops." },
+      { challenge: "Inspection or pour deadlines", answer: "Hotshot dispatch typically within 2 hours · direct origin-to-destination · no consolidation stops." },
       { challenge: "Material delivered too early", answer: "Lilburn warehouse staging · release to site on your draw schedule." },
       { challenge: "Oversize or over-height load", answer: "Step-deck, double-drop, RGN · permits and pilot routes handled in-house." },
       { challenge: "Partial flatbed cost trap", answer: "Flatbed LTL billed by linear feet · no phantom density or accessorial surprises." },
@@ -216,7 +216,7 @@ export const INDUSTRIES: IndustryItem[] = [
       "Spare-part kits",
     ],
     challenges: [
-      { challenge: "Line-down emergency", answer: "Hotshot dispatch · 24/7 phone · driver rolling within the hour." },
+      { challenge: "Line-down emergency", answer: "Hotshot dispatch · 24/7 phone · driver often rolling within the hour." },
       { challenge: "JIT inbound windows", answer: "Scheduled-arrival LTL · dock-time confirmed before the truck rolls." },
       { challenge: "Multiple suppliers, one inbound trailer", answer: "Inbound consolidation at our Lilburn cross-dock." },
       { challenge: "Outbound to regional DCs", answer: "Pool distribution · one inbound load, fanned-out outbound LTL." },
@@ -290,11 +290,11 @@ export const INDUSTRIES: IndustryItem[] = [
       { challenge: "Load damaged in transit", answer: "Same-day distressed-load recovery · restack, rewrap, document." },
       { challenge: "Driver-load vs. roll-on", answer: "RGN drive-on, crane-loaded flatbed, or forklift drop — your dock or ours." },
       { challenge: "Port to inland delivery", answer: "Transload at our Lilburn dock · container to flatbed in the same shift." },
-      { challenge: "Time-critical down-machine part", answer: "Hotshot dispatch · driver moving within 2 hours of confirmation." },
+      { challenge: "Time-critical down-machine part", answer: "Hotshot dispatch · driver typically moving within 2 hours of confirmation." },
       { challenge: "Multi-piece project freight", answer: "Sequenced delivery with staging at our warehouse between drops." },
     ],
     animation: "HeavyHaul",
     whyComet:
-      "Machinery freight has consequences. A misrouted permit costs days; a mis-set chain costs the asset. We’ve spent five decades earning the calls that other brokers pass on — because the carrier who’s done it before is the one who actually finishes the job.",
+      "Machinery freight has consequences. A misrouted permit costs days; a mis-set chain costs the asset. We’ve spent three decades earning the calls that other brokers pass on — because the carrier who’s done it before is the one who actually finishes the job.",
   },
 ];
