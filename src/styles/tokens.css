@@ -1,26 +1,31 @@
 /* ----------------------------------------------------------------------------
  * Comet National — Design tokens
  * Single source of truth. Tailwind v4 @theme references these custom properties.
+ *
+ * Palette derives from the legacy Comet Express badge (Est. 1995):
+ * deep pine green pulled from the badge mark, cream ground, harvest-brass
+ * accent reserved for CTAs and animation highlights.
  * --------------------------------------------------------------------------- */
 
 :root {
-  /* Color — industrial palette */
-  --c-navy: #1a2332;
-  --c-navy-deep: #111824;
-  --c-charcoal: #2a2f3a;
-  --c-ink: #0d1117; /* near-black body text */
-  --c-ink-muted: #4b5563;
-  --c-ink-soft: #6b7280;
-  --c-line: #d4d8de;
-  --c-line-soft: #e6e8ec;
-  --c-bg: #fafaf8; /* near-white ground, slight warm cast */
-  --c-bg-elevated: #ffffff;
-  --c-bg-inverse: #0d1117;
-  --c-accent: #f5a623; /* safety amber */
-  --c-accent-hover: #ffb733;
-  --c-accent-ink: #1a1206; /* text on amber */
-  --c-warn: #c8331a; /* distressed-load red, used sparingly */
-  --c-success: #2f7d3b;
+  /* Color — heritage freight palette */
+  --c-pine: #2f462b; /* badge green — primary brand color */
+  --c-pine-deep: #22331f; /* dark sections, footer */
+  --c-moss: #46543f; /* secondary surfaces */
+  --c-ink: #161d12; /* near-black body text, green cast */
+  --c-ink-muted: #4e5a48;
+  --c-ink-soft: #6e7867;
+  --c-line: #d6d8cc;
+  --c-line-soft: #e6e7dc;
+  --c-bg: #f7f6ee; /* cream ground */
+  --c-bg-elevated: #fffefa;
+  --c-bg-inverse: #161d12;
+  --c-accent: #c29237; /* harvest brass */
+  --c-accent-hover: #d3a845;
+  --c-accent-deep: #8a6a1f; /* brass as text/outline on light grounds */
+  --c-accent-ink: #201607; /* text on brass */
+  --c-warn: #b23a24; /* distressed-load red, used sparingly */
+  --c-success: #3b7d34;
 
   /* Type — fluid scale */
   --t-display: clamp(2.75rem, 5vw + 1rem, 5.25rem);

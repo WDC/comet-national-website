@@ -1,20 +1,27 @@
 ---
+/**
+ * Brand lockup: the legacy Comet Express badge (Est. 1995) beside the
+ * Comet National wordmark. `variant="bg"` renders the cream-on-dark version
+ * for inverse grounds (footer, dark sections).
+ * Badge SVGs are served from /logos/ so they cache once CDN-side.
+ */
 interface Props {
   variant?: "ink" | "bg";
   class?: string;
 }
 const { variant = "ink", class: className = "" } = Astro.props;
-const fill = variant === "ink" ? "var(--c-ink)" : "var(--c-bg)";
-const accent = "var(--c-accent)";
+const badgeSrc = variant === "ink" ? "/logos/comet-badge.svg" : "/logos/comet-badge-cream.svg";
+const wordmark = variant === "ink" ? "var(--c-pine)" : "var(--c-bg)";
+const est = variant === "ink" ? "var(--c-ink-muted)" : "var(--c-line)";
 ---
-<a href="/" class={`inline-flex items-center gap-2.5 ${className}`} aria-label="Comet National — Home">
-  <svg width="32" height="32" viewBox="0 0 32 32" fill="none" aria-hidden="true">
-    <!-- stylized comet trail: a horizontal line ending in a circle, suggesting freight motion -->
-    <path d="M2 16 L21 16" stroke={fill} stroke-width="2" stroke-linecap="square" />
-    <path d="M22 8 L30 16 L22 24" stroke={accent} stroke-width="2.5" stroke-linejoin="miter" fill="none" />
-    <circle cx="6" cy="16" r="1.5" fill={accent} />
-  </svg>
-  <span class="font-display font-bold text-[1.05rem] tracking-tight uppercase leading-none" style={`color: ${fill}`}>
-    Comet<span style={`color: ${accent}; margin-left: 0.15rem;`}>·</span>National
+<a href="/" class={`inline-flex items-center gap-3 ${className}`} aria-label="Comet National — Home">
+  <img src={badgeSrc} alt="" width="42" height="42" aria-hidden="true" />
+  <span class="flex flex-col leading-none">
+    <span class="font-display font-bold text-[1.05rem] tracking-tight uppercase leading-none" style={`color: ${wordmark}`}>
+      Comet National
+    </span>
+    <span class="mono text-[0.575rem] uppercase" style={`color: ${est}; letter-spacing: 0.22em; margin-top: 0.3rem;`}>
+      Est. 1995 · Atlanta, GA
+    </span>
   </span>
 </a>

@@ -190,7 +190,7 @@ export const INDUSTRIES: IndustryItem[] = [
     ],
     animation: "ConstructionRise",
     whyComet:
-      "Construction logistics is a sequencing problem dressed up as a shipping problem. We've been the carrier behind the schedules of GCs across the southeast since 1970 — we know the difference between a permit you can route around and one you can't, between a foreman who'll hand-unload and one who won't.",
+      "Construction logistics is a sequencing problem dressed up as a shipping problem. We've been the carrier behind the schedules of GCs across the southeast since 1995 — we know the difference between a permit you can route around and one you can't, between a foreman who'll hand-unload and one who won't.",
   },
   {
     slug: "manufacturing-industrial",

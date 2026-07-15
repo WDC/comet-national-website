@@ -19,11 +19,12 @@
   --color-ink-soft: var(--c-ink-soft);
   --color-line: var(--c-line);
   --color-line-soft: var(--c-line-soft);
-  --color-navy: var(--c-navy);
-  --color-navy-deep: var(--c-navy-deep);
-  --color-charcoal: var(--c-charcoal);
+  --color-pine: var(--c-pine);
+  --color-pine-deep: var(--c-pine-deep);
+  --color-moss: var(--c-moss);
   --color-accent: var(--c-accent);
   --color-accent-hover: var(--c-accent-hover);
+  --color-accent-deep: var(--c-accent-deep);
   --color-accent-ink: var(--c-accent-ink);
   --color-warn: var(--c-warn);
   --color-success: var(--c-success);
@@ -114,9 +115,13 @@ p {
 
 /* --- Focus state — industrial, visible --- */
 :focus-visible {
-  outline: 2px solid var(--c-accent);
+  outline: 2px solid var(--c-accent-deep);
   outline-offset: 2px;
   border-radius: var(--r-sm);
+}
+/* Brighter brass on dark grounds so the indicator keeps ≥3:1 contrast */
+.section-inverse :focus-visible {
+  outline-color: var(--c-accent);
 }
 
 /* --- Selection --- */
@@ -166,7 +171,7 @@ p {
   padding-block: clamp(2rem, 5vw, 3.5rem);
 }
 .section-inverse {
-  background: var(--c-navy-deep);
+  background: var(--c-pine-deep);
   color: var(--c-bg);
 }
 .section-inverse .eyebrow {

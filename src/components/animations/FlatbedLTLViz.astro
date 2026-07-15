@@ -1,17 +1,17 @@
 ---
 /**
  * Prompt 5 — Flatbed LTL "pay for the space you use".
- * Top-down flatbed: 3 amber blocks slide in from right and snap into place,
+ * Top-down flatbed: 3 brass blocks slide in from right and snap into place,
  * filling ~60% of the deck. Bracket + label animate over the used portion.
  */
 ---
 <div class="flatbed-viz" data-anim>
   <svg viewBox="0 0 480 220" role="img" aria-label="Top-down view of a partial flatbed showing the linear feet you actually pay for">
     <!-- Deck outline -->
-    <rect x="20" y="60" width="440" height="100" fill="none" stroke="var(--c-navy)" stroke-width="1.5" />
+    <rect x="20" y="60" width="440" height="100" fill="none" stroke="var(--c-pine)" stroke-width="1.5" />
     <!-- Tick marks every ~10ft equivalent -->
     {Array.from({ length: 9 }).map((_, i) => (
-      <line x1={64 + i * 48} y1={156} x2={64 + i * 48} y2={164} stroke="var(--c-navy)" stroke-width="1" />
+      <line x1={64 + i * 48} y1={156} x2={64 + i * 48} y2={164} stroke="var(--c-pine)" stroke-width="1" />
     ))}
     {Array.from({ length: 9 }).map((_, i) => (
       <text x={64 + i * 48} y={180} text-anchor="middle" font-family="var(--ff-mono)" font-size="9" fill="var(--c-ink-muted)" letter-spacing="0.08em">

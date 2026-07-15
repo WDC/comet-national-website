@@ -11,9 +11,9 @@ export const SITE = {
   legalName: "Comet National Shipping Company",
   tagline: "We ship anything to anywhere.",
   subline:
-    "Flatbed LTL, dry van, reefer, full truckload, transloading, and warehousing — managed by one team out of Atlanta since 1970. You make one call. We solve the whole problem.",
-  trustLine: "One Atlanta team. Every mode since 1970.",
-  foundingYear: 1970,
+    "Flatbed LTL, dry van, reefer, full truckload, transloading, and warehousing — managed by one team out of Atlanta since 1995. You make one call. We solve the whole problem.",
+  trustLine: "One Atlanta team. Every mode since 1995.",
+  foundingYear: 1995,
   phone: "(800) 831-5376",
   phoneE164: "+18008315376",
   email: "sales@cometnational.com",
