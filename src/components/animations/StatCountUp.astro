@@ -10,8 +10,13 @@
  *
  * Reduced motion: final formatted values shown, underlines full.
  *
- * Phase 1 stats are placeholders per user direction — backfill in Sanity later.
+ * Values are derived from verifiable facts (founding year, service catalog,
+ * coverage) rather than unaudited placeholders. Backfill richer stats in
+ * Sanity later.
  */
+import { SITE } from "@lib/site";
+import { SERVICES } from "@lib/services";
+
 interface Stat {
   label: string;
   value: number;
@@ -19,9 +24,9 @@ interface Stat {
   suffix?: string;
 }
 const stats: Stat[] = [
-  { label: "Years in business", value: new Date().getFullYear() - 1995, format: "plus" },
+  { label: "Years in business", value: new Date().getFullYear() - SITE.foundingYear, format: "plus" },
   { label: "Lanes served", value: 48, suffix: " states + Canada" },
-  { label: "Loads moved", value: 50000, format: "plus" },
+  { label: "Freight modes", value: SERVICES.length, suffix: " under one roof" },
   { label: "Atlanta dock", value: 1, suffix: " — every mode" },
 ];
 

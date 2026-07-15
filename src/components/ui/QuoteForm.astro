@@ -164,7 +164,7 @@ const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY ?? "";
   }
   .quote-form__group legend {
     margin-bottom: var(--s-2);
-    color: var(--c-accent);
+    color: var(--c-accent-deep);
   }
   .quote-form__row {
     display: grid;
@@ -208,7 +208,7 @@ const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY ?? "";
   .quote-form textarea:focus {
     outline: none;
     border-color: var(--c-accent);
-    box-shadow: 0 0 0 3px rgba(245, 166, 35, 0.15);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--c-accent) 22%, transparent);
   }
   .quote-form label > span {
     transition: color var(--d-fast) var(--ease-out);
@@ -243,8 +243,8 @@ const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY ?? "";
     font-size: var(--t-small);
   }
   .quote-form__status.is-pending { border-color: var(--c-ink-muted); color: var(--c-ink-muted); }
-  .quote-form__status.is-ok { border-color: var(--c-success); color: var(--c-success); background: rgba(47,125,59,0.06); }
-  .quote-form__status.is-err { border-color: var(--c-warn); color: var(--c-warn); background: rgba(200,51,26,0.06); }
+  .quote-form__status.is-ok { border-color: var(--c-success); color: var(--c-success); background: color-mix(in srgb, var(--c-success) 8%, transparent); }
+  .quote-form__status.is-err { border-color: var(--c-warn); color: var(--c-warn); background: color-mix(in srgb, var(--c-warn) 8%, transparent); }
 
   @media (max-width: 600px) {
     .quote-form__row { grid-template-columns: 1fr; }

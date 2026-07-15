@@ -6,6 +6,7 @@
  */
 
 import { SITE } from "./site";
+import { SERVICES, INDUSTRIES } from "./services";
 
 const orgId = `${SITE.url}/#org`;
 
@@ -143,6 +144,31 @@ export function articleSchema(a: ArticleInput) {
     publisher: { "@id": orgId },
     ...(a.image ? { image: a.image } : {}),
   };
+}
+
+/**
+ * Path → display-title map for breadcrumb JSON-LD, so structured data reads
+ * "Flatbed LTL" / "Machinery & Equipment" (matching the visible crumbs and page
+ * H1s) instead of the naive title-cased slug ("Flatbed Ltl" / "Machinery
+ * Equipment"). Keyed by the accumulated path segment used in breadcrumbsFromPath.
+ */
+export function crumbTitles(): Record<string, string> {
+  const map: Record<string, string> = {
+    "/services": "Services",
+    "/industries": "Industries",
+    "/why-comet": "Why Comet",
+    "/blog": "Blog",
+    "/get-a-quote": "Get a Quote",
+    "/contact": "Contact",
+    "/carriers": "Carriers",
+    "/privacy": "Privacy Policy",
+    "/terms": "Terms of Use",
+    "/locations": "Locations",
+    "/locations/atlanta": "Atlanta",
+  };
+  for (const s of SERVICES) map[`/services/${s.slug}`] = s.title;
+  for (const i of INDUSTRIES) map[`/industries/${i.slug}`] = i.title;
+  return map;
 }
 
 export function breadcrumbsFromPath(pathname: string, titles: Record<string, string> = {}) {

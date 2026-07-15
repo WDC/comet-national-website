@@ -1,6 +1,6 @@
 ---
 import { resolveSeo, type PageSeo } from "@lib/seo";
-import { organizationSchema, websiteSchema, breadcrumbSchema, breadcrumbsFromPath } from "@lib/schema";
+import { organizationSchema, websiteSchema, breadcrumbSchema, breadcrumbsFromPath, crumbTitles } from "@lib/schema";
 import { SITE } from "@lib/site";
 import JsonLd from "@components/seo/JsonLd.astro";
 import "@styles/base.css";
@@ -20,7 +20,7 @@ const sitewideSchemas: Array<Record<string, unknown>> = [
   websiteSchema(),
 ];
 if (showBreadcrumbs) {
-  sitewideSchemas.push(breadcrumbSchema({ items: breadcrumbsFromPath(Astro.url.pathname) }));
+  sitewideSchemas.push(breadcrumbSchema({ items: breadcrumbsFromPath(Astro.url.pathname, crumbTitles()) }));
 }
 ---
 <meta charset="UTF-8" />
