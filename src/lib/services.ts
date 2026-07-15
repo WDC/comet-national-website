@@ -311,6 +311,15 @@ export function getService(slug: string): ServiceItem | undefined {
   return SERVICES.find((s) => s.slug === slug);
 }
 
+/**
+ * Reverse lookup: which industries recombine a given service. Powers the
+ * "Common industries" cross-links on each service page (industry pages already
+ * link out to services; this closes the loop the other way).
+ */
+export function getIndustriesForService(slug: string): IndustryItem[] {
+  return INDUSTRIES.filter((i) => i.serviceSlugs.includes(slug));
+}
+
 export interface IndustryItem {
   slug: string;
   title: string;

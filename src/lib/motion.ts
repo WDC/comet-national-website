@@ -32,11 +32,13 @@ export function observeReveals(root: ParentNode = document) {
 
 export function bootMotion() {
   if (typeof window === "undefined") return;
-  // Defer until idle so it never blocks LCP.
+  // Defer until idle so it never blocks LCP. Wrap the call so requestIdleCallback
+  // doesn't pass its IdleDeadline argument into observeReveals's `root` param
+  // (which would make root.querySelectorAll throw and no reveal would ever fire).
   if ("requestIdleCallback" in window) {
     (window as Window & { requestIdleCallback: (cb: () => void) => void })
-      .requestIdleCallback(observeReveals);
+      .requestIdleCallback(() => observeReveals());
   } else {
-    setTimeout(observeReveals, 1);
+    setTimeout(() => observeReveals(), 1);
   }
 }

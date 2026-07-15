@@ -46,6 +46,9 @@ if (showBreadcrumbs) {
 <meta property="og:description" content={seo.description} />
 <meta property="og:url" content={seo.canonical} />
 <meta property="og:image" content={seo.ogImage} />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content={seo.title} />
 <meta property="og:locale" content="en_US" />
 
 <!-- Twitter -->
@@ -53,6 +56,7 @@ if (showBreadcrumbs) {
 <meta name="twitter:title" content={seo.title} />
 <meta name="twitter:description" content={seo.description} />
 <meta name="twitter:image" content={seo.ogImage} />
+<meta name="twitter:image:alt" content={seo.title} />
 
 <!-- Preload the three critical above-the-fold MB faces (body serif, hero display,
      mono labels). font-display:swap + metric-matched fallbacks cover the rest. -->

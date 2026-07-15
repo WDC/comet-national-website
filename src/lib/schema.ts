@@ -88,6 +88,32 @@ export function serviceSchema(s: ServiceSchemaInput) {
   };
 }
 
+export interface ItemListInput {
+  name: string;
+  url: string;
+  items: Array<{ name: string; url: string }>;
+}
+
+/**
+ * ItemList for pages that present a curated set of links (e.g. an industry page
+ * listing the services it recombines). Gives crawlers explicit structure where
+ * a bare page would otherwise be the thinnest structured data on the site.
+ */
+export function itemListSchema(input: ItemListInput) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: input.name,
+    url: input.url,
+    itemListElement: input.items.map((it, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      name: it.name,
+      url: it.url,
+    })),
+  };
+}
+
 export interface BreadcrumbInput {
   items: Array<{ name: string; url: string }>;
 }

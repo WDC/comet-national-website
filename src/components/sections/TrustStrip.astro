@@ -3,11 +3,11 @@ import { SITE } from "@lib/site";
 
 // Real customer references pulled from the legacy site testimonials.
 // Multi-word names carry a non-breaking space so a company never wraps mid-name.
-const clients = ["Sika", "Atlas Concrete", "Capital Steel", "GMC Group", "Pioneer Industrial", "Vulcan"];
+const clients = ["Sika", "Atlas Concrete", "Capital Steel", "GMC Group", "Pioneer Industrial", "Vulcan"];
 ---
-<section class="trust" aria-label="Trusted by industrial buyers">
+<section class="trust" aria-label="Trusted by industrial buyers" data-trust>
   <div class="container-content trust__inner">
-    <p class="trust__line"><span class="trust__accent">·</span> {SITE.trustLine}</p>
+    <p class="trust__line"><span class="trust__accent" data-trust-dot>·</span> {SITE.trustLine}</p>
     <ul class="trust__logos reveal-stagger" data-reveal aria-label="Selected clients">
       {clients.map((c) => (
         <li class="trust__logo display">{c}</li>
@@ -42,35 +42,72 @@ const clients = ["Sika", "Atlas Concrete", "Capital Steel", "GMC Group", "Pio
     margin: 0;
     display: flex;
     flex-wrap: wrap;
+    align-items: center;
     justify-content: flex-end;
-    gap: var(--s-6) var(--s-8);
+    /* Column gap carries the hairline dividers below; keep it wider than the
+       row gap so wrapped rows still breathe. */
+    gap: var(--s-4) 0;
   }
+  /* Deliberate "trusted by" wordmark row: uppercase, tracked, full-strength ink
+     with hairline brass dividers between names — reads as a curated client list
+     rather than greyed-out placeholder text. */
   .trust__logo {
     font-weight: 700;
-    font-size: 1.05rem;
-    letter-spacing: var(--ls-snug);
-    color: var(--c-ink-muted);
-    opacity: 0.65;
-    cursor: default;
-    transition:
-      opacity var(--d-fast) var(--ease-out),
-      color var(--d-fast) var(--ease-out),
-      transform var(--d-fast) var(--ease-out),
-      letter-spacing var(--d-base) var(--ease-out);
-  }
-  .trust__logo:hover {
-    opacity: 1;
+    font-size: 0.9rem;
+    letter-spacing: var(--ls-wide);
+    text-transform: uppercase;
     color: var(--c-ink);
+    cursor: default;
+    padding-inline: var(--s-5);
+    white-space: nowrap;
+    position: relative;
+    transition:
+      color var(--d-fast) var(--ease-out),
+      transform var(--d-fast) var(--ease-out);
+  }
+  .trust__logo + .trust__logo::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 50%;
+    height: 0.85em;
+    width: 1px;
+    background: var(--c-line);
+    transform: translateY(-50%);
+  }
+  .trust__logos > .trust__logo:last-child { padding-right: 0; }
+  .trust__logo:hover {
+    color: var(--c-accent-deep);
     transform: translateY(-1px);
-    letter-spacing: 0;
   }
   .trust__accent {
     color: var(--c-accent);
     display: inline-block;
-    animation: pulse-dot 3s var(--ease-in-out) infinite;
+    animation: trust-pulse 3s var(--ease-in-out) infinite;
   }
+  /* Live-dispatch dot — a slow brass pulse. Paused when the strip is off-screen
+     (see script) so it isn't animating while scrolled past. */
+  @keyframes trust-pulse {
+    0%, 100% { opacity: 0.35; transform: scale(1); }
+    50%      { opacity: 1; transform: scale(1.35); }
+  }
+  .trust.is-offscreen .trust__accent { animation-play-state: paused; }
+
   @media (max-width: 760px) {
     .trust__inner { grid-template-columns: 1fr; }
     .trust__logos { justify-content: flex-start; }
+    .trust__logo:first-child { padding-left: 0; }
   }
 </style>
+
+<script>
+  // Pause the live-dispatch pulse while the strip is scrolled out of view.
+  const strip = document.querySelector<HTMLElement>("[data-trust]");
+  if (strip && "IntersectionObserver" in window) {
+    const io = new IntersectionObserver(
+      ([entry]) => strip.classList.toggle("is-offscreen", !entry!.isIntersecting),
+      { threshold: 0 },
+    );
+    io.observe(strip);
+  }
+</script>
