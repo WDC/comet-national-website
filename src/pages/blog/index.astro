@@ -1,0 +1,249 @@
+---
+import BaseLayout from "@layouts/BaseLayout.astro";
+import Caps from "@components/ui/Caps.astro";
+import { SITE } from "@lib/site";
+import {
+  getPublishedPosts,
+  postPath,
+  postUrl,
+  formatDate,
+  isoDate,
+  readingMinutes,
+} from "@lib/posts";
+
+export const prerender = true;
+
+const posts = await getPublishedPosts();
+const [lead, ...rest] = posts;
+
+const title = "Blog";
+const description =
+  "Freight, plain-spoken. Practical writing on flatbed and open-deck, LTL accessorials, transloading, and moving the loads other carriers bounce, from the Comet National team in Atlanta.";
+
+// Blog + ItemList JSON-LD so the listing is eligible for rich results.
+const blogSchema: Record<string, unknown> = {
+  "@context": "https://schema.org",
+  "@type": "Blog",
+  "@id": `${SITE.url}/blog#blog`,
+  name: `${SITE.name} — Blog`,
+  url: `${SITE.url}/blog`,
+  description,
+  publisher: { "@id": `${SITE.url}/#org` },
+  blogPost: posts.slice(0, 20).map((p) => ({
+    "@type": "BlogPosting",
+    headline: p.data.title,
+    url: postUrl(p),
+    datePublished: isoDate(p.data.publishedDate),
+    description: p.data.summary,
+  })),
+};
+---
+<BaseLayout title={title} description={description} extraSchema={[blogSchema]}>
+  <section class="blog-hero section-tight" data-reveal>
+    <div class="container-content">
+      <nav aria-label="Breadcrumb" class="blog-hero__crumbs mono">
+        <a href="/">Home</a>
+        <span aria-hidden="true">/</span>
+        <span>Blog</span>
+      </nav>
+      <p class="eyebrow">The Comet National blog</p>
+      <h1 class="blog-hero__title display">Freight, plain-spoken.</h1>
+      <p class="blog-hero__lede">{description}</p>
+    </div>
+  </section>
+
+  <div class="container-content blog-body">
+    {posts.length === 0 && (
+      <p class="blog-empty">No posts yet. Check back soon.</p>
+    )}
+
+    {lead && (
+      <a href={postPath(lead)} class="blog-lead" data-reveal>
+        <div class="blog-lead__text">
+          <span class="blog-lead__eyebrow mono">Latest · {lead.data.category ?? "Blog"}</span>
+          <h2 class="blog-lead__title display"><Caps text={lead.data.title} /></h2>
+          <p class="blog-lead__summary"><Caps text={lead.data.summary} /></p>
+          <span class="blog-lead__meta mono">
+            <time datetime={isoDate(lead.data.publishedDate)}>{formatDate(lead.data.publishedDate)}</time>
+            <span aria-hidden="true"> · </span>{readingMinutes(lead)} min read
+          </span>
+        </div>
+        <div class="blog-lead__art">
+          <img
+            src={`${postPath(lead)}/og.png`}
+            width="1200"
+            height="630"
+            alt={lead.data.heroAlt ?? `${lead.data.title} — Comet National`}
+            loading="eager"
+          />
+        </div>
+      </a>
+    )}
+
+    {rest.length > 0 && (
+      <ul class="blog-grid reveal-stagger" data-reveal>
+        {rest.map((p) => (
+          <li>
+            <a href={postPath(p)} class="blog-card">
+              <span class="blog-card__eyebrow mono">{p.data.category ?? "Blog"}</span>
+              <h3 class="blog-card__title display"><Caps text={p.data.title} /></h3>
+              <p class="blog-card__summary"><Caps text={p.data.summary} /></p>
+              <span class="blog-card__meta mono">
+                <time datetime={isoDate(p.data.publishedDate)}>{formatDate(p.data.publishedDate)}</time>
+                <span aria-hidden="true"> · </span>{readingMinutes(p)} min read
+              </span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    )}
+  </div>
+</BaseLayout>
+
+<style>
+  .blog-hero {
+    background: var(--c-bg-elevated);
+    border-bottom: 1px solid var(--c-line);
+  }
+  .blog-hero__crumbs {
+    display: flex;
+    gap: var(--s-2);
+    font-size: var(--t-eyebrow);
+    color: var(--c-ink-muted);
+    letter-spacing: var(--ls-wider);
+    text-transform: uppercase;
+    margin-bottom: var(--s-6);
+  }
+  .blog-hero__crumbs a:hover { color: var(--c-accent); }
+  .blog-hero__title {
+    margin-top: var(--s-3);
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    line-height: 1;
+  }
+  .blog-hero__lede {
+    margin-top: var(--s-5);
+    max-width: 62ch;
+    font-size: var(--t-lede);
+    line-height: var(--lh-snug);
+    color: var(--c-ink-muted);
+  }
+
+  .blog-body {
+    padding-block: var(--s-16);
+    display: grid;
+    gap: var(--s-16);
+  }
+  .blog-empty {
+    color: var(--c-ink-muted);
+    font-size: var(--t-lede);
+  }
+
+  .blog-lead {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--s-10);
+    align-items: center;
+    color: var(--c-ink);
+  }
+  .blog-lead__eyebrow {
+    font-size: var(--t-eyebrow);
+    letter-spacing: var(--ls-wider);
+    text-transform: uppercase;
+    color: var(--c-accent-deep);
+  }
+  .blog-lead__title {
+    margin-top: var(--s-3);
+    font-size: clamp(1.9rem, 3vw, 2.75rem);
+    line-height: 1.03;
+    max-width: 18ch;
+    transition: color var(--d-fast) var(--ease-out);
+  }
+  .blog-lead:hover .blog-lead__title { color: var(--c-accent-deep); }
+  .blog-lead__summary {
+    margin-top: var(--s-4);
+    color: var(--c-ink-muted);
+    max-width: 46ch;
+    line-height: 1.5;
+  }
+  .blog-lead__meta {
+    display: inline-block;
+    margin-top: var(--s-5);
+    font-size: var(--t-small);
+    color: var(--c-ink-soft);
+    font-feature-settings: "lnum" 1, "tnum" 1;
+  }
+  .blog-lead__art {
+    border: 1px solid var(--c-line);
+    border-radius: var(--r-md);
+    overflow: hidden;
+    transition: border-color var(--d-base) var(--ease-out), box-shadow var(--d-base) var(--ease-out);
+  }
+  .blog-lead:hover .blog-lead__art {
+    border-color: var(--c-accent);
+    box-shadow: 0 16px 32px -24px rgba(194, 146, 55, 0.5);
+  }
+  .blog-lead__art img { width: 100%; height: auto; }
+
+  .blog-grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--c-line);
+    border: 1px solid var(--c-line);
+  }
+  .blog-card {
+    display: grid;
+    grid-template-rows: auto auto 1fr auto;
+    gap: var(--s-3);
+    background: var(--c-bg);
+    padding: var(--s-6);
+    min-height: 220px;
+    color: var(--c-ink);
+    position: relative;
+    transition: background var(--d-fast) var(--ease-out);
+  }
+  .blog-card::before {
+    content: "";
+    position: absolute;
+    inset: auto 0 0 0;
+    height: 2px;
+    background: var(--c-accent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform var(--d-base) var(--ease-out);
+  }
+  .blog-card:hover { background: var(--c-bg-elevated); }
+  .blog-card:hover::before { transform: scaleX(1); }
+  .blog-card__eyebrow {
+    font-size: var(--t-eyebrow);
+    letter-spacing: var(--ls-wider);
+    text-transform: uppercase;
+    color: var(--c-accent-deep);
+  }
+  .blog-card__title {
+    font-size: 1.35rem;
+    line-height: 1.1;
+  }
+  .blog-card__summary {
+    font-size: var(--t-small);
+    color: var(--c-ink-muted);
+    line-height: 1.5;
+  }
+  .blog-card__meta {
+    font-size: var(--t-small);
+    color: var(--c-ink-soft);
+    font-feature-settings: "lnum" 1, "tnum" 1;
+  }
+
+  @media (max-width: 880px) {
+    .blog-lead { grid-template-columns: 1fr; }
+    .blog-lead__art { order: -1; }
+    .blog-grid { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 560px) {
+    .blog-grid { grid-template-columns: 1fr; }
+  }
+</style>
