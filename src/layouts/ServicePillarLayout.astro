@@ -4,7 +4,7 @@ import Button from "@components/ui/Button.astro";
 import ServiceSchema from "@components/seo/ServiceSchema.astro";
 import HowItWorksFlow from "@components/animations/HowItWorksFlow.astro";
 import { SITE } from "@lib/site";
-import { type ServiceItem, getService } from "@lib/services";
+import { type ServiceItem, type ServiceCategory, getService, getIndustriesForService } from "@lib/services";
 import Caps from "@components/ui/Caps.astro";
 
 interface Props {
@@ -17,6 +17,28 @@ interface Props {
 const { service, pageTitle, pageDescription, relatedSlugs } = Astro.props;
 const title = pageTitle ?? `${service.title} | ${SITE.name}`;
 const url = `${SITE.url}/services/${service.slug}`;
+
+// Industries that actually buy this service — closes the internal-link loop
+// (industry pages already link out to services).
+const industries = getIndustriesForService(service.slug);
+
+// Vary the closing CTA by service family so all 11 pages don't end on the exact
+// same "Tell us about the load" block.
+const CLOSERS: Record<ServiceCategory, { title: string; body: string }> = {
+  trailer: {
+    title: "Tell us about the load.",
+    body: "Dimensions, weight, where it's going, and when it has to be there. We'll put the right trailer under it.",
+  },
+  facility: {
+    title: "Tell us what the dock needs to do.",
+    body: "Transload, cross-dock, recover, or store — describe the freight and the deadline, and we'll handle it from our dock.",
+  },
+  managed: {
+    title: "Tell us about the problem.",
+    body: "One call, every mode. Describe the freight and we'll figure out how it moves — and move it.",
+  },
+};
+const closer = CLOSERS[service.category];
 ---
 <BaseLayout
   title={title}
@@ -114,11 +136,26 @@ const url = `${SITE.url}/services/${service.slug}`;
         </section>
       )}
 
+      {industries.length > 0 && (
+        <section class="pillar__industries" data-reveal>
+          <p class="eyebrow">Common industries</p>
+          <h2 class="pillar__h2 display">Who moves freight this way.</h2>
+          <ul class="pillar__industries-list reveal-stagger" data-reveal>
+            {industries.map((ind) => (
+              <li>
+                <a href={`/industries/${ind.slug}`} class="link-arrow">
+                  <span class="pillar__industries-title display"><Caps text={ind.title} /></span>
+                  <span class="pillar__industries-cta arrow" aria-hidden="true">→</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
       <section class="pillar__final-cta section-tight reveal" data-reveal>
-        <h2 class="pillar__h2 display">Tell us about the load.</h2>
-        <p class="pillar__final-body">
-          The quote form takes a minute. The right answer often takes less.
-        </p>
+        <h2 class="pillar__h2 display">{closer.title}</h2>
+        <p class="pillar__final-body">{closer.body}</p>
         <Button href="/get-a-quote" size="lg">Get a Quote</Button>
       </section>
     </div>
@@ -251,6 +288,36 @@ const url = `${SITE.url}/services/${service.slug}`;
     font-weight: 600;
   }
 
+  /* Common industries — compact chip row of the buyers who use this service. */
+  .pillar__industries-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--s-3);
+  }
+  .pillar__industries-list a {
+    display: inline-flex;
+    align-items: baseline;
+    gap: var(--s-2);
+    padding: var(--s-3) var(--s-5);
+    border: 1px solid var(--c-line);
+    background: var(--c-bg-elevated);
+    color: var(--c-ink);
+    transition:
+      border-color var(--d-fast) var(--ease-out),
+      background var(--d-fast) var(--ease-out),
+      transform var(--d-fast) var(--ease-out);
+  }
+  .pillar__industries-list a:hover {
+    border-color: var(--c-accent);
+    background: var(--c-bg);
+    transform: translateY(-1px);
+  }
+  .pillar__industries-title { font-size: 1.0625rem; line-height: 1; }
+  .pillar__industries-cta { color: var(--c-accent-deep); font-weight: 700; }
+
   .pillar__faq-list {
     list-style: none;
     padding: 0;
@@ -322,6 +389,12 @@ const url = `${SITE.url}/services/${service.slug}`;
 
   @media (max-width: 880px) {
     .pillar__hero-grid { grid-template-columns: 1fr; }
+  }
+  /* Related services: 3 → 2 → 1 so the tablet range keeps a two-up grid. */
+  @media (max-width: 960px) {
+    .pillar__related-list { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 600px) {
     .pillar__related-list { grid-template-columns: 1fr; }
   }
 </style>

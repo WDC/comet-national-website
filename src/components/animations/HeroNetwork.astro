@@ -116,6 +116,23 @@ const MAX_LANES = Math.max(...TOUR.map((s) => s.to.length));
   const root = document.querySelector<HTMLElement>("[data-hero-net]");
   if (root?.dataset.tour) {
     const tour = JSON.parse(root.dataset.tour) as NetStop[];
-    runNetworkCycle(root, tour, { vbW: 960 });
+    // Defer boot to idle so the forever-loop never competes with LCP, and gate
+    // the timeline to the viewport via ScrollTrigger so it pauses once the hero
+    // is scrolled past instead of animating off-screen forever.
+    const boot = () =>
+      runNetworkCycle(root, tour, {
+        vbW: 960,
+        scrollTrigger: {
+          trigger: root,
+          start: "top bottom",
+          end: "bottom top",
+          toggleActions: "play pause resume pause",
+        },
+      });
+    if ("requestIdleCallback" in window) {
+      (window as Window & { requestIdleCallback: (cb: () => void) => void }).requestIdleCallback(boot);
+    } else {
+      setTimeout(boot, 1);
+    }
   }
 </script>

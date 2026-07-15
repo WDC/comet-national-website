@@ -146,6 +146,10 @@ import { SITE } from "@lib/site";
       grid-template-columns: 1fr;
       gap: var(--s-8);
     }
-    .hero__visual { order: -1; }
+    /* Copy stays first on small screens — the pale line-art map reads as a
+       near-blank block above the fold, so the H1 leads instead. The visual
+       follows the actions and its top margin is trimmed. */
+    .hero__copy { max-width: none; }
+    .hero__visual { margin-top: calc(-1 * var(--s-2)); }
   }
 </style>

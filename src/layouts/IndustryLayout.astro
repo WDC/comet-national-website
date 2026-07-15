@@ -4,6 +4,7 @@ import Button from "@components/ui/Button.astro";
 import HowItWorksFlow from "@components/animations/HowItWorksFlow.astro";
 import { SITE } from "@lib/site";
 import { type IndustryItem, getService } from "@lib/services";
+import { itemListSchema } from "@lib/schema";
 import Caps from "@components/ui/Caps.astro";
 
 interface Props {
@@ -13,8 +14,20 @@ interface Props {
 }
 const { industry, pageTitle, pageDescription } = Astro.props;
 const title = pageTitle ?? `${industry.title} Freight | ${SITE.name}`;
+const url = `${SITE.url}/industries/${industry.slug}`;
+
+// Structured data: the set of services this industry recombines, as an ItemList.
+const industryServices = industry.serviceSlugs
+  .map((slug) => getService(slug))
+  .filter((s): s is NonNullable<typeof s> => Boolean(s))
+  .map((s) => ({ name: s.title, url: `${SITE.url}/services/${s.slug}` }));
+const listSchema = itemListSchema({
+  name: `Freight services for ${industry.title.toLowerCase()}`,
+  url,
+  items: industryServices,
+});
 ---
-<BaseLayout title={title} description={pageDescription} ogType="website">
+<BaseLayout title={title} description={pageDescription} ogType="website" extraSchema={[listSchema]}>
   <article class="ind">
     <header class="ind__hero section-tight">
       <div class="container-content ind__hero-inner">

@@ -80,8 +80,15 @@ function isActive(href: string) {
 </header>
 
 <script>
-  // Mega-menu open on hover & keyboard focus; respects reduced-motion via CSS
+  // Touch/coarse pointers can't hover — on those the mega-menu opens on the
+  // first tap of its trigger (second tap navigates), fixing the 900–960px
+  // "desktop nav visible but hover-only menu" dead zone on touch tablets.
+  const canHover = window.matchMedia("(hover: hover)").matches;
+
+  // Mega-menu: open on hover & keyboard focus (pointer-capable), or tap-to-open
+  // on touch. Respects reduced-motion via CSS.
   const triggers = document.querySelectorAll<HTMLElement>(".site-nav__item.has-menu");
+  const closers: Array<() => void> = [];
   triggers.forEach((item) => {
     const link = item.querySelector<HTMLElement>(".site-nav__link");
     const menu = item.querySelector<HTMLElement>(".mega-menu");
@@ -103,29 +110,95 @@ function isActive(href: string) {
         link.setAttribute("aria-expanded", "false");
       }, 140);
     };
-    item.addEventListener("mouseenter", open);
-    item.addEventListener("mouseleave", close);
-    item.addEventListener("focusin", open);
-    item.addEventListener("focusout", (e) => {
-      const next = e.relatedTarget as Node | null;
-      if (!next || !item.contains(next)) close();
+    closers.push(() => {
+      menu.classList.remove("is-open");
+      link.setAttribute("aria-expanded", "false");
     });
-  });
 
-  // Mobile nav toggle
-  const toggle = document.querySelector<HTMLButtonElement>("[data-mobile-toggle]");
-  const mnav = document.querySelector<HTMLElement>("[data-mobile-nav]");
-  toggle?.addEventListener("click", () => {
-    const open = toggle.getAttribute("aria-expanded") === "true";
-    toggle.setAttribute("aria-expanded", String(!open));
-    if (mnav) {
-      if (open) {
-        mnav.setAttribute("hidden", "");
-      } else {
-        mnav.removeAttribute("hidden");
-      }
+    if (canHover) {
+      item.addEventListener("mouseenter", open);
+      item.addEventListener("mouseleave", close);
+      item.addEventListener("focusin", open);
+      item.addEventListener("focusout", (e) => {
+        const next = e.relatedTarget as Node | null;
+        if (!next || !item.contains(next)) close();
+      });
+    } else {
+      link.addEventListener("click", (e) => {
+        if (!menu.classList.contains("is-open")) {
+          e.preventDefault();
+          menu.classList.add("is-open");
+          link.setAttribute("aria-expanded", "true");
+        }
+      });
     }
   });
+
+  // Dismiss any open mega-menu on Escape or an outside tap (touch mode).
+  if (!canHover) {
+    document.addEventListener("click", (e) => {
+      if (!(e.target as Element)?.closest(".site-nav__item.has-menu")) {
+        closers.forEach((c) => c());
+      }
+    });
+  }
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") closers.forEach((c) => c());
+  });
+
+  // Mobile nav toggle — with Escape-to-close, outside-click close, focus move,
+  // and a simple Tab focus trap while open.
+  const toggle = document.querySelector<HTMLButtonElement>("[data-mobile-toggle]");
+  const mnav = document.querySelector<HTMLElement>("[data-mobile-nav]");
+  if (toggle && mnav) {
+    const focusables = () => [...mnav.querySelectorAll<HTMLElement>("a[href]")];
+    const isOpen = () => toggle.getAttribute("aria-expanded") === "true";
+
+    const openNav = () => {
+      toggle.setAttribute("aria-expanded", "true");
+      mnav.removeAttribute("hidden");
+      focusables()[0]?.focus();
+    };
+    const closeNav = (returnFocus = true) => {
+      toggle.setAttribute("aria-expanded", "false");
+      mnav.setAttribute("hidden", "");
+      if (returnFocus) toggle.focus();
+    };
+
+    toggle.addEventListener("click", () => (isOpen() ? closeNav() : openNav()));
+
+    // Close after choosing a destination.
+    mnav.addEventListener("click", (e) => {
+      if ((e.target as Element)?.closest("a[href]")) closeNav(false);
+    });
+
+    // Escape closes; outside tap closes; Tab is trapped within the panel.
+    document.addEventListener("keydown", (e) => {
+      if (!isOpen()) return;
+      if (e.key === "Escape") {
+        closeNav();
+        return;
+      }
+      if (e.key === "Tab") {
+        const items = [toggle, ...focusables()];
+        const first = items[0]!;
+        const last = items[items.length - 1]!;
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
+    });
+    document.addEventListener("click", (e) => {
+      if (isOpen() && !(e.target as Element)?.closest("[data-mobile-nav]") &&
+          !(e.target as Element)?.closest("[data-mobile-toggle]")) {
+        closeNav(false);
+      }
+    });
+  }
 
   // Header scrim on scroll
   const header = document.querySelector<HTMLElement>("[data-header]");
@@ -208,8 +281,8 @@ function isActive(href: string) {
 
   .site-header__menu-toggle {
     display: none;
-    width: 40px;
-    height: 40px;
+    width: 44px;
+    height: 44px;
     grid-column: 4;
     align-self: center;
     flex-direction: column;

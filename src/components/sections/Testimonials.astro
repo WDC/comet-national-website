@@ -122,7 +122,12 @@ const quotes = [
     margin-top: 2px;
   }
 
-  @media (max-width: 900px) {
+  /* 3 → 2 → 1: the 600–960px range gets a two-up step rather than jumping to
+     over-wide single-column cards. */
+  @media (max-width: 960px) {
+    .testimonials__list { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 600px) {
     .testimonials__list { grid-template-columns: 1fr; }
   }
 </style>

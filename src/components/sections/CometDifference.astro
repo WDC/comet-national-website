@@ -115,7 +115,12 @@ const cards = [
   }
   .diff__cta:hover { color: var(--c-accent-hover); }
 
-  @media (max-width: 880px) {
+  /* 3 → 2 → 1: give the 600–960px tablet range a two-up step instead of
+     jumping straight to full-width stacked cards. */
+  @media (max-width: 960px) {
+    .diff__cards { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 600px) {
     .diff__cards { grid-template-columns: 1fr; }
   }
 </style>

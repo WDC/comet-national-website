@@ -2,7 +2,7 @@
 import Button from "@components/ui/Button.astro";
 import { SITE } from "@lib/site";
 ---
-<section class="quote-cta section section-bar" data-reveal>
+<section class="quote-cta section section-inverse section-bar" data-reveal>
   <div class="container-content quote-cta__inner reveal-stagger" data-reveal>
     <p class="eyebrow">09 · Get moving</p>
     <h2 class="quote-cta__title display">
@@ -33,10 +33,12 @@ import { SITE } from "@lib/site";
     font-size: var(--t-display);
     line-height: 0.98;
     margin-top: var(--s-3);
+    color: var(--c-bg);
   }
-  .quote-cta__accent { color: var(--c-accent-deep); }
+  /* Brass reads at full strength on the pine-deep ground (~4.65:1). */
+  .quote-cta__accent { color: var(--c-accent); }
   .quote-cta__body {
-    color: var(--c-ink-muted);
+    color: rgba(247, 246, 238, 0.72);
     max-width: 50ch;
   }
   .quote-cta__actions {
@@ -50,11 +52,11 @@ import { SITE } from "@lib/site";
   .quote-cta__phone {
     font-weight: 600;
     font-size: 1rem;
-    color: var(--c-ink-muted);
+    color: rgba(247, 246, 238, 0.72);
     letter-spacing: var(--ls-snug);
   }
   .quote-cta__phone-num {
-    color: var(--c-ink);
+    color: var(--c-bg);
     border-bottom: 1.5px solid var(--c-accent);
     padding-bottom: 2px;
     font-feature-settings: "tnum" 1, "lnum" 1;
