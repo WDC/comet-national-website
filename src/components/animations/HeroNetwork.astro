@@ -40,7 +40,7 @@ const MAX_LANES = Math.max(...TOUR.map((s) => s.to.length));
   <svg viewBox="0 0 960 600" preserveAspectRatio="xMidYMid meet" fill="none" role="presentation">
     <defs>
       <radialGradient id="hnGlow" cx="50%" cy="50%" r="50%">
-        <stop offset="0%" stop-color="var(--c-accent)" stop-opacity="0.45" />
+        <stop offset="0%" stop-color="var(--c-accent)" stop-opacity="0.6" />
         <stop offset="100%" stop-color="var(--c-accent)" stop-opacity="0" />
       </radialGradient>
     </defs>
@@ -49,7 +49,7 @@ const MAX_LANES = Math.max(...TOUR.map((s) => s.to.length));
     <path class="hn-outline" d={proj.usPath} />
 
     <!-- Reusable lane pool -->
-    <g class="hn-lanes" stroke="var(--c-accent)" stroke-width="1.5" stroke-linecap="round">
+    <g class="hn-lanes" stroke="var(--c-accent-deep)" stroke-width="2" stroke-linecap="round">
       {Array.from({ length: MAX_LANES }).map(() => (
         <line class="hn-lane" data-lane x1={start.x} y1={start.y} x2={start.x} y2={start.y} />
       ))}
@@ -64,7 +64,7 @@ const MAX_LANES = Math.max(...TOUR.map((s) => s.to.length));
 
     <!-- Persistent hub dots -->
     <g class="hn-hubs">
-      {NODES.map((n) => <circle class="hn-hub" cx={n.x} cy={n.y} r="4" />)}
+      {NODES.map((n) => <circle class="hn-hub" cx={n.x} cy={n.y} r="4.5" />)}
     </g>
 
     <!-- Active hub marker: glow + pulse + solid core + label -->
@@ -79,16 +79,16 @@ const MAX_LANES = Math.max(...TOUR.map((s) => s.to.length));
   .hero-net { width: 100%; height: 100%; }
   .hero-net svg { width: 100%; height: auto; overflow: visible; display: block; }
 
-  /* Faint pine map on the cream ground. */
+  /* Pine map on the cream ground — kept crisp enough to read at a glance. */
   .hn-outline {
-    stroke: var(--c-ink-soft);
-    stroke-width: 1.25;
-    stroke-opacity: 0.42;
+    stroke: var(--c-ink-muted);
+    stroke-width: 1.75;
+    stroke-opacity: 0.62;
     stroke-linejoin: round;
-    fill: rgba(47, 70, 43, 0.02);
+    fill: rgba(34, 51, 31, 0.04);
   }
-  .hn-lane { stroke-opacity: 0.55; opacity: 0; }
-  .hn-hub { fill: var(--c-accent); opacity: 0.6; }
+  .hn-lane { stroke-opacity: 0.85; opacity: 0; }
+  .hn-hub { fill: var(--c-accent-deep); opacity: 0.8; }
   /* Shipments read as deep-pine cargo carrying a brass trail on light ground. */
   .hn-ship { fill: var(--c-pine-deep); filter: drop-shadow(0 0 4px var(--c-accent)); opacity: 0; }
   .hn-core { fill: var(--c-accent); }

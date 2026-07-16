@@ -33,7 +33,7 @@ import { SITE } from "@lib/site";
 
   <!-- Specs ribbon under hero -->
   <div class="hero__specs container-content section-bar" data-reveal>
-    <span class="mono">[ 01 · WHAT WE DO ]</span>
+    <span class="hero__specs-label mono">[ 01 · WHAT WE DO ]</span>
     <ul class="hero__spec-list reveal-stagger" data-reveal>
       <li>Partial / Volume LTL</li>
       <li>Full Truckload</li>
@@ -55,8 +55,8 @@ import { SITE } from "@lib/site";
   }
   .hero__inner {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: var(--s-12);
+    grid-template-columns: 1fr 1.25fr;
+    gap: var(--s-10);
     align-items: center;
   }
   .hero__copy { max-width: 38ch; }
@@ -86,10 +86,6 @@ import { SITE } from "@lib/site";
     transition: transform 1100ms var(--ease-out) 700ms;
   }
   .hero__headline.is-visible .hero__accent::after { transform: scaleX(1); }
-  .hero__spec-list li {
-    transition: color var(--d-fast) var(--ease-out), transform var(--d-fast) var(--ease-out);
-  }
-  .hero__spec-list li:hover { color: var(--c-accent); transform: translateY(-1px); }
   .hero__lede {
     margin-top: var(--s-6);
     font-size: var(--t-lede);
@@ -109,43 +105,67 @@ import { SITE } from "@lib/site";
   }
   .hero__visual {
     position: relative;
+    /* Let the network read large on wide viewports without crowding the copy. */
+    width: 100%;
+    margin-right: calc(-1 * clamp(0rem, 2.5vw, 2.5rem));
   }
   .hero__specs {
     margin-top: clamp(2rem, 5vw, 4rem);
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: var(--s-6);
     padding-top: var(--s-6);
     border-top: 1px solid var(--c-line);
   }
-  .hero__specs > .mono {
+  .hero__specs-label {
+    display: block;
+    margin-bottom: var(--s-5);
     font-size: var(--t-eyebrow);
     letter-spacing: var(--ls-wider);
     color: var(--c-ink-muted);
   }
+  /* A real grid so the six modes align into tidy columns at every width
+     instead of wrapping into ragged flex rows. Six items divide evenly by
+     3 → 2 → 1, so no orphan ever hangs on its own line. */
   .hero__spec-list {
     list-style: none;
     padding: 0;
     margin: 0;
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--s-4) var(--s-6);
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--s-4) var(--s-8);
     font-family: var(--ff-mono);
     font-size: var(--t-small);
     color: var(--c-ink);
   }
+  .hero__spec-list li {
+    display: flex;
+    align-items: baseline;
+    gap: var(--s-2);
+    transition: color var(--d-fast) var(--ease-out), transform var(--d-fast) var(--ease-out);
+  }
   .hero__spec-list li::before {
     content: "·";
     color: var(--c-accent);
-    margin-right: var(--s-2);
+    flex: none;
   }
+  .hero__spec-list li:hover { color: var(--c-accent); transform: translateY(-1px); }
 
   @media (max-width: 960px) {
     .hero__inner {
       grid-template-columns: 1fr;
-      gap: var(--s-8);
+      gap: var(--s-6);
     }
-    .hero__visual { order: -1; }
+    /* Stacked: lead with the headline + copy, then the map as a supporting
+       graphic below. Cap its size so it stays a graphic, not a full-height
+       banner. (No order override — natural DOM order puts copy first.) */
+    .hero__visual {
+      width: 100%;
+      max-width: 440px;
+      margin: var(--s-2) auto 0;
+    }
+    .hero__spec-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+
+  @media (max-width: 560px) {
+    .hero__visual { max-width: 340px; }
+    .hero__spec-list { grid-template-columns: 1fr; }
   }
 </style>

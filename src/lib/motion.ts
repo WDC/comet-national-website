@@ -35,7 +35,7 @@ export function bootMotion() {
   // Defer until idle so it never blocks LCP.
   if ("requestIdleCallback" in window) {
     (window as Window & { requestIdleCallback: (cb: () => void) => void })
-      .requestIdleCallback(observeReveals);
+      .requestIdleCallback(() => observeReveals());
   } else {
     setTimeout(observeReveals, 1);
   }

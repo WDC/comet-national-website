@@ -22,11 +22,13 @@ const clients = ["Sika", "Atlas Concrete", "Capital Steel", "GMC Group", "Pio
     border-block: 1px solid var(--c-line);
     padding-block: var(--s-6);
   }
+  /* Tagline on its own line, then the wordmarks as a clean wrapping row.
+     Stacking (rather than a two-column split) keeps the names readable and
+     lets the row use the full width without cramming. */
   .trust__inner {
-    display: grid;
-    grid-template-columns: auto 1fr;
-    align-items: center;
-    gap: var(--s-8);
+    display: flex;
+    flex-direction: column;
+    gap: var(--s-5);
   }
   .trust__line {
     font-family: var(--ff-display);
@@ -34,18 +36,21 @@ const clients = ["Sika", "Atlas Concrete", "Capital Steel", "GMC Group", "Pio
     color: var(--c-ink);
     font-size: 1rem;
     letter-spacing: var(--ls-snug);
-    white-space: nowrap;
   }
+  /* Flex-wrap with natural-width items: every wordmark keeps its own width,
+     so long names can never overflow a fixed track and collide. Wrapped rows
+     align to the left edge and share an even gap. */
   .trust__logos {
     list-style: none;
     padding: 0;
     margin: 0;
     display: flex;
     flex-wrap: wrap;
-    justify-content: flex-end;
-    gap: var(--s-6) var(--s-8);
+    align-items: baseline;
+    gap: var(--s-3) clamp(var(--s-6), 4vw, var(--s-12));
   }
   .trust__logo {
+    white-space: nowrap;
     font-weight: 700;
     font-size: 1.05rem;
     letter-spacing: var(--ls-snug);
@@ -68,9 +73,5 @@ const clients = ["Sika", "Atlas Concrete", "Capital Steel", "GMC Group", "Pio
     color: var(--c-accent);
     display: inline-block;
     animation: pulse-dot 3s var(--ease-in-out) infinite;
-  }
-  @media (max-width: 760px) {
-    .trust__inner { grid-template-columns: 1fr; }
-    .trust__logos { justify-content: flex-start; }
   }
 </style>
