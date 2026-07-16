@@ -51,7 +51,7 @@ const differentiators = [
 ---
 <BaseLayout
   title={`Why Comet | ${SITE.name}`}
-  description={`Comet National has been Atlanta's most trusted transportation partner since ${SITE.foundingYear}. Learn about our mission, values, and why shippers choose us for every mode.`}
+  description={`Comet National has moved industrial freight from metro Atlanta since ${SITE.foundingYear} — one team, every mode. Our mission, our values, and why shippers keep calling.`}
 >
 
   <!-- ─── Hero ─── -->
@@ -60,8 +60,8 @@ const differentiators = [
       <div class="reveal-stagger" data-reveal>
         <p class="eyebrow">Why Comet</p>
         <h1 class="why-hero__title display">
-          Your trusted transportation<br/>
-          <span class="why-hero__accent">solutions provider.</span>
+          Not a marketplace.<br/>
+          <span class="why-hero__accent">A team that answers.</span>
         </h1>
         <p class="why-hero__lede">
           Since {SITE.foundingYear}, Comet&nbsp;National has built its reputation one load at a time.
@@ -497,10 +497,16 @@ const differentiators = [
     .origin__aside { position: static; flex-direction: row; flex-wrap: wrap; gap: var(--s-6); }
     .origin__divider { display: none; }
   }
+  /* 3-up card grids get a two-up tablet step before collapsing to one column. */
+  @media (max-width: 960px) {
+    .why-diff__cards { grid-template-columns: repeat(2, 1fr); }
+  }
   @media (max-width: 880px) {
     .mv__grid { grid-template-columns: 1fr; }
-    .why-diff__cards { grid-template-columns: 1fr; }
     .vals__grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 600px) {
+    .why-diff__cards { grid-template-columns: 1fr; }
   }
   @media (max-width: 560px) {
     .vals__grid { grid-template-columns: 1fr; }

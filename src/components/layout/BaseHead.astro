@@ -1,6 +1,7 @@
 ---
 import { resolveSeo, type PageSeo } from "@lib/seo";
 import { organizationSchema, websiteSchema, breadcrumbSchema, breadcrumbsFromPath, crumbTitles } from "@lib/schema";
+import { ogImageForPath } from "@lib/og/pages";
 import { SITE } from "@lib/site";
 import JsonLd from "@components/seo/JsonLd.astro";
 import "@styles/base.css";
@@ -12,7 +13,13 @@ interface Props extends PageSeo {
 }
 
 const { preloadHero, extraSchema = [], ...seoInput } = Astro.props;
-const seo = resolveSeo({ ...seoInput, pathname: Astro.url.pathname });
+// Per-page OG card (/og/<key>.png) when this route has one, unless the page set
+// its own ogImage explicitly (e.g. blog posts). Falls back to the site default.
+const seo = resolveSeo({
+  ...seoInput,
+  ogImage: seoInput.ogImage ?? ogImageForPath(Astro.url.pathname),
+  pathname: Astro.url.pathname,
+});
 
 const showBreadcrumbs = Astro.url.pathname.split("/").filter(Boolean).length >= 1;
 const sitewideSchemas: Array<Record<string, unknown>> = [
@@ -46,6 +53,9 @@ if (showBreadcrumbs) {
 <meta property="og:description" content={seo.description} />
 <meta property="og:url" content={seo.canonical} />
 <meta property="og:image" content={seo.ogImage} />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content={seo.title} />
 <meta property="og:locale" content="en_US" />
 
 <!-- Twitter -->
@@ -53,6 +63,7 @@ if (showBreadcrumbs) {
 <meta name="twitter:title" content={seo.title} />
 <meta name="twitter:description" content={seo.description} />
 <meta name="twitter:image" content={seo.ogImage} />
+<meta name="twitter:image:alt" content={seo.title} />
 
 <!-- Preload the three critical above-the-fold MB faces (body serif, hero display,
      mono labels). font-display:swap + metric-matched fallbacks cover the rest. -->

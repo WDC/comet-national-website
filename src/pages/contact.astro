@@ -3,6 +3,11 @@ export const prerender = true;
 import BaseLayout from "@layouts/BaseLayout.astro";
 import Button from "@components/ui/Button.astro";
 import { SITE } from "@lib/site";
+
+const mapsQuery = encodeURIComponent(
+  `${SITE.address.street}, ${SITE.address.locality}, ${SITE.address.region} ${SITE.address.postal}`,
+);
+const directionsUrl = `https://www.google.com/maps/search/?api=1&query=${mapsQuery}`;
 ---
 <BaseLayout
   title={`Contact | ${SITE.name}`}
@@ -38,6 +43,14 @@ import { SITE } from "@lib/site";
             {SITE.address.locality}, {SITE.address.region} {SITE.address.postal}
           </address>
           <p class="contact__hours mono">By appointment for transload &amp; cross-dock</p>
+          <div class="contact__links">
+            <a class="contact__link mono" href={directionsUrl} rel="noopener" target="_blank">
+              Get directions <span class="arrow" aria-hidden="true">→</span>
+            </a>
+            <a class="contact__link mono" href="/locations/atlanta">
+              About the facility <span class="arrow" aria-hidden="true">→</span>
+            </a>
+          </div>
         </div>
 
         <div class="contact__card contact__card--cta">
@@ -110,6 +123,17 @@ import { SITE } from "@lib/site";
     color: var(--c-ink);
   }
   .contact__hours { color: var(--c-ink-muted); font-size: var(--t-eyebrow); letter-spacing: var(--ls-wide); text-transform: uppercase; }
+  .contact__links { display: flex; flex-wrap: wrap; gap: var(--s-2) var(--s-5); margin-top: var(--s-3); }
+  .contact__link {
+    font-size: var(--t-small);
+    color: var(--c-accent-deep);
+    font-weight: 600;
+    display: inline-flex;
+    align-items: baseline;
+    gap: 6px;
+    transition: color var(--d-fast) var(--ease-out);
+  }
+  .contact__link:hover { color: var(--c-accent); }
   .contact__cta-title { font-size: 1.75rem; line-height: 1.05; color: var(--c-bg); }
 
   @media (max-width: 760px) {

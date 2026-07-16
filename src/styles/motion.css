@@ -15,6 +15,9 @@ html.js .reveal {
     transform 600ms var(--ease-out);
   transition-delay: var(--reveal-delay, 0ms);
 }
+/* Match the `html.js` prefix so the visible rule out-specifies the hidden gate
+   above — without it, `html.js .reveal` (0,2,1) beats `.reveal.is-visible`
+   (0,2,0) and adding .is-visible could never raise opacity back to 1. */
 html.js .reveal.is-visible {
   opacity: 1;
   transform: none;
@@ -444,13 +447,6 @@ header a[aria-label="Comet National — Home"]:hover svg path:first-of-type {
   transition: transform var(--d-fast) var(--ease-out);
 }
 .cargo-grid li:hover .cargo-grid__tick { transform: scale(1.5); }
-
-/* .art-placeholder — wraps a placeholder SVG hero illustration on several
-   service pages. Add a subtle hover so the asset feels interactive. */
-.pillar__art .art-placeholder {
-  transition: transform var(--d-base) var(--ease-out);
-}
-.pillar__art:hover .art-placeholder { transform: scale(1.02); }
 
 /* Reduced motion — covers our additions in addition to the catch-all in tokens.css */
 @media (prefers-reduced-motion: reduce) {

@@ -95,7 +95,9 @@ function formatStat(value: number, format?: Stat["format"]): string {
     letter-spacing: var(--ls-wider);
     font-family: var(--ff-mono);
   }
-  @media (max-width: 760px) {
+  /* Drop to two-up below ~900px so the big clamp() numerals aren't cramped in
+     four columns at tablet-portrait widths (~768px). */
+  @media (max-width: 900px) {
     .stat-band { grid-template-columns: repeat(2, 1fr); }
   }
 </style>

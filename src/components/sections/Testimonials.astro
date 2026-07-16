@@ -69,6 +69,7 @@ const quotes = [
     border: 1px solid var(--c-line);
     padding: var(--s-8);
     position: relative;
+    overflow: hidden;
     display: grid;
     grid-template-rows: auto 1fr auto;
     gap: var(--s-5);
@@ -77,6 +78,19 @@ const quotes = [
       border-color var(--d-fast) var(--ease-out),
       box-shadow var(--d-base) var(--ease-out);
   }
+  /* Shared card signature: brass bar draws in on hover (matches the industries,
+     difference, and value cards). */
+  .testimonials__item::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 2px;
+    background: var(--c-accent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform var(--d-base) var(--ease-out);
+  }
+  .testimonials__item:hover::before { transform: scaleX(1); }
   .testimonials__item:hover {
     transform: translateY(-3px);
     border-color: var(--c-ink);
@@ -122,7 +136,12 @@ const quotes = [
     margin-top: 2px;
   }
 
-  @media (max-width: 900px) {
+  /* 3 → 2 → 1: the 600–960px range gets a two-up step rather than jumping to
+     over-wide single-column cards. */
+  @media (max-width: 960px) {
+    .testimonials__list { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 600px) {
     .testimonials__list { grid-template-columns: 1fr; }
   }
 </style>

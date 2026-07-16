@@ -155,7 +155,9 @@ import { SITE } from "@lib/site";
     }
     /* Stacked: lead with the headline + copy, then the map as a supporting
        graphic below. Cap its size so it stays a graphic, not a full-height
-       banner. (No order override — natural DOM order puts copy first.) */
+       banner. (No order override — natural DOM order puts copy first.)
+       Copy drops its 38ch desktop cap so it uses the full mobile width. */
+    .hero__copy { max-width: none; }
     .hero__visual {
       width: 100%;
       max-width: 440px;

@@ -52,6 +52,7 @@ const relatedSlugs = ["flatbed-open-deck", "volume-ltl", "transloading"];
       <strong>Linear Foot Charge</strong>, <strong>Over-Dimensional Surcharge</strong>. Stack them up and
       the quote you got isn’t the bill you pay.
     </p>
+    <p class="cost-trap__illustrative mono">Illustrative example — actual numbers depend on the lane, dims, and weight.</p>
     <div class="cost-trap__compare">
       <article class="cost-trap__card">
         <h3 class="display">Standard <span class="sc">LTL</span> <small>— the trap</small></h3>
@@ -130,11 +131,19 @@ const relatedSlugs = ["flatbed-open-deck", "volume-ltl", "transloading"];
   }
   .cargo-grid li:hover .cargo-grid__tick { transform: scale(1.5); }
 
+  .cost-trap__illustrative {
+    margin-top: var(--s-6);
+    margin-bottom: var(--s-3);
+    color: var(--c-ink-soft);
+    font-size: var(--t-eyebrow);
+    letter-spacing: var(--ls-wide);
+    text-transform: uppercase;
+  }
   .cost-trap__compare {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: var(--s-4);
-    margin-top: var(--s-6);
+    margin-top: 0;
   }
   .cost-trap__card {
     background: var(--c-bg-elevated);

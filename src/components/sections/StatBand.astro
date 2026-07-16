@@ -10,7 +10,11 @@ import StatCountUp from "@components/animations/StatCountUp.astro";
 
 <style>
   .stat-section {
-    background: var(--c-bg-elevated);
+    /* Faint dotted paper texture over the elevated ground — the dots sit in the
+       soft line token so they read as depth, not pattern, behind the numerals. */
+    background:
+      radial-gradient(circle, var(--c-line-soft) 1px, transparent 1.6px) 0 0 / 24px 24px,
+      var(--c-bg-elevated);
     border-block: 1px solid var(--c-line);
   }
   .stat-section__eyebrow {

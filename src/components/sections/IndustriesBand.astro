@@ -109,11 +109,27 @@ import { INDUSTRIES } from "@lib/services";
   .industries__cell {
     background: var(--c-bg-elevated);
     border: 1px solid var(--c-line);
+    position: relative;
+    overflow: hidden;
     transition:
       border-color var(--d-fast) var(--ease-out),
       transform var(--d-base) var(--ease-out),
       box-shadow var(--d-base) var(--ease-out);
   }
+  /* Shared card signature: brass bar draws in from the left on hover (matches
+     CometDifference, contact, and the why-comet value cards). */
+  .industries__cell::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 2px;
+    background: var(--c-accent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform var(--d-base) var(--ease-out);
+    z-index: 1;
+  }
+  .industries__cell:hover::before { transform: scaleX(1); }
   .industries__cell:hover {
     border-color: var(--c-ink);
     transform: translateY(-3px);

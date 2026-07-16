@@ -18,7 +18,13 @@ import HowItWorksFlow from "@components/animations/HowItWorksFlow.astro";
 </section>
 
 <style>
-  .how { background: var(--c-bg-elevated); }
+  .how {
+    /* Same faint dotted texture as the stat band so the two elevated sections
+       share a surface treatment. */
+    background:
+      radial-gradient(circle, var(--c-line-soft) 1px, transparent 1.6px) 0 0 / 24px 24px,
+      var(--c-bg-elevated);
+  }
   .how__head {
     text-align: center;
     max-width: 60ch;
