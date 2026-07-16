@@ -1,0 +1,248 @@
+---
+/**
+ * The Answer Relay — the "a team that answers" companion for the /why-comet hero.
+ *
+ * Deliberately NOT another US map (the home hero owns that) and NOT the radial
+ * reach dial with rings/axes/cardinals (CoverageReveal owns that). This graphic
+ * dramatizes the page's promise — "Not a marketplace. A team that answers." — as
+ * a single relay:
+ *   1. One inbound call runs a lane from the shipper into the Comet hub.
+ *   2. The hub *answers*: it settles in with a brass glow + the house two-ring
+ *      pulse — the same "live hub" signature used across the suite.
+ *   3. The team dispatches a coordinated wave: lanes draw out to every mode, each
+ *      node settle-pops with its label, and a shipment runs each lane.
+ *   4. It winds down (lanes retract, nodes recede) — ready for the next call — and
+ *      loops, gently, gated to the viewport.
+ *
+ * One point of contact, every mode fanning out from it: a team, not a marketplace.
+ *
+ * Same motion vocabulary as the rest of the suite (see lib/gsapMotion.scene):
+ * strokeDashoffset draws (EASE.draw), EASE.settle node pops, the house two-ring
+ * pulseRing, and constant-speed shipment travel (EASE.linear). Every animated
+ * property both enters and exits, so the loop is seamless with no reset flash.
+ *
+ * Reduced motion: fully-drawn static relay, no travel. (See setStatic.)
+ */
+// Geometry is tuned to fill the 680×480 viewBox edge-to-edge (short margins) so
+// the relay reads large in the hero column — the inbound lane is deliberately
+// short and the mode fan is pulled tight to keep the whole thing legible.
+const HUB = { x: 250, y: 240 };
+const ORIGIN = { x: 34, y: 240 }; // the shipper — one point of contact, off to the left
+const ARC = { rx: 325, ry: 215 }; // mode fan sweeps the right hemisphere
+
+// A point on the mode arc at bearing `a` (deg, y-down: 0 = E, negative = up).
+const onArc = (a: number) => {
+  const r = (a * Math.PI) / 180;
+  return { x: HUB.x + ARC.rx * Math.cos(r), y: HUB.y + ARC.ry * Math.sin(r) };
+};
+
+// Every mode Comet runs, fanned top-to-bottom across the right hemisphere. The
+// same six modes the home hero lists — one team owns all of them.
+const MODES = [
+  { label: "FLATBED", a: -62 },
+  { label: "DRY VAN", a: -37 },
+  { label: "REEFER", a: -12 },
+  { label: "TRUCKLOAD", a: 12 },
+  { label: "TRANSLOAD", a: 37 },
+  { label: "WAREHOUSE", a: 62 },
+].map((m) => ({ ...m, ...onArc(m.a) }));
+---
+<div class="relay" data-relay>
+  <svg
+    viewBox="0 0 680 480"
+    role="img"
+    aria-label="One inbound call reaching the Atlanta team, which answers and dispatches across every freight mode — flatbed, dry van, reefer, truckload, transload, and warehousing"
+    preserveAspectRatio="xMidYMid meet"
+    fill="none"
+  >
+    <defs>
+      <radialGradient id="relayGlow" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="var(--c-accent)" stop-opacity="0.42" />
+        <stop offset="100%" stop-color="var(--c-accent)" stop-opacity="0" />
+      </radialGradient>
+    </defs>
+
+    <!-- Inbound lane — the shipper's one call reaching the team -->
+    <line
+      class="relay-in-lane" data-in-lane
+      x1={ORIGIN.x} y1={ORIGIN.y} x2={HUB.x} y2={HUB.y}
+    />
+
+    <!-- Dispatch lanes — one team fanning out to every mode -->
+    <g class="relay-lanes" stroke="var(--c-accent)" stroke-linecap="round">
+      {MODES.map((m) => (
+        <line
+          class="relay-lane" data-lane
+          x1={HUB.x} y1={HUB.y} x2={m.x} y2={m.y}
+        />
+      ))}
+    </g>
+
+    <!-- Mode nodes + labels -->
+    <g class="relay-modes">
+      {MODES.map((m) => (
+        <g>
+          <circle class="relay-mode-dot" data-mode-dot cx={m.x} cy={m.y} r="4.5" />
+          <text class="relay-mode-label" data-mode-label x={m.x + 13} y={m.y + 4}>
+            {m.label}
+          </text>
+        </g>
+      ))}
+    </g>
+
+    <!-- Shipment pool: one inbound call + one per dispatched mode -->
+    <circle class="relay-call" data-call cx={ORIGIN.x} cy={ORIGIN.y} r="4" />
+    <g class="relay-ships">
+      {MODES.map(() => (
+        <circle class="relay-ship" data-ship cx={HUB.x} cy={HUB.y} r="3.5" />
+      ))}
+    </g>
+
+    <!-- Shipper anchor — one point of contact -->
+    <circle class="relay-origin" cx={ORIGIN.x} cy={ORIGIN.y} r="5" />
+    <text class="relay-origin-label" x={ORIGIN.x - 4} y={ORIGIN.y + 24}>ONE CALL</text>
+
+    <!-- Comet hub — the team that answers: glow + pulse + solid core + name -->
+    <circle class="relay-glow" data-glow cx={HUB.x} cy={HUB.y} r="54" fill="url(#relayGlow)" />
+    <circle class="relay-pulse" data-pulse cx={HUB.x} cy={HUB.y} r="9" />
+    <g class="relay-marker" data-marker transform={`translate(${HUB.x}, ${HUB.y})`}>
+      <circle r="9" fill="var(--c-accent)" />
+      <circle r="3.5" fill="var(--c-pine-deep)" />
+    </g>
+    <text class="relay-hub-name" data-hub-text x={HUB.x} y={HUB.y + 42} text-anchor="middle">
+      COMET NATIONAL
+    </text>
+    <text class="relay-hub-sub" data-hub-text x={HUB.x} y={HUB.y + 60} text-anchor="middle">
+      ATLANTA · ONE TEAM
+    </text>
+  </svg>
+</div>
+
+<style>
+  .relay { width: 100%; height: 100%; }
+  .relay svg { width: 100%; height: auto; overflow: visible; display: block; }
+
+  .relay-in-lane { stroke: var(--c-accent-deep); stroke-width: 1.6; stroke-opacity: 0.5; }
+  .relay-lane { stroke-width: 1.4; stroke-opacity: 0.85; }
+
+  .relay-mode-dot { fill: var(--c-accent); }
+  .relay-mode-label {
+    fill: var(--c-ink-muted); font-family: var(--ff-mono);
+    font-size: 12px; letter-spacing: 0.14em;
+  }
+
+  /* Shipments read as deep-pine cargo carrying a brass trail on the cream ground. */
+  .relay-call,
+  .relay-ship { fill: var(--c-pine-deep); filter: drop-shadow(0 0 4px var(--c-accent)); opacity: 0; }
+
+  .relay-origin { fill: var(--c-accent-deep); }
+  .relay-origin-label {
+    fill: var(--c-ink-muted); font-family: var(--ff-mono);
+    font-size: 10px; letter-spacing: 0.16em;
+  }
+
+  .relay-pulse { fill: none; stroke: var(--c-accent); stroke-width: 2; opacity: 0; }
+  .relay-glow { opacity: 0; }
+
+  .relay-hub-name {
+    fill: var(--c-ink); font-family: var(--ff-mono); font-size: 13px;
+    font-weight: 600; letter-spacing: 0.14em;
+  }
+  .relay-hub-sub {
+    fill: var(--c-ink-muted); font-family: var(--ff-mono);
+    font-size: 10px; letter-spacing: 0.16em;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .relay-call,
+    .relay-ship { display: none; }
+  }
+</style>
+
+<script>
+  import { scene, prepDraw, pulseRing, EASE, DUR } from "@lib/gsapMotion";
+
+  const HUB = { x: 250, y: 240 };
+  const ORIGIN = { x: 34, y: 240 };
+
+  const root = document.querySelector<HTMLElement>("[data-relay]");
+  if (root) {
+    const inLane = root.querySelector<SVGLineElement>("[data-in-lane]");
+    const lanes = [...root.querySelectorAll<SVGLineElement>("[data-lane]")];
+    const dots = [...root.querySelectorAll<SVGCircleElement>("[data-mode-dot]")];
+    const labels = [...root.querySelectorAll<SVGTextElement>("[data-mode-label]")];
+    const call = root.querySelector<SVGCircleElement>("[data-call]");
+    const ships = [...root.querySelectorAll<SVGCircleElement>("[data-ship]")];
+    const glow = root.querySelector<SVGCircleElement>("[data-glow]");
+    const pulse = root.querySelector<SVGCircleElement>("[data-pulse]");
+    const marker = root.querySelector<SVGGElement>("[data-marker]");
+    const hubText = [...root.querySelectorAll<SVGTextElement>("[data-hub-text]")];
+
+    if (inLane && call) {
+      // Lane lengths captured up front so entrance (draw to 0) and exit (retract
+      // to len) share one geometric truth. Endpoints of each dispatch lane drive
+      // its shipment's destination.
+      const dests = lanes.map((l) => ({ x: l.x2.baseVal.value, y: l.y2.baseVal.value }));
+
+      const setStatic = (g: typeof import("gsap").gsap) => {
+        [inLane, ...lanes].forEach((el) => prepDraw(el, false));
+        g.set(dots, { scale: 1, transformOrigin: "center", opacity: 1 });
+        g.set([...labels, ...hubText, glow], { opacity: 1 });
+        g.set(marker, { opacity: 1, scale: 1, transformOrigin: "center" });
+        g.set([call, ...ships], { opacity: 0 });
+      };
+
+      scene(
+        root,
+        (tl, g) => {
+          const inLen = prepDraw(inLane);
+          const laneLens = lanes.map((l) => prepDraw(l));
+          g.set(dots, { scale: 0, transformOrigin: "center" });
+          g.set([...labels, ...hubText, glow], { opacity: 0 });
+          g.set(marker, { opacity: 0, scale: 0.9, transformOrigin: "center" });
+          g.set([call, ...ships], { opacity: 0 });
+
+          // 1 · One call reaches the team — lane draws in, cargo runs it.
+          tl.to(inLane, { strokeDashoffset: 0, duration: DUR.base, ease: EASE.draw });
+          tl.set(call, { attr: { cx: ORIGIN.x, cy: ORIGIN.y } }, 0)
+            .to(call, { opacity: 1, duration: 0.2 }, 0.12)
+            .to(call, { attr: { cx: HUB.x, cy: HUB.y }, duration: DUR.travel * 0.7, ease: EASE.linear }, 0.12)
+            .to(call, { opacity: 0, duration: 0.2 }, ">-0.1");
+
+          // 2 · The team answers — hub settles in with glow + the house pulse.
+          tl.to(marker, { opacity: 1, scale: 1, duration: DUR.base, ease: EASE.settle }, "-=0.35")
+            .to([glow, ...hubText], { opacity: 1, duration: DUR.base }, "<");
+          if (pulse) pulseRing(tl, pulse, { from: 9, to: 128, at: "<0.05", duration: 1.5 });
+
+          // 3 · The whole problem, handled — lanes fan out, nodes + labels land.
+          tl.addLabel("disp", "-=0.5");
+          tl.to(lanes, { strokeDashoffset: 0, duration: DUR.draw, ease: EASE.draw, stagger: 0.09 }, "disp")
+            .to(dots, { scale: 1, duration: DUR.fast, ease: EASE.settle, stagger: 0.09 }, "disp+=0.28")
+            .to(labels, { opacity: 1, duration: DUR.base, stagger: 0.09 }, "disp+=0.36");
+
+          // A shipment dispatches down each lane as it lands.
+          dests.forEach((d, i) => {
+            const ship = ships[i];
+            if (!ship) return;
+            const at = `disp+=${(i * 0.09).toFixed(2)}`;
+            tl.set(ship, { attr: { cx: HUB.x, cy: HUB.y }, opacity: 0 }, at)
+              .to(ship, { opacity: 1, duration: 0.2 }, `disp+=${(i * 0.09 + 0.2).toFixed(2)}`)
+              .to(ship, { attr: { cx: d.x, cy: d.y }, duration: DUR.travel * 0.6, ease: EASE.linear }, `disp+=${(i * 0.09 + 0.2).toFixed(2)}`)
+              .to(ship, { opacity: 0, duration: 0.22 }, ">-0.08");
+          });
+
+          // 4 · Wind down — lanes retract, nodes recede, hub dims. Ready for the
+          //     next call, and a seamless loop (every prop returns to its start).
+          tl.addLabel("wind", "+=0.9");
+          tl.to(lanes, { strokeDashoffset: (i: number) => laneLens[i] ?? 0, duration: DUR.base, ease: EASE.inOut, stagger: 0.04 }, "wind")
+            .to(labels, { opacity: 0, duration: DUR.fast, stagger: 0.04 }, "wind")
+            .to(dots, { scale: 0, duration: DUR.fast, ease: EASE.inOut, stagger: 0.04 }, "wind")
+            .to([glow, marker, ...hubText], { opacity: 0, duration: DUR.base }, "wind+=0.2")
+            .to(marker, { scale: 0.9, duration: DUR.base }, "<")
+            .to(inLane, { strokeDashoffset: inLen, duration: DUR.base, ease: EASE.inOut }, "wind+=0.1");
+        },
+        { start: "top 82%", loop: true, repeatDelay: 1.4, reduced: setStatic },
+      );
+    }
+  }
+</script>

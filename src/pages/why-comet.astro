@@ -2,6 +2,7 @@
 export const prerender = true;
 import BaseLayout from "@layouts/BaseLayout.astro";
 import Button from "@components/ui/Button.astro";
+import AnswerRelay from "@components/animations/AnswerRelay.astro";
 import { SITE } from "@lib/site";
 
 const values = [
@@ -56,8 +57,8 @@ const differentiators = [
 
   <!-- ─── Hero ─── -->
   <section class="why-hero section section-bar" data-reveal>
-    <div class="container-content">
-      <div class="reveal-stagger" data-reveal>
+    <div class="container-content why-hero__inner">
+      <div class="reveal-stagger why-hero__copy" data-reveal>
         <p class="eyebrow">Why Comet</p>
         <h1 class="why-hero__title display">
           Not a marketplace.<br/>
@@ -72,6 +73,10 @@ const differentiators = [
           <Button href="/get-a-quote" size="lg">Get a Quote</Button>
           <Button href={`tel:${SITE.phoneE164}`} variant="ghost" size="lg">{SITE.phone}</Button>
         </div>
+      </div>
+
+      <div class="why-hero__visual reveal" data-reveal style="--reveal-delay: 200ms">
+        <AnswerRelay />
       </div>
     </div>
   </section>
@@ -210,6 +215,12 @@ const differentiators = [
 
 <style>
   /* ─── Hero ─── */
+  .why-hero__inner {
+    display: grid;
+    grid-template-columns: 1fr 1.1fr;
+    gap: var(--s-12);
+    align-items: center;
+  }
   .why-hero__title {
     font-size: var(--t-h1);
     line-height: 1;
@@ -220,7 +231,7 @@ const differentiators = [
   .why-hero__lede {
     margin-top: var(--s-6);
     color: var(--c-ink-muted);
-    max-width: 56ch;
+    max-width: 52ch;
     line-height: var(--lh-relaxed);
   }
   .why-hero__actions {
@@ -228,6 +239,30 @@ const differentiators = [
     display: flex;
     flex-wrap: wrap;
     gap: var(--s-3);
+  }
+  .why-hero__visual {
+    position: relative;
+    width: 100%;
+    /* Let the relay read large on wide viewports, matching the home hero. */
+    margin-right: calc(-1 * clamp(0rem, 2vw, 2rem));
+  }
+
+  @media (max-width: 960px) {
+    .why-hero__inner {
+      grid-template-columns: 1fr;
+      gap: var(--s-8);
+    }
+    /* Stacked: copy leads, the relay follows as a supporting graphic. Capped so
+       it stays a graphic, not a full-width banner. */
+    .why-hero__visual {
+      width: 100%;
+      max-width: 480px;
+      margin: var(--s-2) auto 0;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .why-hero__visual { max-width: 380px; }
   }
 
   /* ─── Origin ─── */
