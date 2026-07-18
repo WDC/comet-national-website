@@ -1,6 +1,6 @@
 import type { APIRoute } from "astro";
 import { z } from "zod";
-import { Resend } from "resend";
+import { SESv2Client, SendEmailCommand } from "@aws-sdk/client-sesv2";
 import { SITE } from "@lib/site";
 
 export const prerender = false;
@@ -91,45 +91,73 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
     return jsonError("Verification failed. Please retry.", 400);
   }
 
-  const apiKey = import.meta.env.RESEND_API_KEY;
-  const to = import.meta.env.QUOTE_RECIPIENT_EMAIL ?? SITE.email;
+  // NB: Vercel runs on AWS Lambda, which reserves the `AWS_`-prefixed env
+  // vars, so credentials are passed via `SES_`-prefixed names instead.
+  const region = import.meta.env.SES_REGION ?? "us-east-1";
+  const accessKeyId = import.meta.env.SES_ACCESS_KEY_ID;
+  const secretAccessKey = import.meta.env.SES_SECRET_ACCESS_KEY;
+  // QUOTE_RECIPIENT_EMAIL may be a comma-separated list of recipients.
+  const to = (import.meta.env.QUOTE_RECIPIENT_EMAIL ?? SITE.email)
+    .split(",")
+    .map((addr: string) => addr.trim())
+    .filter(Boolean);
   const from = import.meta.env.QUOTE_FROM_EMAIL ?? `quotes@cometnational.com`;
 
-  if (!apiKey) {
+  if (!accessKeyId || !secretAccessKey) {
     // Dev fallback: log to stdout so manual testing still works
-    console.warn("[quote] RESEND_API_KEY not set; logging quote and returning success.");
+    console.warn("[quote] SES credentials not set; logging quote and returning success.");
     console.log(formatEmailBody(data));
     return jsonOk({ ok: true, dev: true });
   }
 
-  const resend = new Resend(apiKey);
+  const ses = new SESv2Client({
+    region,
+    credentials: { accessKeyId, secretAccessKey },
+  });
   try {
     const subject = `Quote — ${data.company} · ${data.freightType} · ${data.origin} → ${data.destination}`;
-    await resend.emails.send({
-      from: `Comet Quotes <${from}>`,
-      to,
-      replyTo: data.email,
-      subject,
-      text: formatEmailBody(data),
-    });
+    await ses.send(
+      new SendEmailCommand({
+        FromEmailAddress: `Comet Quotes <${from}>`,
+        Destination: { ToAddresses: to },
+        ReplyToAddresses: [data.email],
+        Content: {
+          Simple: {
+            Subject: { Data: subject, Charset: "UTF-8" },
+            Body: { Text: { Data: formatEmailBody(data), Charset: "UTF-8" } },
+          },
+        },
+      }),
+    );
     // Confirmation to lead
-    await resend.emails.send({
-      from: `Comet National <${from}>`,
-      to: data.email,
-      subject: `We got your quote request — Comet National`,
-      text: [
-        `Hi ${data.name.split(" ")[0]},`,
-        ``,
-        `Thanks for the quote request. A dispatcher will typically reach out within one business hour.`,
-        ``,
-        `If it's urgent, call us at ${SITE.phone}.`,
-        ``,
-        `— The Comet National team`,
-        `Atlanta, GA — since ${SITE.foundingYear}`,
-      ].join("\n"),
-    });
+    await ses.send(
+      new SendEmailCommand({
+        FromEmailAddress: `Comet National <${from}>`,
+        Destination: { ToAddresses: [data.email] },
+        Content: {
+          Simple: {
+            Subject: { Data: `We got your quote request — Comet National`, Charset: "UTF-8" },
+            Body: {
+              Text: {
+                Charset: "UTF-8",
+                Data: [
+                  `Hi ${data.name.split(" ")[0]},`,
+                  ``,
+                  `Thanks for the quote request. A dispatcher will typically reach out within one business hour.`,
+                  ``,
+                  `If it's urgent, call us at ${SITE.phone}.`,
+                  ``,
+                  `— The Comet National team`,
+                  `Atlanta, GA — since ${SITE.foundingYear}`,
+                ].join("\n"),
+              },
+            },
+          },
+        },
+      }),
+    );
   } catch (err) {
-    console.error("[quote] resend failure", err);
+    console.error("[quote] SES failure", err);
     return jsonError("Couldn't send the email. Please call us — fastest path.", 500);
   }
 
