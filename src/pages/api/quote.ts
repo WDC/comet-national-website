@@ -2,6 +2,13 @@ import type { APIRoute } from "astro";
 import { z } from "zod";
 import { SESv2Client, SendEmailCommand } from "@aws-sdk/client-sesv2";
 import { SITE } from "@lib/site";
+import {
+  formatSender,
+  renderInternalQuoteEmail,
+  renderInternalQuoteText,
+  renderLeadConfirmationEmail,
+  renderLeadConfirmationText,
+} from "@lib/emailTemplates";
 
 export const prerender = false;
 
@@ -41,30 +48,6 @@ async function verifyTurnstile(token: string | undefined, ip: string | null): Pr
   }
 }
 
-function formatEmailBody(input: z.infer<typeof QuoteSchema>): string {
-  const lines: string[] = [
-    `New quote request from cometnational.com`,
-    ``,
-    `--- CONTACT ---`,
-    `Company:     ${input.company}`,
-    `Name:        ${input.name}`,
-    `Phone:       ${input.phone}`,
-    `Email:       ${input.email}`,
-    ``,
-    `--- FREIGHT ---`,
-    `Type:        ${input.freightType}`,
-    `Ready date:  ${input.readyDate || "—"}`,
-    `Origin:      ${input.origin}`,
-    `Destination: ${input.destination}`,
-    `Dimensions:  ${input.dimensions || "—"}`,
-    `Weight:      ${input.weight || "—"}`,
-    ``,
-    `--- DESCRIPTION ---`,
-    input.description || "(none provided)",
-  ];
-  return lines.join("\n");
-}
-
 export const POST: APIRoute = async ({ request, clientAddress }) => {
   let raw: unknown;
   try {
@@ -101,12 +84,15 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
     .split(",")
     .map((addr: string) => addr.trim())
     .filter(Boolean);
+  // QUOTE_FROM_EMAIL may be a bare address ("quotes@cometnational.com") or an
+  // already-branded pair ("Comet National <quotes@cometnational.com>").
+  // formatSender() guarantees a display name either way — never a naked address.
   const from = import.meta.env.QUOTE_FROM_EMAIL ?? `quotes@cometnational.com`;
 
   if (!accessKeyId || !secretAccessKey) {
     // Dev fallback: log to stdout so manual testing still works
     console.warn("[quote] SES credentials not set; logging quote and returning success.");
-    console.log(formatEmailBody(data));
+    console.log(renderInternalQuoteText(data));
     return jsonOk({ ok: true, dev: true });
   }
 
@@ -118,13 +104,16 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
     const subject = `Quote — ${data.company} · ${data.freightType} · ${data.origin} → ${data.destination}`;
     await ses.send(
       new SendEmailCommand({
-        FromEmailAddress: `Comet Quotes <${from}>`,
+        FromEmailAddress: formatSender(from, "Comet Quotes"),
         Destination: { ToAddresses: to },
         ReplyToAddresses: [data.email],
         Content: {
           Simple: {
             Subject: { Data: subject, Charset: "UTF-8" },
-            Body: { Text: { Data: formatEmailBody(data), Charset: "UTF-8" } },
+            Body: {
+              Text: { Data: renderInternalQuoteText(data), Charset: "UTF-8" },
+              Html: { Data: renderInternalQuoteEmail(data), Charset: "UTF-8" },
+            },
           },
         },
       }),
@@ -132,25 +121,14 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
     // Confirmation to lead
     await ses.send(
       new SendEmailCommand({
-        FromEmailAddress: `Comet National <${from}>`,
+        FromEmailAddress: formatSender(from, "Comet National"),
         Destination: { ToAddresses: [data.email] },
         Content: {
           Simple: {
             Subject: { Data: `We got your quote request — Comet National`, Charset: "UTF-8" },
             Body: {
-              Text: {
-                Charset: "UTF-8",
-                Data: [
-                  `Hi ${data.name.split(" ")[0]},`,
-                  ``,
-                  `Thanks for the quote request. A dispatcher will typically reach out within one business hour.`,
-                  ``,
-                  `If it's urgent, call us at ${SITE.phone}.`,
-                  ``,
-                  `— The Comet National team`,
-                  `Atlanta, GA — since ${SITE.foundingYear}`,
-                ].join("\n"),
-              },
+              Text: { Data: renderLeadConfirmationText(data), Charset: "UTF-8" },
+              Html: { Data: renderLeadConfirmationEmail(data), Charset: "UTF-8" },
             },
           },
         },
