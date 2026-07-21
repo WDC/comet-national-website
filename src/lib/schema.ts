@@ -55,6 +55,8 @@ export function localBusinessSchema() {
     "@id": `${SITE.url}/locations/atlanta#localbusiness`,
     name: `${SITE.legalName} — Atlanta`,
     url: `${SITE.url}/locations/atlanta`,
+    // Branded card until a real facility photo exists (recommended prop).
+    image: `${SITE.url}${SITE.defaultOgImage}`,
     telephone: SITE.phoneE164,
     email: SITE.email,
     address: organizationSchema().address,
@@ -197,12 +199,17 @@ export function crumbTitles(): Record<string, string> {
   return map;
 }
 
+/** Intermediate path segments with no real page behind them — a breadcrumb
+ * item pointing at them would reference a 404. */
+const CRUMB_SKIP = new Set(["/locations"]);
+
 export function breadcrumbsFromPath(pathname: string, titles: Record<string, string> = {}) {
   const parts = pathname.split("/").filter(Boolean);
   const items: BreadcrumbInput["items"] = [{ name: "Home", url: SITE.url }];
   let acc = "";
   for (const p of parts) {
     acc += `/${p}`;
+    if (CRUMB_SKIP.has(acc) && acc !== pathname.replace(/\/+$/, "")) continue;
     items.push({
       name: titles[acc] ?? toTitle(p),
       url: `${SITE.url}${acc}`,

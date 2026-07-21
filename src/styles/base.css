@@ -103,6 +103,10 @@ a {
   color: inherit;
   text-decoration: none;
 }
+/* Phone numbers never break across lines. */
+a[href^="tel:"] {
+  white-space: nowrap;
+}
 } /* @layer base */
 
 /* --- Typography defaults --- */
@@ -336,7 +340,7 @@ blockquote {
   margin-top: var(--s-3);
   font-family: var(--ff-mono);
   font-size: var(--t-small);
-  color: var(--c-ink-soft);
+  color: var(--c-ink-muted);
 }
 
 /* Data tables: digits align in columns (tabular) and sit at cap height
@@ -352,8 +356,11 @@ table {
   outline-offset: 2px;
   border-radius: var(--r-sm);
 }
-/* Brighter brass on dark grounds so the indicator keeps ≥3:1 contrast */
-.section-inverse :focus-visible {
+/* Brighter brass on dark grounds so the indicator keeps ≥3:1 contrast.
+ * `.on-dark` marks pine-deep inset cards that live outside .section-inverse
+ * (final CTAs, contact/quote panels) so they get the same overrides. */
+.section-inverse :focus-visible,
+.on-dark :focus-visible {
   outline-color: var(--c-accent);
 }
 
@@ -416,6 +423,7 @@ table {
   background: var(--c-pine-deep);
   color: var(--c-bg);
 }
-.section-inverse .eyebrow {
+.section-inverse .eyebrow,
+.on-dark .eyebrow {
   color: var(--c-accent);
 }

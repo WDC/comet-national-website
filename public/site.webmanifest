@@ -1,0 +1,15 @@
+{
+  "name": "Comet National",
+  "short_name": "Comet",
+  "description": "Flatbed LTL, dry van, reefer, full truckload, transloading, and warehousing — one Atlanta team since 1995.",
+  "start_url": "/",
+  "display": "browser",
+  "background_color": "#f7f6ee",
+  "theme_color": "#2f462b",
+  "icons": [
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/icon-192-maskable.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable" },
+    { "src": "/icon-512-maskable.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

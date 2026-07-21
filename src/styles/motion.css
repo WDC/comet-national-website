@@ -166,7 +166,7 @@ a[class*="bg-pine"]:active {
 /* CTA glow — for primary Buttons, subtle shadow on hover */
 a[class*="bg-accent"]:hover,
 button[class*="bg-accent"]:hover {
-  box-shadow: 0 8px 20px -10px rgba(194, 146, 55, 0.55);
+  box-shadow: 0 8px 20px -10px color-mix(in srgb, var(--c-accent) 55%, transparent);
 }
 a[class*="bg-pine"]:hover,
 button[class*="bg-pine"]:hover {
@@ -225,7 +225,7 @@ button[class*="bg-pine"]:hover {
 label:has(input:focus) > span,
 label:has(select:focus) > span,
 label:has(textarea:focus) > span {
-  color: var(--c-accent) !important;
+  color: var(--c-accent-deep) !important;
   transition: color var(--d-fast) var(--ease-out);
 }
 
@@ -428,7 +428,7 @@ header a[aria-label="Comet National — Home"]:hover svg path:first-of-type {
   display: inline-block;
   transition: transform var(--d-fast) var(--ease-out), color var(--d-fast) var(--ease-out);
 }
-.svc-grid li:hover strong { transform: translateX(3px); color: var(--c-accent); }
+.svc-grid li:hover strong { transform: translateX(3px); color: var(--c-accent-deep); }
 
 /* .cargo-grid — tag-cloud list used by flatbed-ltl, dry-van-ltl, hotshot */
 .cargo-grid li {

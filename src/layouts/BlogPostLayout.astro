@@ -46,6 +46,13 @@ const schema = articleSchema({
   description={data.summary}
   ogType="article"
   ogImage={postOgImage(post)}
+  article={{
+    publishedTime: isoDate(data.publishedDate),
+    modifiedTime: data.updatedDate ? isoDate(data.updatedDate) : undefined,
+    author: data.author,
+    tags: data.tags,
+  }}
+  breadcrumbTitle={data.title}
   extraSchema={[schema]}
 >
   <article class="post">
@@ -92,7 +99,7 @@ const schema = articleSchema({
         <slot />
       </div>
 
-      <aside class="post__cta section-tight" data-reveal>
+      <aside class="post__cta section-tight on-dark" data-reveal>
         <p class="eyebrow">Have a load like this?</p>
         <h2 class="post__cta-title display">Tell us about the freight.</h2>
         <p class="post__cta-body">
@@ -277,7 +284,7 @@ const schema = articleSchema({
   }
   .post__related-date {
     font-size: var(--t-small);
-    color: var(--c-ink-soft);
+    color: var(--c-ink-muted);
   }
 
   @media (max-width: 720px) {

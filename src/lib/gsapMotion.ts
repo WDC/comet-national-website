@@ -51,10 +51,10 @@ export const EASE = {
   linear: 'none', //        shipments running a lane at constant speed
 } as const;
 
-/** Shared durations, in seconds. */
+/** Shared durations, in seconds. Mirrors the CSS motion tokens (--d-fast 200ms, --d-base 400ms, --d-slow 800ms). */
 export const DUR = {
-  fast: 0.25,
-  base: 0.5,
+  fast: 0.2,
+  base: 0.4,
   slow: 0.8,
   draw: 1.0,
   travel: 1.6,
@@ -112,14 +112,16 @@ export function scene(
       return;
     }
 
+    // Gate every scene to the viewport. Completed one-shot timelines ignore the
+    // extra play/pause calls, but scenes with infinite child tweens (looping
+    // shipment dots) stop burning frames when scrolled off-screen.
     ScrollTrigger.create({
       trigger: root,
       start: opts.start ?? 'top 80%',
-      once: !opts.loop,
       onEnter: () => tl.play(),
-      onLeave: opts.loop ? () => tl.pause() : undefined,
-      onEnterBack: opts.loop ? () => tl.play() : undefined,
-      onLeaveBack: opts.loop ? () => tl.pause() : undefined,
+      onLeave: () => tl.pause(),
+      onEnterBack: () => tl.play(),
+      onLeaveBack: () => tl.pause(),
     });
   }, root);
 

@@ -28,7 +28,7 @@ None of that shows up on an invoice. It shows up in your hours.
 
 Single-source does not mean one truck does everything. No truck does. It means one team, one point of contact, and one set of people who already know your freight, whatever shape it takes.
 
-Comet National has run freight since 1995, and we cover the full menu from metro Atlanta to all 50 states and Canada:
+Comet National has run freight since 1995, and we cover the full menu from metro Atlanta to all 48 states and Canada:
 
 - **Flatbed and open-deck**, standard, oversized, and permitted specialty loads that big networks bounce.
 - **Full truckload and partial dry van**, traditional moves anywhere in the U.S. and Canada.

@@ -25,11 +25,13 @@
   --c-accent-deep: #8a6a1f; /* brass as text/outline on light grounds */
   --c-accent-ink: #201607; /* text on brass */
   --c-warn: #b23a24; /* distressed-load red, used sparingly */
-  --c-success: #3b7d34;
+  --c-success: #3b7d34; /* borders/icons — as small text on cream it misses AA */
+  --c-success-deep: #2e6128; /* success as text on light grounds */
+  --c-line-inverse: rgba(255, 255, 255, 0.08); /* hairlines on pine-deep */
 
   /* Type — fluid scale
-   * Sized for Equity's serif proportions (a touch larger than the old Inter
-   * setting so the smaller x-height reads at a comfortable optical size). */
+   * Sized for Equity's serif proportions (its smaller x-height wants a touch
+   * more size to read at a comfortable optical size). */
   --t-display: clamp(2.75rem, 5vw + 1rem, 5.25rem);
   --t-h1: clamp(2.25rem, 3vw + 1rem, 3.75rem);
   --t-h2: clamp(1.625rem, 2vw + 0.75rem, 2.5rem);

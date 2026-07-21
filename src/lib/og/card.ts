@@ -54,7 +54,10 @@ function headlineSize(title: string): number {
   if (len <= 40) return 78;
   if (len <= 60) return 68;
   if (len <= 85) return 60;
-  return 52;
+  if (len <= 110) return 52;
+  // Very long titles: keep shrinking so ~5 wrapped lines can't collide with
+  // the bottom meta row inside the fixed 630px canvas.
+  return 44;
 }
 
 function buildTree(input: OgCardInput): El {

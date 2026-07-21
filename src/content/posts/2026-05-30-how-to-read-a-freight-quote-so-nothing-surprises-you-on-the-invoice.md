@@ -60,6 +60,6 @@ A quote that answers these plainly is one you can trust. A quote that goes vague
 
 The reason surprise charges sting is that most of them were avoidable. Someone just needed to catch the mismatch before the truck rolled. When you have a single point of contact who reads the load the way you do, that person flags the liftgate, questions the class, and tells you when your long partial is about to get buried in linear-foot charges.
 
-That is the whole idea at Comet National. We have moved freight since 1995, we cover all 50 states and Canada, and we would rather quote you the shipment that actually happens than win you with a number that falls apart on the invoice.
+That is the whole idea at Comet National. We have moved freight since 1995, we cover all 48 states and Canada, and we would rather quote you the shipment that actually happens than win you with a number that falls apart on the invoice.
 
 If your last few bills have not matched your quotes, send us the load. We will read it line by line and tell you where the real cost is. And if you want a broader look, ask us to review your freight spend and show you where the surprises keep coming from.

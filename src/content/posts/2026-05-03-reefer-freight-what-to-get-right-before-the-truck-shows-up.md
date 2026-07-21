@@ -48,7 +48,7 @@ Decide up front who pulps the product and when. A receiver who pulps at delivery
 
 ## Match the size of the move to the right service
 
-Not every cold shipment is a full truckload. Comet handles dry and refrigerated freight at both LTL and truckload size, frozen and fresh, to all 50 states and Canada. If you have a few pallets, you don't need to pay for a whole reefer trailer, and if you have a full load with a tight window, you need dedicated space and a driver who understands the product. The mistake is forcing a shipment into the wrong size and eating cost or risk you didn't have to.
+Not every cold shipment is a full truckload. Comet handles dry and refrigerated freight at both LTL and truckload size, frozen and fresh, to all 48 states and Canada. If you have a few pallets, you don't need to pay for a whole reefer trailer, and if you have a full load with a tight window, you need dedicated space and a driver who understands the product. The mistake is forcing a shipment into the wrong size and eating cost or risk you didn't have to.
 
 This is also where a single point of contact earns its keep. When something drifts on the road, you want a person who answers the phone and owns the problem, not a tracking number and a queue.
 

@@ -29,7 +29,7 @@ const bodyClass2 = [bodyClass, showCallBar ? "has-call-bar" : null]
   <body class={bodyClass2}>
     <a href="#main" class="skip-link">Skip to content</a>
     <Header />
-    <main id="main">
+    <main id="main" tabindex="-1">
       <slot />
     </main>
     <Footer />
@@ -50,7 +50,7 @@ const bodyClass2 = [bodyClass, showCallBar ? "has-call-bar" : null]
         padding: var(--s-2) var(--s-4);
         font-family: var(--ff-display);
         font-weight: 600;
-        z-index: 9999;
+        z-index: var(--z-modal);
       }
       .skip-link:focus { top: 0; }
       /* Reserve room above the sticky mobile bar — only on routes that render

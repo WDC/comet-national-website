@@ -51,4 +51,4 @@ Some shows involve freight that arrives one way and has to leave another, or gea
 
 Event freight rewards planning and punishes guessing. The cheapest quote means nothing if the booth misses move-in. What you actually want is predictable pricing on awkward freight, a crew that knows how show docks work, and one person who owns the load both directions.
 
-We've been moving open-deck and hard-to-handle freight since 1995, to all 50 states and Canada. If you've got a show on the calendar, call us before you book, or ask us for a quote on the round trip. Tell us the venue, the dates, and what the booth looks like, and we'll build a plan that gets it there and back on deadline.
+We've been moving open-deck and hard-to-handle freight since 1995, to all 48 states and Canada. If you've got a show on the calendar, call us before you book, or ask us for a quote on the round trip. Tell us the venue, the dates, and what the booth looks like, and we'll build a plan that gets it there and back on deadline.

@@ -6,7 +6,7 @@ import { SERVICES_BY_CATEGORY } from "@lib/services";
 
 const year = new Date().getFullYear();
 ---
-<footer class="site-footer">
+<footer class="site-footer on-dark">
   <div class="container-content site-footer__grid reveal-stagger" data-reveal>
     <div class="site-footer__brand">
       <Logo variant="bg" />
@@ -32,8 +32,8 @@ const year = new Date().getFullYear();
       </ul>
     </nav>
 
-    <nav class="site-footer__col" aria-label="Footer — By facility">
-      <div class="eyebrow site-footer__heading">By facility</div>
+    <nav class="site-footer__col" aria-label="Footer — By facility and managed">
+      <div class="eyebrow site-footer__heading">Facility &amp; managed</div>
       <ul>
         {SERVICES_BY_CATEGORY.facility.map((s) => (
           <li><a href={`/services/${s.slug}`}><Caps text={s.title} /></a></li>
@@ -100,7 +100,7 @@ const year = new Date().getFullYear();
     grid-template-columns: 1.4fr 1fr 1fr 1fr;
     gap: var(--s-10);
     padding-bottom: var(--s-12);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    border-bottom: 1px solid var(--c-line-inverse);
   }
   .site-footer__tag {
     margin-top: var(--s-3);
@@ -132,9 +132,11 @@ const year = new Date().getFullYear();
     margin: 0;
     padding: 0;
     display: grid;
-    gap: var(--s-2);
+    gap: var(--s-1);
   }
   .site-footer__col a {
+    display: inline-block;
+    padding-block: 4px; /* ≥24px tap target (WCAG 2.5.8) without changing rhythm */
     font-size: var(--t-small);
     color: rgba(247, 246, 238, 0.78);
   }
@@ -188,6 +190,11 @@ const year = new Date().getFullYear();
     gap: var(--s-5);
     order: 3;
     flex-basis: 100%;
+  }
+  .site-footer__legal-links a,
+  .site-footer__socials a {
+    display: inline-block;
+    padding-block: 4px;
   }
   .site-footer__legal-links a { color: rgba(247, 246, 238, 0.7); }
   .site-footer__legal-links a:hover { color: var(--c-accent); }

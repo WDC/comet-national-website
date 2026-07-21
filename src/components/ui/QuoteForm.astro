@@ -1,7 +1,20 @@
 ---
 import Button from "./Button.astro";
+import { SERVICES } from "@lib/services";
 
 const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY ?? "";
+
+// Freight-type options derive from the service registry so a new service can't
+// silently go missing here. Overrides add buyer-facing clarifiers.
+const freightLabelOverrides: Record<string, string> = {
+  "flatbed-ltl": "Flatbed LTL (partial flatbed)",
+  "volume-ltl": "Volume LTL / Partial",
+  hotshot: "Hotshot / Expedited",
+};
+const freightOptions = [
+  ...SERVICES.map((s) => freightLabelOverrides[s.slug] ?? s.title),
+  "Not sure — recommend",
+];
 ---
 <form class="quote-form reveal-stagger" data-reveal action="/api/quote" method="POST" novalidate data-quote-form>
   <fieldset class="quote-form__group">
@@ -35,18 +48,7 @@ const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY ?? "";
         <span>Freight type *</span>
         <select name="freightType" required>
           <option value="">Select…</option>
-          <option>Flatbed LTL (partial flatbed)</option>
-          <option>Dry Van LTL</option>
-          <option>Volume LTL / Partial</option>
-          <option>Full Truckload</option>
-          <option>Flatbed / Open Deck</option>
-          <option>Refrigerated</option>
-          <option>Hotshot / Expedited</option>
-          <option>Transloading</option>
-          <option>Cross-Docking</option>
-          <option>Distressed Load Recovery</option>
-          <option>Warehousing &amp; Fulfillment</option>
-          <option>Not sure — recommend</option>
+          {freightOptions.map((o) => <option>{o}</option>)}
         </select>
       </label>
       <label>
@@ -107,6 +109,9 @@ const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY ?? "";
   if (form && status) {
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
+      // novalidate suppresses validation on submit; surface the native
+      // per-field messages ourselves before sending anything.
+      if (!form.reportValidity()) return;
       const fd = new FormData(form);
       const payload: Record<string, string> = {};
       fd.forEach((v, k) => { payload[k] = typeof v === "string" ? v : ""; });
@@ -132,7 +137,7 @@ const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY ?? "";
           status.className = "quote-form__status is-ok";
           form.reset();
         } else {
-          status.textContent = data?.error ?? "Couldn't send. Try calling us — fastest path.";
+          status.textContent = data?.error ?? "Couldn’t send. Try calling us — fastest path.";
           status.className = "quote-form__status is-err";
         }
       } catch {
@@ -207,8 +212,10 @@ const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY ?? "";
   .quote-form select:focus,
   .quote-form textarea:focus {
     outline: none;
-    border-color: var(--c-accent);
-    box-shadow: 0 0 0 3px color-mix(in srgb, var(--c-accent) 22%, transparent);
+    /* Deep brass: the focused border must clear 3:1 against the elevated
+       ground on its own (plain --c-accent is only 2.8:1). */
+    border-color: var(--c-accent-deep);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--c-accent) 28%, transparent);
   }
   .quote-form label > span {
     transition: color var(--d-fast) var(--ease-out);
@@ -243,7 +250,7 @@ const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY ?? "";
     font-size: var(--t-small);
   }
   .quote-form__status.is-pending { border-color: var(--c-ink-muted); color: var(--c-ink-muted); }
-  .quote-form__status.is-ok { border-color: var(--c-success); color: var(--c-success); background: color-mix(in srgb, var(--c-success) 8%, transparent); }
+  .quote-form__status.is-ok { border-color: var(--c-success); color: var(--c-success-deep); background: color-mix(in srgb, var(--c-success) 8%, transparent); }
   .quote-form__status.is-err { border-color: var(--c-warn); color: var(--c-warn); background: color-mix(in srgb, var(--c-warn) 8%, transparent); }
 
   @media (max-width: 600px) {

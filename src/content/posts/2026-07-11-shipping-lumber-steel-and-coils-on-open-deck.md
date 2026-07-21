@@ -59,4 +59,4 @@ The fastest way to a clean quote and a smooth pickup is to tell us the real dime
 
 With that, we can tell you the right equipment, whether you're looking at permits, and what it actually costs. No guesswork, no reclass surprise on the invoice.
 
-Comet National has been moving open-deck freight since 1995, to all 50 states and Canada, and building materials are squarely in our wheelhouse. If you've got lumber, steel, or coils to move, call us or ask for a quote, and tell us what you're shipping. We'll tell you the straight story on how to get it there safely.
+Comet National has been moving open-deck freight since 1995, to all 48 states and Canada, and building materials are squarely in our wheelhouse. If you've got lumber, steel, or coils to move, call us or ask for a quote, and tell us what you're shipping. We'll tell you the straight story on how to get it there safely.

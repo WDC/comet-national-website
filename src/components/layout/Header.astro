@@ -29,9 +29,9 @@ function isActive(href: string) {
               href={l.href}
               class="site-nav__link"
               id={l.hasMenu ? "services-trigger" : undefined}
-              aria-haspopup={l.hasMenu ? "true" : undefined}
               aria-expanded={l.hasMenu ? "false" : undefined}
               aria-controls={l.hasMenu ? "services-mega-menu" : undefined}
+              aria-current={isActive(l.href) ? "page" : undefined}
               data-active={isActive(l.href)}
             >
               {l.label}
@@ -72,7 +72,7 @@ function isActive(href: string) {
   <div id="mobile-nav" class="site-mobile-nav" data-mobile-nav hidden>
     <ul>
       {links.map((l) => (
-        <li><a href={l.href}>{l.label}</a></li>
+        <li><a href={l.href} aria-current={isActive(l.href) ? "page" : undefined}>{l.label}</a></li>
       ))}
       <li><a href="/get-a-quote" class="mobile-cta">Get a Quote</a></li>
     </ul>
@@ -88,7 +88,7 @@ function isActive(href: string) {
   // Mega-menu: open on hover & keyboard focus (pointer-capable), or tap-to-open
   // on touch. Respects reduced-motion via CSS.
   const triggers = document.querySelectorAll<HTMLElement>(".site-nav__item.has-menu");
-  const closers: Array<() => void> = [];
+  const closers: Array<(returnFocus?: boolean) => void> = [];
   triggers.forEach((item) => {
     const link = item.querySelector<HTMLElement>(".site-nav__link");
     const menu = item.querySelector<HTMLElement>(".mega-menu");
@@ -110,19 +110,24 @@ function isActive(href: string) {
         link.setAttribute("aria-expanded", "false");
       }, 140);
     };
-    closers.push(() => {
+    closers.push((returnFocus = false) => {
+      const wasOpen = menu.classList.contains("is-open");
       menu.classList.remove("is-open");
       link.setAttribute("aria-expanded", "false");
+      // Don't strand keyboard focus inside a hidden menu.
+      if (returnFocus && wasOpen && item.contains(document.activeElement)) link.focus();
+    });
+
+    // Keyboard focus opens the menu on every device class.
+    item.addEventListener("focusin", open);
+    item.addEventListener("focusout", (e) => {
+      const next = e.relatedTarget as Node | null;
+      if (!next || !item.contains(next)) close();
     });
 
     if (canHover) {
       item.addEventListener("mouseenter", open);
       item.addEventListener("mouseleave", close);
-      item.addEventListener("focusin", open);
-      item.addEventListener("focusout", (e) => {
-        const next = e.relatedTarget as Node | null;
-        if (!next || !item.contains(next)) close();
-      });
     } else {
       link.addEventListener("click", (e) => {
         if (!menu.classList.contains("is-open")) {
@@ -143,7 +148,7 @@ function isActive(href: string) {
     });
   }
   document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape") closers.forEach((c) => c());
+    if (e.key === "Escape") closers.forEach((c) => c(true));
   });
 
   // Mobile nav toggle — with Escape-to-close, outside-click close, focus move,
@@ -255,9 +260,11 @@ function isActive(href: string) {
     border-radius: var(--r-sm);
     transition: color var(--d-fast) var(--ease-out);
   }
+  /* Deep brass for text state changes — plain --c-accent is only 2.6:1 on the
+     cream header ground, below AA even for the persistent active state. */
   .site-nav__link:hover,
   .site-nav__link[data-active="true"] {
-    color: var(--c-accent);
+    color: var(--c-accent-deep);
   }
   /* Active underline is provided by .site-nav__link::after in motion.css */
   .site-header__actions {
@@ -277,7 +284,7 @@ function isActive(href: string) {
     font-feature-settings: "lnum" 1, "tnum" 1;
     font-variant-numeric: tabular-nums lining-nums;
   }
-  .site-header__phone:hover { color: var(--c-accent); }
+  .site-header__phone:hover { color: var(--c-accent-deep); }
 
   .site-header__menu-toggle {
     display: none;
@@ -340,7 +347,7 @@ function isActive(href: string) {
   }
   .site-mobile-nav a:hover,
   .site-mobile-nav a:focus-visible {
-    color: var(--c-accent);
+    color: var(--c-accent-deep);
     padding-left: calc(var(--s-3) + 6px);
   }
   .site-mobile-nav .mobile-cta {

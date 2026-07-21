@@ -50,7 +50,7 @@ A real oversized quote accounts for the whole job before the truck rolls. That's
 
 ## How we'd move yours
 
-Comet National has handled open-deck and specialty freight since 1995, and oversized work is the house specialty. Give us the dimensions, the weight, the pickup and delivery points, and any date you're being held to, and we'll build the move around what the load actually needs: the right trailer, a securement and tarping plan, the permits, and a legal route to all 50 states and Canada. One person owns the shipment and answers the phone, so you're not chasing a tracking number when something needs a decision.
+Comet National has handled open-deck and specialty freight since 1995, and oversized work is the house specialty. Give us the dimensions, the weight, the pickup and delivery points, and any date you're being held to, and we'll build the move around what the load actually needs: the right trailer, a securement and tarping plan, the permits, and a legal route to all 48 states and Canada. One person owns the shipment and answers the phone, so you're not chasing a tracking number when something needs a decision.
 
 If your load is smaller, one to several pallets of open-deck freight, that's partial flatbed, and our sister brand [FlatbedLTL](https://flatbed.delcoe.com) is built for exactly that.
 

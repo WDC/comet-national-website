@@ -51,6 +51,6 @@ The right mode beats the biggest truck and it beats the lowest teaser rate. Open
 
 Give whoever is quoting you the real picture: accurate weight, real dimensions, the freight class or a solid description, both pickup and delivery conditions, and any timing you're committed to. A quote built on that stays close to the final bill.
 
-That's how we prefer to work. Comet National has moved freight since 1995, across all 50 states and Canada, and we'd rather tell you what a load will actually cost than win you with a number that falls apart at the dock. If your freight is oversized, long, or the kind big networks keep bouncing, that's our house specialty on the open-deck side.
+That's how we prefer to work. Comet National has moved freight since 1995, across all 48 states and Canada, and we'd rather tell you what a load will actually cost than win you with a number that falls apart at the dock. If your freight is oversized, long, or the kind big networks keep bouncing, that's our house specialty on the open-deck side.
 
 Have a load that keeps quoting higher than it should? Send us the details and we'll tell you why, and whether a different mode would save you money. If you want a bigger look, ask us to review your freight spend.

@@ -95,7 +95,7 @@ const relatedSlugs = ["flatbed-open-deck", "volume-ltl", "transloading"];
   .pillar-section__lede {
     color: var(--c-ink-muted);
     max-width: 64ch;
-    font-size: 1.0625rem;
+    font-size: var(--t-body-sm);
     margin-bottom: var(--s-8);
   }
   .cargo-grid {
@@ -125,7 +125,7 @@ const relatedSlugs = ["flatbed-open-deck", "volume-ltl", "transloading"];
   .cargo-grid__tick {
     color: var(--c-accent);
     margin-right: var(--s-2);
-    font-weight: bold;
+    font-weight: 700;
     transition: transform var(--d-fast) var(--ease-out);
     display: inline-block;
   }
@@ -134,7 +134,7 @@ const relatedSlugs = ["flatbed-open-deck", "volume-ltl", "transloading"];
   .cost-trap__illustrative {
     margin-top: var(--s-6);
     margin-bottom: var(--s-3);
-    color: var(--c-ink-soft);
+    color: var(--c-ink-muted);
     font-size: var(--t-eyebrow);
     letter-spacing: var(--ls-wide);
     text-transform: uppercase;
@@ -153,12 +153,12 @@ const relatedSlugs = ["flatbed-open-deck", "volume-ltl", "transloading"];
   }
   .cost-trap__card:hover {
     transform: translateY(-3px);
-    box-shadow: 0 12px 24px -16px rgba(13, 17, 23, 0.18);
+    box-shadow: 0 12px 24px -16px rgba(22, 29, 18, 0.18);
   }
   .cost-trap__card tr {
     transition: background var(--d-fast) var(--ease-out);
   }
-  .cost-trap__card tr:hover { background: rgba(13, 17, 23, 0.03); }
+  .cost-trap__card tr:hover { background: rgba(22, 29, 18, 0.03); }
   .cost-trap__card--ours tr:hover { background: rgba(255, 255, 255, 0.04); }
   .cost-trap__final {
     transition: transform var(--d-base) var(--ease-out);

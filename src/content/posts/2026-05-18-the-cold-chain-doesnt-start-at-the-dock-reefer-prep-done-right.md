@@ -48,7 +48,7 @@ A well-loaded trailer holds temperature. A wall of pallets jammed against the bu
 
 ## Why the Handoff Matters as Much as the Setpoint
 
-Most temperature claims are not equipment failures. They are handoff failures: warm product, a rushed load, no pulp records, or a trailer that never got pre-cooled. That is where working with a carrier who treats reefer freight seriously pays off. Comet National has moved dry and refrigerated freight, at both LTL and truckload size, since 1995, to all 50 states and Canada. We would rather talk through your loading process before the truck shows up than sort out a rejection after.
+Most temperature claims are not equipment failures. They are handoff failures: warm product, a rushed load, no pulp records, or a trailer that never got pre-cooled. That is where working with a carrier who treats reefer freight seriously pays off. Comet National has moved dry and refrigerated freight, at both LTL and truckload size, since 1995, to all 48 states and Canada. We would rather talk through your loading process before the truck shows up than sort out a rejection after.
 
 We can also help when the cold chain has to change modes: a refrigerated container coming off the port that needs to transfer to an over-the-road reefer, staged and handed off through our Atlanta transload facility without breaking temperature. That handoff is exactly where product tends to warm up if nobody is watching it.
 

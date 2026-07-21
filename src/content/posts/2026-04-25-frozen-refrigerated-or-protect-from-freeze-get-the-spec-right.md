@@ -48,7 +48,7 @@ Here's how to get it right before pickup:
 
 ## Match the spec to the shipment size
 
-Temperature-controlled doesn't have to mean a full truckload. Comet National handles dry and refrigerated freight at both LTL and truckload size, and moves frozen and refrigerated loads to all 50 states and Canada. If you've got a few pallets that need a specific setpoint, you don't have to pay for a whole trailer to get the temperature right. And if your load needs to change modes on the way, our Atlanta transload facility keeps it staged and handled without breaking the cold chain along the way.
+Temperature-controlled doesn't have to mean a full truckload. Comet National handles dry and refrigerated freight at both LTL and truckload size, and moves frozen and refrigerated loads to all 48 states and Canada. If you've got a few pallets that need a specific setpoint, you don't have to pay for a whole trailer to get the temperature right. And if your load needs to change modes on the way, our Atlanta transload facility keeps it staged and handled without breaking the cold chain along the way.
 
 The main thing is this: tell us the number and the condition, not just the word. "Refrigerated" is a starting point. A setpoint, a range, and a handling note are what actually keep your product intact.
 

@@ -40,7 +40,7 @@ That can mean:
 - Finding freight stuck in a mode handoff that our Atlanta transload facility could smooth out, moving a container off rail or ocean and onto a truck without the demurrage clock running.
 - Cleaning up the booking information that triggers reweighs and reclasses in the first place.
 
-We move flatbed and open-deck, full truckload, partial dry van, and dry or refrigerated freight at LTL and TL size, to all 50 states and Canada. That range matters here, because finding the savings usually means moving freight to the right service, and we can actually put it on that service once we find it.
+We move flatbed and open-deck, full truckload, partial dry van, and dry or refrigerated freight at LTL and truckload size, to all 48 states and Canada. That range matters here, because finding the savings usually means moving freight to the right service, and we can actually put it on that service once we find it.
 
 ## The point isn't the lowest quote
 

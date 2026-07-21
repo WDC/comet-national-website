@@ -40,4 +40,4 @@ And if your freight belongs on an open deck instead of inside a van, that's a di
 
 ## Let us run both numbers
 
-Comet National has been booking full truckload, partial van, and open-deck freight since 1995, to all 50 states and Canada. When you're staring at a shipment that's too big to feel like a partial and too small to obviously need a whole truck, that's the sweet spot where a quick call pays for itself. Send us the dimensions, the weight, and the delivery date, and we'll price it both ways and tell you straight which move is cheaper. Get a quote or ask us to look at your freight spend, no pressure either way.
+Comet National has been booking full truckload, partial van, and open-deck freight since 1995, to all 48 states and Canada. When you're staring at a shipment that's too big to feel like a partial and too small to obviously need a whole truck, that's the sweet spot where a quick call pays for itself. Send us the dimensions, the weight, and the delivery date, and we'll price it both ways and tell you straight which move is cheaper. Get a quote or ask us to look at your freight spend, no pressure either way.

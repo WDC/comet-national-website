@@ -9,7 +9,7 @@ const groups: ServiceCategory[] = ["trailer", "facility", "managed"];
 ---
 <BaseLayout
   title={`Freight Services | ${SITE.name}`}
-  description="Every freight mode under one roof — flatbed LTL, dry van, reefer, truckload, transloading, warehousing, and brokerage. One Atlanta team since 1995."
+  description="Every freight mode under one roof — flatbed LTL, dry van, reefer, full truckload, transloading, warehousing, and brokerage. One Atlanta team since 1995."
 >
   <section class="services-hero section-tight section-bar" data-reveal>
     <div class="container-content services-hero__inner reveal-stagger" data-reveal>
@@ -140,7 +140,7 @@ const groups: ServiceCategory[] = ["trailer", "facility", "managed"];
     transition: color var(--d-base) var(--ease-out), transform var(--d-base) var(--ease-out);
   }
   .services-group__head:hover .services-group__num {
-    color: var(--c-accent);
+    color: var(--c-accent-deep);
     transform: translateY(-2px);
   }
   .services-group__cell-head {
@@ -150,12 +150,12 @@ const groups: ServiceCategory[] = ["trailer", "facility", "managed"];
   }
   .services-group__cell-idx {
     font-size: var(--t-eyebrow);
-    color: var(--c-accent);
+    color: var(--c-accent-deep);
     letter-spacing: var(--ls-wider);
   }
   .services-group__cell-title { font-size: 1.5rem; line-height: 1.05; }
   .services-group__cell-equity {
-    color: var(--c-accent);
+    color: var(--c-accent-deep);
     font-family: var(--ff-display);
     font-style: italic;
     font-size: var(--t-small);
@@ -164,7 +164,7 @@ const groups: ServiceCategory[] = ["trailer", "facility", "managed"];
   .services-group__cell-cta {
     font-family: var(--ff-display);
     font-weight: 600;
-    color: var(--c-accent);
+    color: var(--c-accent-deep);
     font-size: var(--t-small);
     letter-spacing: var(--ls-snug);
   }

@@ -52,7 +52,7 @@ Miss one piece and the whole move stalls. That's the real reason oversize freigh
 
 ## What Comet does with a load like this
 
-This is the house specialty. Comet National has moved open-deck and specialty freight since 1995, to all 50 states and Canada, and complex oversized loads are exactly what the team is built for. When you hand us the dimensions, we handle the permits, plan a route that actually clears, arrange the escorts and pilot cars each state requires, and build a securement and tarping plan that fits the freight. You get one point of contact who owns the move, not a tracking number and a shrug.
+This is the house specialty. Comet National has moved open-deck and specialty freight since 1995, to all 48 states and Canada, and complex oversized loads are exactly what the team is built for. When you hand us the dimensions, we handle the permits, plan a route that actually clears, arrange the escorts and pilot cars each state requires, and build a securement and tarping plan that fits the freight. You get one point of contact who owns the move, not a tracking number and a shrug.
 
 And if it turns out your load is closer to legal than you thought, we'll tell you that too. The right plan beats the biggest truck every time.
 

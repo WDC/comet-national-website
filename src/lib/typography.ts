@@ -30,7 +30,8 @@ export function escapeHtml(input: string): string {
  * roman numerals, single-letter grades, and directions read fine as caps and
  * small-capping them would look fussy. Extend as needed.
  */
-const SMALLCAPS_SKIP = new Set<string>(["OK", "TV", "ID"]);
+// Keep in sync with SKIP in rehype-smallcaps.ts (the markdown-side twin).
+const SMALLCAPS_SKIP = new Set<string>(["OK", "TV", "ID", "A", "I"]);
 
 /**
  * Wrap runs of two-or-more capital letters (an acronym such as LTL, FTL, RGN,

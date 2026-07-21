@@ -58,4 +58,4 @@ A few clear positions from people who book loads for a living:
 
 If your audit turned up a lot of long or oversized loads getting surcharged, that is open-deck territory. If it is one to a few pallets of flatbed freight, look at our sister brand FlatbedLTL (flatbed.delcoe.com), built around predictable partial flatbed pricing.
 
-Run the 20 minutes. If you want a second set of eyes on what you find, send us the pattern you are seeing and we will tell you honestly where the fix is. Comet has been moving freight to all 50 states and Canada since 1995, and we are happy to look at your freight spend before we ever talk about a truck.
+Run the 20 minutes. If you want a second set of eyes on what you find, send us the pattern you are seeing and we will tell you honestly where the fix is. Comet has been moving freight to all 48 states and Canada since 1995, and we are happy to look at your freight spend before we ever talk about a truck.

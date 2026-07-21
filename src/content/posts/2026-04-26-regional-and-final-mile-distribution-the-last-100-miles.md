@@ -44,7 +44,7 @@ Comet runs an Atlanta-based transload facility built for exactly this. Freight m
 
 Here's the position we'll take plainly: the low bid on the last leg is often the most expensive shipment you'll book. A missed window means a redelivery fee and a receiver who's now angry at you. A load handled by people who don't own the outcome means damage claims and phone calls. A messy transload means product sitting when it should be moving.
 
-What you're actually buying on the final leg is accountability. One point of contact who knows where your freight is, who's handling it, and what happens next. Since 1995, that's been the whole idea here: real people who answer the phone and own the problem until the freight is delivered, in all 50 states and Canada.
+What you're actually buying on the final leg is accountability. One point of contact who knows where your freight is, who's handling it, and what happens next. Since 1995, that's been the whole idea here: real people who answer the phone and own the problem until the freight is delivered, in all 48 states and Canada.
 
 ## Getting it right
 

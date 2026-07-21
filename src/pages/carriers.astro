@@ -7,7 +7,7 @@ import { SITE } from "@lib/site";
 const reasons = [
   {
     title: "Steady freight, honest rates",
-    body: "Flatbed, step-deck, RGN, reefer, dry van, and hotshot lanes out of metro Atlanta and across 48 states. We price fairly and we don't nickel-and-dime the settlement.",
+    body: "Flatbed, step-deck, RGN, reefer, dry van, and hotshot lanes out of metro Atlanta and across 48 states. We price fairly and we don’t nickel-and-dime the settlement.",
   },
   {
     title: "Paid on time",
@@ -41,7 +41,7 @@ const requirements = [
         <p class="car__lede">
           We move the loads other brokers bounce — and we need carriers who can
           handle them. If you run flatbed, step-deck, RGN, reefer, dry van, or
-          hotshot, let's get you set up.
+          hotshot, let’s get you set up.
         </p>
         <div class="car__actions">
           <Button href={`tel:${SITE.phoneE164}`} size="lg">Call dispatch · {SITE.phone}</Button>
@@ -61,13 +61,13 @@ const requirements = [
         ))}
       </ul>
 
-      <div class="car__setup reveal-stagger" data-reveal>
+      <div class="car__setup reveal-stagger on-dark" data-reveal>
         <div class="car__setup-copy">
           <p class="eyebrow">Get set up</p>
           <h2 class="car__setup-title display">What we need to onboard you.</h2>
           <p class="car__setup-body">
             Send the packet below to <a href={`mailto:${SITE.email}?subject=Carrier%20setup`}>{SITE.email}</a>
-            {" "}or call dispatch and we'll walk you through it.
+            {" "}or call dispatch and we’ll walk you through it.
           </p>
         </div>
         <ul class="car__reqs">
@@ -82,12 +82,12 @@ const requirements = [
 
 <style>
   .car__title { font-size: var(--t-h1); line-height: 1; margin-top: var(--s-3); max-width: 20ch; }
-  .car__accent { color: var(--c-accent); }
+  .car__accent { color: var(--c-accent-deep); }
   .car__lede { margin-top: var(--s-6); color: var(--c-ink-muted); max-width: 58ch; line-height: var(--lh-relaxed); }
   .car__actions { margin-top: var(--s-8); display: flex; flex-wrap: wrap; gap: var(--s-5); align-items: center; }
   .car__email { font-size: 1rem; font-weight: 600; color: var(--c-ink-muted); }
   .car__email-addr { color: var(--c-ink); border-bottom: 1.5px solid var(--c-accent); padding-bottom: 2px; }
-  .car__email:hover .car__email-addr { color: var(--c-accent); }
+  .car__email:hover .car__email-addr { color: var(--c-accent-deep); }
 
   .car__reasons {
     list-style: none; padding: 0; margin: var(--s-16) 0 0;
@@ -105,7 +105,7 @@ const requirements = [
     transition: transform var(--d-base) var(--ease-out);
   }
   .car__reason:hover::before { transform: scaleX(1); }
-  .car__num { font-size: var(--t-eyebrow); letter-spacing: var(--ls-wider); color: var(--c-accent); }
+  .car__num { font-size: var(--t-eyebrow); letter-spacing: var(--ls-wider); color: var(--c-accent-deep); }
   .car__reason-title { font-size: var(--t-h3); line-height: 1.05; color: var(--c-ink); }
   .car__reason-body { color: var(--c-ink-muted); font-size: var(--t-small); line-height: var(--lh-relaxed); }
 

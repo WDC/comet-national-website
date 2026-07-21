@@ -45,6 +45,6 @@ Transload isn't automatic. If your container is going door-to-door to a single c
 
 The move itself isn't complicated. What makes it work is having a human who owns the handoff instead of a tracking number that updates after the fact. When the chassis situation shifts or the box comes in a day early, somebody has to make a decision fast: pull it now, stage it here, put this piece on a flatbed, send the rest van. That's the service Comet is built around, and it's the difference between a transload that saves you money and a warehouse that just holds your freight longer.
 
-Comet has been moving freight since 1995, reaches all 50 states and Canada, and handles the open-deck, dry, and refrigerated freight that comes off those containers once it's on wheels. So the transload isn't a dead end. It's the start of the over-the-road move, handled by the same team.
+Comet has been moving freight since 1995, reaches all 48 states and Canada, and handles the open-deck, dry, and refrigerated freight that comes off those containers once it's on wheels. So the transload isn't a dead end. It's the start of the over-the-road move, handled by the same team.
 
 If you've got a container tied to a ramp or a rail move that's about to hit its free-time wall, call Comet and walk us through the load. We'll tell you whether a transload beats waiting, and if it does, we'll get it moving.

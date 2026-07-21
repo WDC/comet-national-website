@@ -6,7 +6,7 @@ import { getService } from "@lib/services";
 
 const service = getService("hotshot")!;
 const description =
-  "Hotshot expedited freight when the deadline can't slip. Dedicated 1-, 2-, or 3-driver pickup-and-deliver from Atlanta, dispatched 24/7 for time-critical loads.";
+  "Hotshot expedited freight when the deadline can’t slip. Dedicated 1-, 2-, or 3-driver pickup-and-deliver from Atlanta, dispatched 24/7 for time-critical loads.";
 
 const relatedSlugs = ["full-truckload", "flatbed-open-deck", "distressed-load-recovery"];
 ---
@@ -71,7 +71,7 @@ const relatedSlugs = ["full-truckload", "flatbed-open-deck", "distressed-load-re
 
 <style>
   .svc-h2 { font-size: var(--t-h2); line-height: 1.05; margin-top: var(--s-3); margin-bottom: var(--s-5); max-width: 24ch; }
-  .svc-lede { color: var(--c-ink-muted); max-width: 64ch; font-size: 1.0625rem; }
+  .svc-lede { color: var(--c-ink-muted); max-width: 64ch; font-size: var(--t-body-sm); }
 
   .svc-bullets {
     list-style: none;
@@ -106,7 +106,7 @@ const relatedSlugs = ["full-truckload", "flatbed-open-deck", "distressed-load-re
   .cargo-grid__tick {
     color: var(--c-accent);
     margin-right: var(--s-2);
-    font-weight: bold;
+    font-weight: 700;
   }
 
   @media (max-width: 760px) {
