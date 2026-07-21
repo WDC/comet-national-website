@@ -1,0 +1,396 @@
+/* ----------------------------------------------------------------------------
+ * Comet National — Flourish library
+ * Second layer of presentation + motion primitives, on top of motion.css.
+ * Everything here is opt-in via class / data-attribute and degrades to a
+ * clean static state with no JS or under prefers-reduced-motion.
+ *
+ *   .marquee / [data-marquee]  — infinite ticker (JS duplicates the track)
+ *   .manifest                  — numbered ledger list with brass indices
+ *   .watermark                 — oversized outlined display text behind a hero
+ *   .spec-strip                — mono quick-facts row with hairline dividers
+ *   .frame-ticks               — brass corner ticks on a framed panel
+ *   .card-sweep                — diagonal shine sweep across a card on hover
+ *   .route-rule                — dashed lane divider with a traveling brass dot
+ *   .reveal-left/right/scale   — directional variants of .reveal
+ *   [data-tilt]                — pointer-follow 3D tilt (JS sets --tilt-x/y)
+ *   [data-parallax]            — scroll drift (JS sets --parallax-y)
+ *   [data-reading-progress]    — article progress bar (JS sets --progress)
+ * --------------------------------------------------------------------------- */
+
+/* --- Marquee ticker -------------------------------------------------------- *
+ * Markup: <div class="marquee" data-marquee><div class="marquee__track">…</div></div>
+ * JS wraps the children in a .marquee__group and appends an aria-hidden clone,
+ * then adds .is-ready — two identical groups make translateX(-50%) loop
+ * seamlessly. Without JS the single group renders as a static wrapping row. */
+.marquee {
+  overflow: hidden;
+  position: relative;
+  mask-image: linear-gradient(90deg, transparent, black 6%, black 94%, transparent);
+  -webkit-mask-image: linear-gradient(90deg, transparent, black 6%, black 94%, transparent);
+}
+.marquee__track {
+  display: flex;
+  width: max-content;
+}
+.marquee__group {
+  display: flex;
+  align-items: center;
+  gap: var(--marquee-gap, var(--s-10));
+  padding-inline-end: var(--marquee-gap, var(--s-10));
+  flex: none;
+}
+/* Pre-JS the raw children sit directly in the track; let them wrap. */
+.marquee:not(.is-ready) .marquee__track {
+  width: 100%;
+  flex-wrap: wrap;
+  gap: var(--marquee-gap, var(--s-10));
+}
+html.js .marquee.is-ready .marquee__track {
+  animation: marquee-scroll var(--marquee-duration, 38s) linear infinite;
+}
+.marquee.is-ready:hover .marquee__track,
+.marquee.is-ready:focus-within .marquee__track {
+  animation-play-state: paused;
+}
+@keyframes marquee-scroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+/* --- Manifest list --------------------------------------------------------- *
+ * A freight-manifest ledger: mono leading-zero indices, hairline rows, and a
+ * hover sweep. Apply to a <ul>/<ol>; pairs well with .reveal-stagger. */
+.manifest {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  counter-reset: manifest;
+  border-top: 1px solid var(--c-line);
+}
+.manifest > li {
+  counter-increment: manifest;
+  position: relative;
+  display: grid;
+  grid-template-columns: 3ch 1fr;
+  align-items: baseline;
+  column-gap: var(--s-5);
+  padding: var(--s-4) var(--s-3);
+  border-bottom: 1px solid var(--c-line);
+  transition:
+    background var(--d-fast) var(--ease-out),
+    padding-left var(--d-base) var(--ease-out);
+}
+.manifest > li::before {
+  content: counter(manifest, decimal-leading-zero);
+  font-family: var(--ff-mono);
+  font-feature-settings: var(--fs-tabular);
+  font-size: var(--t-small);
+  color: var(--c-accent-deep);
+  transition: color var(--d-fast) var(--ease-out);
+}
+.manifest > li::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: -1px;
+  bottom: -1px;
+  width: 2px;
+  background: var(--c-accent);
+  transform: scaleY(0);
+  transform-origin: top;
+  transition: transform var(--d-base) var(--ease-out);
+}
+.manifest > li:hover {
+  background: var(--c-bg-elevated);
+  padding-left: calc(var(--s-3) + 4px);
+}
+.manifest > li:hover::before { color: var(--c-accent); }
+.manifest > li:hover::after { transform: scaleY(1); }
+/* Dark-ground variant */
+.on-dark .manifest,
+.section-inverse .manifest { border-top-color: var(--c-line-inverse); }
+.on-dark .manifest > li,
+.section-inverse .manifest > li { border-bottom-color: var(--c-line-inverse); }
+.on-dark .manifest > li:hover,
+.section-inverse .manifest > li:hover { background: rgba(255, 255, 255, 0.04); }
+.on-dark .manifest > li::before,
+.section-inverse .manifest > li::before { color: var(--c-accent); }
+
+/* --- Watermark ------------------------------------------------------------- *
+ * Oversized outlined display text pinned behind hero content. Always
+ * aria-hidden in markup; clipped by an overflow:hidden positioned parent. */
+.watermark {
+  position: absolute;
+  z-index: 0;
+  font-family: var(--ff-display);
+  font-weight: 800;
+  font-feature-settings: var(--fs-display);
+  letter-spacing: var(--ls-tight);
+  line-height: 0.8;
+  font-size: var(--watermark-size, clamp(8rem, 24vw, 22rem));
+  color: transparent;
+  -webkit-text-stroke: 1.5px var(--watermark-stroke, color-mix(in srgb, var(--c-ink) 10%, transparent));
+  user-select: none;
+  pointer-events: none;
+  white-space: nowrap;
+}
+html.js .watermark {
+  opacity: 0;
+  transform: translateX(2%);
+  transition: opacity 1200ms var(--ease-out) 150ms, transform 1200ms var(--ease-out) 150ms;
+}
+html.js .is-visible .watermark,
+html.js .watermark.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* --- Spec strip ------------------------------------------------------------ *
+ * A row of mono quick-fact cells with hairline dividers — reads like the
+ * spec block on an equipment sheet. */
+.spec-strip {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  border-block: 1px solid var(--c-line);
+}
+.spec-strip > li {
+  display: grid;
+  gap: var(--s-1);
+  padding: var(--s-4) var(--s-6);
+  border-inline-start: 1px solid var(--c-line);
+  transition: background var(--d-fast) var(--ease-out);
+}
+.spec-strip > li:first-child { border-inline-start: 0; padding-inline-start: 0; }
+.spec-strip > li:hover { background: color-mix(in srgb, var(--c-accent) 6%, transparent); }
+.spec-strip__num {
+  font-family: var(--ff-display);
+  font-feature-settings: var(--fs-display);
+  font-weight: 700;
+  font-size: var(--t-h3);
+  line-height: 1;
+  color: var(--c-ink);
+}
+.spec-strip__label {
+  font-family: var(--ff-mono);
+  font-size: var(--t-eyebrow);
+  letter-spacing: var(--ls-wider);
+  text-transform: uppercase;
+  color: var(--c-ink-muted);
+}
+.on-dark .spec-strip,
+.section-inverse .spec-strip { border-block-color: var(--c-line-inverse); }
+.on-dark .spec-strip > li,
+.section-inverse .spec-strip > li { border-inline-start-color: var(--c-line-inverse); }
+.on-dark .spec-strip__num,
+.section-inverse .spec-strip__num { color: var(--c-bg); }
+.on-dark .spec-strip__label,
+.section-inverse .spec-strip__label { color: rgba(255, 255, 255, 0.6); }
+
+/* --- Corner ticks ---------------------------------------------------------- *
+ * Brass L-shaped register marks on opposite corners of a framed panel —
+ * a survey/blueprint cue for hero art cards. */
+.frame-ticks { position: relative; }
+.frame-ticks::before,
+.frame-ticks::after {
+  content: "";
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--c-accent);
+  transition: width var(--d-base) var(--ease-out), height var(--d-base) var(--ease-out);
+  pointer-events: none;
+}
+.frame-ticks::before {
+  top: -2px;
+  left: -2px;
+  border-right: 0;
+  border-bottom: 0;
+}
+.frame-ticks::after {
+  bottom: -2px;
+  right: -2px;
+  border-left: 0;
+  border-top: 0;
+}
+.frame-ticks:hover::before,
+.frame-ticks:hover::after {
+  width: 30px;
+  height: 30px;
+}
+
+/* --- Card sweep ------------------------------------------------------------ *
+ * A single diagonal shine that crosses the card on hover. Cheap, composited,
+ * and quiet enough for the heritage palette. */
+.card-sweep { position: relative; overflow: hidden; }
+.card-sweep::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    transparent 42%,
+    color-mix(in srgb, var(--c-accent) 14%, transparent) 50%,
+    transparent 58%
+  );
+  transform: translateX(-130%);
+  pointer-events: none;
+}
+.card-sweep:hover::after {
+  transform: translateX(130%);
+  transition: transform 700ms var(--ease-out);
+}
+
+/* --- Route rule ------------------------------------------------------------ *
+ * A dashed freight-lane divider. When revealed, a brass dot runs the lane
+ * once — the same "shipment travels" motif as the GSAP scenes, in pure CSS. */
+.route-rule {
+  position: relative;
+  height: 1px;
+  border: 0;
+  margin: 0;
+  background-image: repeating-linear-gradient(
+    90deg,
+    var(--c-line) 0 8px,
+    transparent 8px 16px
+  );
+}
+.route-rule::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 7px;
+  height: 7px;
+  margin-top: -3.5px;
+  border-radius: 50%;
+  background: var(--c-accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--c-accent) 22%, transparent);
+  opacity: 0;
+}
+html.js .route-rule.is-visible::after,
+html.js .is-visible .route-rule::after {
+  animation: route-run 1800ms var(--ease-in-out) 200ms forwards;
+}
+@keyframes route-run {
+  0%   { opacity: 0; left: 0; }
+  12%  { opacity: 1; }
+  88%  { opacity: 1; }
+  100% { opacity: 0; left: calc(100% - 7px); }
+}
+
+/* --- Directional reveal variants ------------------------------------------- *
+ * Same contract as .reveal in motion.css: hidden state gated on html.js,
+ * released by .is-visible from the shared IntersectionObserver. */
+html.js .reveal-left,
+html.js .reveal-right,
+html.js .reveal-scale {
+  transition:
+    opacity 700ms var(--ease-out),
+    transform 700ms var(--ease-out);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+html.js .reveal-left  { opacity: 0; transform: translateX(-28px); }
+html.js .reveal-right { opacity: 0; transform: translateX(28px); }
+html.js .reveal-scale { opacity: 0; transform: scale(0.96); }
+html.js .reveal-left.is-visible,
+html.js .reveal-right.is-visible,
+html.js .reveal-scale.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* --- Pointer tilt ---------------------------------------------------------- *
+ * JS (lib/motion.ts) sets --tilt-x/--tilt-y on pointermove for [data-tilt]
+ * elements on fine pointers. Falls back to a flat card everywhere else.
+ * The doubled attribute selector matches the specificity of the
+ * `.reveal*.is-visible { transform: none }` rules — this rule is later in the
+ * cascade, so a revealed card can still tilt. Opacity stays in the transition
+ * list so composing with a reveal keeps its fade. */
+html.js [data-tilt][data-tilt] {
+  transform: perspective(900px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
+  transition: transform 300ms var(--ease-out), opacity 700ms var(--ease-out);
+  will-change: transform;
+}
+
+/* --- Scroll parallax ------------------------------------------------------- *
+ * JS sets --parallax-y each frame for [data-parallax] elements. Doubled
+ * attribute selector for the same reveal-composition reason as [data-tilt]. */
+html.js [data-parallax][data-parallax] {
+  transform: translateY(var(--parallax-y, 0px));
+  will-change: transform;
+}
+
+/* --- Reading progress ------------------------------------------------------ *
+ * Fixed hairline under the header; JS sets --progress ∈ [0,1]. */
+[data-reading-progress] {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  z-index: var(--z-nav);
+  background: transparent;
+  pointer-events: none;
+}
+[data-reading-progress]::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--c-accent);
+  transform: scaleX(var(--progress, 0));
+  transform-origin: left;
+}
+
+/* --- Service-page list upgrades -------------------------------------------- *
+ * Global enhancements to the shared .svc-bullets / .svc-grid patterns used by
+ * every /services/* page (base styles live in each page's scoped CSS, hover
+ * rules in motion.css). Numbering the bullets turns them into a manifest;
+ * the grid cells get the diagonal sweep on hover. */
+.svc-bullets { counter-reset: svcb; }
+.svc-bullets li {
+  counter-increment: svcb;
+  display: flex;
+  align-items: baseline;
+  gap: var(--s-3);
+}
+.svc-bullets li::before {
+  content: counter(svcb, decimal-leading-zero);
+  flex: none;
+  font-feature-settings: var(--fs-tabular);
+  color: var(--c-accent-deep);
+  transition: color var(--d-fast) var(--ease-out);
+}
+.svc-bullets li:hover::before { color: var(--c-accent); }
+
+.svc-grid li::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    transparent 42%,
+    color-mix(in srgb, var(--c-accent) 12%, transparent) 50%,
+    transparent 58%
+  );
+  transform: translateX(-130%);
+  pointer-events: none;
+}
+.svc-grid li:hover::after {
+  transform: translateX(130%);
+  transition: transform 700ms var(--ease-out);
+}
+
+/* --- Reduced motion -------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .marquee__track { animation: none !important; }
+  .marquee { mask-image: none; -webkit-mask-image: none; }
+  .marquee.is-ready .marquee__track { flex-wrap: wrap; width: 100%; }
+  .marquee.is-ready .marquee__group[aria-hidden="true"] { display: none; }
+  .route-rule::after { animation: none !important; opacity: 0 !important; }
+  html.js [data-tilt][data-tilt] { transform: none !important; }
+  html.js [data-parallax][data-parallax] { transform: none !important; }
+  html.js .watermark { opacity: 1; transform: none; transition: none; }
+}

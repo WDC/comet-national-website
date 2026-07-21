@@ -9,15 +9,22 @@ import { SITE } from "@lib/site";
   title={`Industries We Serve | ${SITE.name}`}
   description="Construction, manufacturing, building materials, and machinery & equipment. We recombine 12 freight services around how industrial buyers actually order."
 >
-  <section class="industries-hero section-tight">
+  <section class="industries-hero section-tight section-bar" data-reveal>
+    <span class="watermark industries-hero__mark" aria-hidden="true">Buyers</span>
     <div class="container-content industries-hero__inner">
-      <p class="eyebrow">Industries overview</p>
-      <h1 class="industries-hero__title display reveal" data-reveal>Built around how you buy freight.</h1>
-      <p class="industries-hero__lede reveal" data-reveal style="--reveal-delay: 120ms">
+      <p class="eyebrow reveal" data-reveal>Industries overview</p>
+      <h1 class="industries-hero__title display reveal" data-reveal style="--reveal-delay: 80ms">Built around how you buy freight.</h1>
+      <p class="industries-hero__lede reveal" data-reveal style="--reveal-delay: 180ms">
         Twelve services, four kinds of buyer. We recombine flatbed, van, reefer,
         warehousing, and transload around the way construction <span class="sc">GM</span>s, plant
         managers, distributors, and equipment dealers actually move loads.
       </p>
+      <ul class="spec-strip industries-hero__facts reveal-stagger" data-reveal>
+        <li><span class="spec-strip__num tnum">4</span><span class="spec-strip__label">Buyer profiles</span></li>
+        <li><span class="spec-strip__num tnum">12</span><span class="spec-strip__label">Services recombined</span></li>
+        <li><span class="spec-strip__num tnum">1</span><span class="spec-strip__label">Atlanta team</span></li>
+        <li><span class="spec-strip__num tnum">1995</span><span class="spec-strip__label">Doing it since</span></li>
+      </ul>
     </div>
   </section>
 
@@ -43,7 +50,7 @@ import { SITE } from "@lib/site";
               const s = getService(slug);
               if (!s) return null;
               return (
-                <li>
+                <li class="card-sweep">
                   <a href={`/services/${s.slug}`}>
                     <span class="industries-group__svc-title display">{s.title}</span>
                     <span class="industries-group__svc-blurb">{s.blurb}</span>
@@ -72,8 +79,20 @@ import { SITE } from "@lib/site";
 </BaseLayout>
 
 <style>
-  .industries-hero { background: var(--c-bg-elevated); border-bottom: 1px solid var(--c-line); }
-  .industries-hero__inner { max-width: 60ch; }
+  .industries-hero {
+    position: relative;
+    overflow: hidden;
+    background: var(--c-bg-elevated);
+    border-bottom: 1px solid var(--c-line);
+  }
+  .industries-hero__mark {
+    --watermark-stroke: color-mix(in srgb, var(--c-pine) 10%, transparent);
+    --watermark-size: clamp(9rem, 22vw, 20rem);
+    right: -0.05em;
+    top: 0.05em;
+  }
+  .industries-hero__inner { position: relative; z-index: 1; max-width: 72ch; }
+  .industries-hero__facts { margin-top: clamp(var(--s-8), 4vw, var(--s-10)); }
   .industries-hero__title { font-size: clamp(2.75rem, 5vw, 4.5rem); line-height: 1; margin-top: var(--s-3); max-width: 16ch; }
   .industries-hero__lede { margin-top: var(--s-6); font-size: 1.125rem; color: var(--c-ink-muted); }
 

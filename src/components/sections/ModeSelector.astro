@@ -25,7 +25,7 @@ const featured = SERVICES;
 
     <ul class="modes__grid" data-reveal>
       {featured.map((s, i) => (
-        <li class="modes__cell reveal" style={`--reveal-delay: ${i * 60}ms;`} data-reveal>
+        <li class="modes__cell card-sweep reveal" style={`--reveal-delay: ${i * 60}ms;`} data-reveal>
           <a href={`/services/${s.slug}`} class="modes__cell-link link-arrow">
             <span class="mono modes__cell-num">{String(i + 1).padStart(2, "0")}</span>
             <span class="modes__cell-title"><Caps text={s.title} /></span>

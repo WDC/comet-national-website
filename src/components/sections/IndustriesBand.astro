@@ -16,7 +16,7 @@ import { INDUSTRIES } from "@lib/services";
 
     <ul class="industries__grid">
       {INDUSTRIES.map((ind, i) => (
-        <li class="industries__cell reveal" data-reveal style={`--reveal-delay: ${i * 80}ms`}>
+        <li class="industries__cell card-sweep reveal" data-reveal style={`--reveal-delay: ${i * 80}ms`}>
           <a href={`/industries/${ind.slug}`} class="industries__cell-link">
             <div class="industries__art">
               <svg viewBox="0 0 80 80" aria-hidden="true">

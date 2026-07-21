@@ -2,7 +2,7 @@
 export const prerender = true;
 import BaseLayout from "@layouts/BaseLayout.astro";
 import Button from "@components/ui/Button.astro";
-import { SERVICES_BY_CATEGORY, SERVICE_CATEGORY_LABEL, type ServiceCategory } from "@lib/services";
+import { SERVICES, SERVICES_BY_CATEGORY, SERVICE_CATEGORY_LABEL, type ServiceCategory } from "@lib/services";
 import { SITE } from "@lib/site";
 
 const groups: ServiceCategory[] = ["trailer", "facility", "managed"];
@@ -11,7 +11,8 @@ const groups: ServiceCategory[] = ["trailer", "facility", "managed"];
   title={`Freight Services | ${SITE.name}`}
   description="Every freight mode under one roof — flatbed LTL, dry van, reefer, full truckload, transloading, warehousing, and brokerage. One Atlanta team since 1995."
 >
-  <section class="services-hero section-tight section-bar" data-reveal>
+  <section class="services-hero section-tight on-dark" data-reveal>
+    <span class="watermark services-hero__mark tnum" aria-hidden="true">12</span>
     <div class="container-content services-hero__inner reveal-stagger" data-reveal>
       <p class="eyebrow">Services overview</p>
       <h1 class="services-hero__title display">Every mode. One team.</h1>
@@ -19,6 +20,16 @@ const groups: ServiceCategory[] = ["trailer", "facility", "managed"];
         Twelve services, organized the way industrial buyers actually shop them —
         by trailer, by facility, and by what we manage end-to-end.
       </p>
+    </div>
+    <!-- The whole board, running past — like the departure wall at a terminal. -->
+    <div class="services-hero__ticker marquee" data-marquee aria-hidden="true">
+      <div class="marquee__track">
+        {SERVICES.map((s) => (
+          <span class="services-hero__ticker-item mono">
+            {s.title} <span class="services-hero__ticker-dot">·</span>
+          </span>
+        ))}
+      </div>
     </div>
   </section>
 
@@ -39,7 +50,7 @@ const groups: ServiceCategory[] = ["trailer", "facility", "managed"];
 
         <ul class="services-group__list">
           {SERVICES_BY_CATEGORY[g].map((s, i) => (
-            <li class="services-group__cell reveal" data-reveal style={`--reveal-delay: ${i * 50}ms`}>
+            <li class="services-group__cell card-sweep reveal" data-reveal style={`--reveal-delay: ${i * 50}ms`}>
               <a href={`/services/${s.slug}`} class="link-arrow">
                 <div class="services-group__cell-head">
                   <span class="mono services-group__cell-idx">{(i + 1).toString().padStart(2, "0")}</span>
@@ -67,10 +78,43 @@ const groups: ServiceCategory[] = ["trailer", "facility", "managed"];
 </BaseLayout>
 
 <style>
-  .services-hero { background: var(--c-bg-elevated); border-bottom: 1px solid var(--c-line); }
-  .services-hero__inner { max-width: 60ch; }
+  /* Switchboard hero — the services hub gets the dark drafting-board ground
+     so it reads as the operations wall the rest of the pages hang off. */
+  .services-hero {
+    position: relative;
+    overflow: hidden;
+    color: var(--c-bg);
+    background:
+      repeating-linear-gradient(0deg, transparent 0 47px, rgba(255, 255, 255, 0.045) 47px 48px),
+      repeating-linear-gradient(90deg, transparent 0 47px, rgba(255, 255, 255, 0.045) 47px 48px),
+      linear-gradient(155deg, var(--c-pine-deep) 20%, var(--c-pine) 100%);
+    border-bottom: 2px solid var(--c-accent);
+  }
+  .services-hero__mark {
+    --watermark-stroke: rgba(255, 255, 255, 0.08);
+    --watermark-size: clamp(10rem, 26vw, 24rem);
+    right: 0.04em;
+    bottom: -0.16em;
+  }
+  .services-hero__inner { position: relative; z-index: 1; max-width: 60ch; }
   .services-hero__title { font-size: clamp(2.75rem, 5vw, 4.5rem); line-height: 1; margin-top: var(--s-3); }
-  .services-hero__lede { margin-top: var(--s-6); font-size: 1.125rem; color: var(--c-ink-muted); }
+  .services-hero__lede { margin-top: var(--s-6); font-size: 1.125rem; color: rgba(255, 255, 255, 0.72); }
+  .services-hero__ticker {
+    position: relative;
+    z-index: 1;
+    margin-top: clamp(var(--s-8), 4vw, var(--s-12));
+    border-top: 1px solid var(--c-line-inverse);
+    padding-top: var(--s-4);
+    --marquee-gap: var(--s-8);
+  }
+  .services-hero__ticker-item {
+    font-size: var(--t-small);
+    letter-spacing: var(--ls-wide);
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.6);
+    white-space: nowrap;
+  }
+  .services-hero__ticker-dot { color: var(--c-accent); }
 
   .services-group:nth-child(even) { background: var(--c-bg-elevated); }
   .services-group__head {

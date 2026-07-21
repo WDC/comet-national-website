@@ -14,7 +14,8 @@ const directionsUrl = `https://www.google.com/maps/search/?api=1&query=${mapsQue
   description={`Reach Comet National in Atlanta, GA. Call ${SITE.phone}, email ${SITE.email}, or request a freight quote online. One Atlanta team since 1995.`}
 >
   <section class="contact section section-bar" data-reveal>
-    <div class="container-content">
+    <span class="watermark contact__mark" aria-hidden="true">ATL</span>
+    <div class="container-content contact__inner">
       <div class="reveal-stagger" data-reveal>
         <p class="eyebrow">Contact</p>
         <h1 class="contact__title display">Pick up the phone or pick up the form.</h1>
@@ -24,19 +25,19 @@ const directionsUrl = `https://www.google.com/maps/search/?api=1&query=${mapsQue
       </div>
 
       <div class="contact__grid reveal-stagger" data-reveal>
-        <div class="contact__card">
+        <div class="contact__card card-sweep">
           <p class="eyebrow">Call</p>
           <a class="contact__phone display" href={`tel:${SITE.phoneE164}`}>{SITE.phone}</a>
           <p class="contact__hours mono">Mon–Fri · 8a–5p ET · 24/7 for distressed loads</p>
         </div>
 
-        <div class="contact__card">
+        <div class="contact__card card-sweep">
           <p class="eyebrow">Email</p>
           <a class="contact__email display" href={`mailto:${SITE.email}`}>{SITE.email}</a>
           <p class="contact__hours mono">Replies usually within one business hour</p>
         </div>
 
-        <div class="contact__card contact__card--ad">
+        <div class="contact__card contact__card--ad card-sweep">
           <p class="eyebrow">Atlanta facility</p>
           <address class="contact__addr display">
             {SITE.address.street}<br/>
@@ -64,6 +65,14 @@ const directionsUrl = `https://www.google.com/maps/search/?api=1&query=${mapsQue
 </BaseLayout>
 
 <style>
+  .contact { position: relative; overflow: hidden; }
+  .contact__mark {
+    --watermark-stroke: color-mix(in srgb, var(--c-pine) 9%, transparent);
+    --watermark-size: clamp(10rem, 26vw, 24rem);
+    right: -0.05em;
+    top: -0.1em;
+  }
+  .contact__inner { position: relative; z-index: 1; }
   .contact__title { font-size: clamp(2.5rem, 4vw, 3.5rem); line-height: 1; margin-top: var(--s-3); max-width: 20ch; }
   .contact__lede { margin-top: var(--s-5); color: var(--c-ink-muted); }
   .contact__grid {

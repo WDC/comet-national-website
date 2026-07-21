@@ -31,7 +31,8 @@ const requirements = [
   description={`Owner-operators and carriers: run flatbed, reefer, van, and hotshot with Comet National out of Atlanta. Steady lanes, fair rates, dispatchers who answer.`}
 >
   <section class="car section section-bar" data-reveal>
-    <div class="container-content">
+    <span class="watermark car__mark tnum" aria-hidden="true">48</span>
+    <div class="container-content car__inner">
       <div class="reveal-stagger" data-reveal>
         <p class="eyebrow">Carriers</p>
         <h1 class="car__title display">
@@ -53,7 +54,7 @@ const requirements = [
 
       <ul class="car__reasons reveal-stagger" data-reveal>
         {reasons.map((r, i) => (
-          <li class="car__reason">
+          <li class="car__reason card-sweep">
             <span class="mono car__num">0{i + 1}</span>
             <h2 class="car__reason-title display">{r.title}</h2>
             <p class="car__reason-body">{r.body}</p>
@@ -61,7 +62,7 @@ const requirements = [
         ))}
       </ul>
 
-      <div class="car__setup reveal-stagger on-dark" data-reveal>
+      <div class="car__setup frame-ticks reveal-stagger on-dark" data-reveal>
         <div class="car__setup-copy">
           <p class="eyebrow">Get set up</p>
           <h2 class="car__setup-title display">What we need to onboard you.</h2>
@@ -81,6 +82,14 @@ const requirements = [
 </BaseLayout>
 
 <style>
+  .car { position: relative; overflow: hidden; }
+  .car__mark {
+    --watermark-stroke: color-mix(in srgb, var(--c-pine) 9%, transparent);
+    --watermark-size: clamp(11rem, 28vw, 26rem);
+    right: -0.02em;
+    top: -0.12em;
+  }
+  .car__inner { position: relative; z-index: 1; }
   .car__title { font-size: var(--t-h1); line-height: 1; margin-top: var(--s-3); max-width: 20ch; }
   .car__accent { color: var(--c-accent-deep); }
   .car__lede { margin-top: var(--s-6); color: var(--c-ink-muted); max-width: 58ch; line-height: var(--lh-relaxed); }

@@ -57,6 +57,7 @@ const differentiators = [
 
   <!-- ─── Hero ─── -->
   <section class="why-hero section section-bar" data-reveal>
+    <span class="watermark why-hero__mark tnum" aria-hidden="true">1995</span>
     <div class="container-content why-hero__inner">
       <div class="reveal-stagger why-hero__copy" data-reveal>
         <p class="eyebrow">Why Comet</p>
@@ -102,7 +103,7 @@ const differentiators = [
           The team changed. The building changed. The core promise never did.
         </p>
       </div>
-      <div class="origin__aside reveal" data-reveal style="--reveal-delay: 200ms">
+      <div class="origin__aside frame-ticks reveal-right" data-reveal style="--reveal-delay: 200ms">
         <div class="origin__stat-block">
           <span class="origin__year display">1995</span>
           <p class="origin__stat-label mono">Founded</p>
@@ -161,7 +162,7 @@ const differentiators = [
 
       <ul class="vals__grid reveal-stagger" data-reveal>
         {values.map((v, i) => (
-          <li class="vals__card hover-lift">
+          <li class="vals__card card-sweep hover-lift">
             <span class="mono vals__num">0{i + 1}</span>
             <h3 class="vals__name display">{v.name}</h3>
             <p class="vals__body">{v.body}</p>
@@ -215,7 +216,19 @@ const differentiators = [
 
 <style>
   /* ─── Hero ─── */
+  .why-hero {
+    position: relative;
+    overflow: hidden;
+  }
+  .why-hero__mark {
+    --watermark-stroke: color-mix(in srgb, var(--c-pine) 9%, transparent);
+    --watermark-size: clamp(10rem, 24vw, 22rem);
+    right: -0.04em;
+    bottom: -0.18em;
+  }
   .why-hero__inner {
+    position: relative;
+    z-index: 1;
     display: grid;
     grid-template-columns: 1fr 1.1fr;
     gap: var(--s-12);
