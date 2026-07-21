@@ -318,7 +318,7 @@ export function renderLeadConfirmationEmail(input: QuoteEmailInput): string {
   const firstName = input.name.split(" ")[0] || "there";
   const route = `${input.origin} → ${input.destination}`;
   const inner = `${header()}
-${titleBand("Request Received", "We're on it.")}
+${titleBand("Request Received", "We’re on it.")}
         <tr>
           <td class="cn-pad" style="padding:28px 32px 4px 32px;">
             <div style="font-family:${FONT_BODY};font-size:17px;line-height:1.65;color:${C.ink};">Hi ${esc(
@@ -395,7 +395,7 @@ export function renderLeadConfirmationText(input: QuoteEmailInput): string {
     ``,
     `Thanks for the quote request. A dispatcher will typically reach out within one business hour.`,
     ``,
-    `If it's urgent, call us at ${SITE.phone}.`,
+    `If it’s urgent, call us at ${SITE.phone}.`,
     ``,
     `— The ${SITE.name} team`,
     `Atlanta, GA — since ${SITE.foundingYear}`,

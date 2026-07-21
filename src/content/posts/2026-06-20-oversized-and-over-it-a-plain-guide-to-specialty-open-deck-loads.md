@@ -46,7 +46,7 @@ The right way to price open-deck is to understand the load first, then build the
 
 Open-deck is the house specialty at Comet National, and we have been doing it since 1995. Tell us the piece: dimensions, weight, where it loads, where it lands. From there we work out the trailer, the securement, the tarping, the permits, and the route, and we tell you what the move takes before you commit. If it has to ride on a deck and get strapped, tarped, and permitted, this is what we do.
 
-We move open-deck to all 50 states and Canada. If your shipment is only a pallet or two of open-deck freight rather than a full or oversized load, that is partial flatbed, and our sister brand **FlatbedLTL** (flatbed.delcoe.com) is built for exactly that, with pricing that does not blindside you.
+We move open-deck to all 48 states and Canada. If your shipment is only a pallet or two of open-deck freight rather than a full or oversized load, that is partial flatbed, and our sister brand **FlatbedLTL** (flatbed.delcoe.com) is built for exactly that, with pricing that does not blindside you.
 
 One thing you will not get from us is a runaround. You get a person who answers, owns the load, and gets it delivered.
 

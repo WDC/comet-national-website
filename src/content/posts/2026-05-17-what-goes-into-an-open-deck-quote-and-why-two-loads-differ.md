@@ -56,6 +56,6 @@ Give us the real picture and you'll get a real price:
 4. Your dates and any hard appointment windows.
 5. Whether the shipper or receiver loads and unloads, and how.
 
-Comet National has been quoting and moving open-deck freight since 1995, from standard flatbed to oversized and permitted loads across all 50 states and Canada. If you only have a few pallets of open-deck freight rather than a full trailer, our sister brand FlatbedLTL (flatbed.delcoe.com) is built for exactly that, with pricing that won't surprise you.
+Comet National has been quoting and moving open-deck freight since 1995, from standard flatbed to oversized and permitted loads across all 48 states and Canada. If you only have a few pallets of open-deck freight rather than a full trailer, our sister brand FlatbedLTL (flatbed.delcoe.com) is built for exactly that, with pricing that won't surprise you.
 
 The cheapest quote isn't always the cheapest shipment. A number built on the real load is worth more than a low one built on guesses. Send us the details on your next flatbed or oversized move and we'll walk you through what's driving the price and how we'd get it delivered.

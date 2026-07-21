@@ -6,7 +6,7 @@ import { getService } from "@lib/services";
 
 const service = getService("transloading")!;
 const description =
-  "Transloading at our Atlanta dock. Container to van, flatbed to pup, or van to hotshot — fast mode changes when the original trailer can't finish the job. 24/7.";
+  "Transloading at our Atlanta dock. Container to van, flatbed to pup, or van to hotshot — fast mode changes when the original trailer can’t finish the job. 24/7.";
 
 const relatedSlugs = ["cross-docking", "distressed-load-recovery", "warehousing-fulfillment"];
 ---
@@ -55,7 +55,7 @@ const relatedSlugs = ["cross-docking", "distressed-load-recovery", "warehousing-
 
 <style>
   .t-h2 { font-size: var(--t-h2); line-height: 1.05; margin-top: var(--s-3); margin-bottom: var(--s-5); max-width: 22ch; }
-  .t-lede { color: var(--c-ink-muted); max-width: 64ch; font-size: 1.0625rem; }
+  .t-lede { color: var(--c-ink-muted); max-width: 64ch; font-size: var(--t-body-sm); }
 
   .modes-grid {
     list-style: none;
@@ -95,7 +95,7 @@ const relatedSlugs = ["cross-docking", "distressed-load-recovery", "warehousing-
     display: inline-block;
   }
   .modes-grid li:hover strong { transform: translateX(3px); color: var(--c-accent); }
-  .modes-grid strong { font-size: 1.0625rem; color: var(--c-ink); }
+  .modes-grid strong { font-size: var(--t-body-sm); color: var(--c-ink); }
   .modes-grid span { font-size: var(--t-small); color: var(--c-ink-muted); line-height: 1.5; }
 
   @media (max-width: 760px) {

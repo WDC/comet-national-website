@@ -12,7 +12,7 @@ interface Props extends PageSeo {
   extraSchema?: Array<Record<string, unknown>>;
 }
 
-const { preloadHero, extraSchema = [], ...seoInput } = Astro.props;
+const { preloadHero, extraSchema = [], article, breadcrumbTitle, ...seoInput } = Astro.props;
 // Per-page OG card (/og/<key>.png) when this route has one, unless the page set
 // its own ogImage explicitly (e.g. blog posts). Falls back to the site default.
 const seo = resolveSeo({
@@ -27,7 +27,13 @@ const sitewideSchemas: Array<Record<string, unknown>> = [
   websiteSchema(),
 ];
 if (showBreadcrumbs) {
-  sitewideSchemas.push(breadcrumbSchema({ items: breadcrumbsFromPath(Astro.url.pathname, crumbTitles()) }));
+  // Static route titles, plus the page-supplied title for the leaf segment
+  // (blog posts would otherwise emit their title-cased, date-prefixed slug).
+  const titles = crumbTitles();
+  if (breadcrumbTitle) {
+    titles[Astro.url.pathname.replace(/\/+$/, "")] = breadcrumbTitle;
+  }
+  sitewideSchemas.push(breadcrumbSchema({ items: breadcrumbsFromPath(Astro.url.pathname, titles) }));
 }
 ---
 <meta charset="UTF-8" />
@@ -57,6 +63,14 @@ if (showBreadcrumbs) {
 <meta property="og:image:height" content="630" />
 <meta property="og:image:alt" content={seo.title} />
 <meta property="og:locale" content="en_US" />
+{seo.ogType === "article" && article && (
+  <>
+    <meta property="article:published_time" content={article.publishedTime} />
+    {article.modifiedTime && <meta property="article:modified_time" content={article.modifiedTime} />}
+    {article.author && <meta property="article:author" content={article.author} />}
+    {(article.tags ?? []).map((t) => <meta property="article:tag" content={t} />)}
+  </>
+)}
 
 <!-- Twitter -->
 <meta name="twitter:card" content="summary_large_image" />
@@ -65,16 +79,19 @@ if (showBreadcrumbs) {
 <meta name="twitter:image" content={seo.ogImage} />
 <meta name="twitter:image:alt" content={seo.title} />
 
-<!-- Preload the three critical above-the-fold MB faces (body serif, hero display,
-     mono labels). font-display:swap + metric-matched fallbacks cover the rest. -->
+<!-- Preload the critical above-the-fold MB faces (body serif, hero display,
+     mono labels). font-display:swap + metric-matched fallbacks cover the rest.
+     Concourse ships two display weights: 800 black is the homepage hero,
+     700 bold is the default heading weight — interior pages' LCP text. -->
 <link rel="preload" href="/fonts/equity_ot_a_regular.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
 <link rel="preload" href="/fonts/concourse_ot_8_black.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+<link rel="preload" href="/fonts/concourse_ot_7_bold.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
 <link rel="preload" href="/fonts/triplicate_ot_a_regular.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
 
 <!-- Icons -->
 <link rel="icon" href="/favicon.ico" sizes="48x48" />
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" sizes="any" />
-<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
 <link rel="manifest" href="/site.webmanifest" />
 
 <!-- DNS prefetch for Sanity CDN (Phase 2+) -->

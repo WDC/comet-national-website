@@ -136,7 +136,7 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
     );
   } catch (err) {
     console.error("[quote] SES failure", err);
-    return jsonError("Couldn't send the email. Please call us — fastest path.", 500);
+    return jsonError("Couldn’t send the email. Please call us — fastest path.", 500);
   }
 
   return jsonOk({ ok: true });

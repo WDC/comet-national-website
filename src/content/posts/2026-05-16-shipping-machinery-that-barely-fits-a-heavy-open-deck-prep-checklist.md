@@ -52,6 +52,6 @@ Have your bill of lading accurate, your dimensions consistent across every docum
 
 Big networks bounce this freight for a reason. Long, heavy, hard-to-handle machinery doesn't fit their model, so you get the "we can't take that" call or a surcharge that rewrites your budget. Open-deck done right is a craft: the right deck, a real securement plan, permits handled, and a driver who knows how to tarp and strap a load that barely fits.
 
-That's the work Comet National Shipping has done since 1995. We move flatbed and open-deck freight, including oversized and specialty loads, to all 50 states and Canada, and we'd rather talk through your numbers before pickup than fix a surprise on the road. If you only have a few pallets of open-deck freight instead of a full trailer, our sister brand FlatbedLTL (flatbed.delcoe.com) is built for partial flatbed moves.
+That's the work Comet National Shipping has done since 1995. We move flatbed and open-deck freight, including oversized and specialty loads, to all 48 states and Canada, and we'd rather talk through your numbers before pickup than fix a surprise on the road. If you only have a few pallets of open-deck freight instead of a full trailer, our sister brand FlatbedLTL (flatbed.delcoe.com) is built for partial flatbed moves.
 
 Got a machine that barely fits? Send us the weight, the dimensions, and a photo, and we'll tell you what it rides on and what it takes to move it right.

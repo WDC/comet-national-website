@@ -45,6 +45,6 @@ Most shippers we talk to have a mix. Some of their freight needs to sit, and som
 
 ## Where Comet fits
 
-We've handled both sides of this since 1995, out of metro Atlanta and across all 50 states and Canada. Our transload facility moves freight from rail or ocean container to over-the-road truck. We cross-dock, we recover freight, and we run local and regional distribution. And when freight genuinely needs to be held, we can store it. One point of contact for the whole thing, so you're not stitching a warehouse, a dock, and a carrier together yourself.
+We've handled both sides of this since 1995, out of metro Atlanta and across all 48 states and Canada. Our transload facility moves freight from rail or ocean container to over-the-road truck. We cross-dock, we recover freight, and we run local and regional distribution. And when freight genuinely needs to be held, we can store it. One point of contact for the whole thing, so you're not stitching a warehouse, a dock, and a carrier together yourself.
 
 If you're paying to store freight that's really just passing through, let us look at it. Call Comet National and tell us what the freight is and where it's headed, and we'll tell you whether you need a shelf or just a dock and a truck.

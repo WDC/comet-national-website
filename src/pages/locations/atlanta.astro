@@ -15,7 +15,7 @@ const directionsUrl = `https://www.google.com/maps/search/?api=1&query=${mapsQue
 ---
 <BaseLayout
   title={`Atlanta Freight & Warehousing Facility | ${SITE.name}`}
-  description={`Comet National's freight hub in ${SITE.address.locality}, ${SITE.address.region}, on the metro-Atlanta I-85 corridor. Transload, cross-dock, and warehousing — every mode, since ${SITE.foundingYear}.`}
+  description={`Comet National’s freight hub in ${SITE.address.locality}, ${SITE.address.region}, on the metro-Atlanta I-85 corridor. Transload, cross-dock, and warehousing — every mode, since ${SITE.foundingYear}.`}
   extraSchema={[localBusinessSchema()]}
 >
   <section class="loc section section-bar" data-reveal>
@@ -27,7 +27,7 @@ const directionsUrl = `https://www.google.com/maps/search/?api=1&query=${mapsQue
         </h1>
         <p class="loc__lede">
           Every mode we run is dispatched and coordinated from one facility in
-          {" "}{SITE.address.locality}, {SITE.address.region}. It's where freight gets
+          {" "}{SITE.address.locality}, {SITE.address.region}. It’s where freight gets
           transloaded, cross-docked, staged, and stored — the hub behind
           "one call solves the whole problem."
         </p>
@@ -66,7 +66,7 @@ const directionsUrl = `https://www.google.com/maps/search/?api=1&query=${mapsQue
           <h2 class="loc__cta-title display">Rooted in Atlanta. Reach across {SITE.areaServed.length > 1 ? "the US + Canada" : "the US"}.</h2>
           <p class="loc__cta-body">
             Lanes run out of this hub to 48 states and southern Canada. Tell us the
-            load — we'll put the right trailer under it.
+            load — we’ll put the right trailer under it.
           </p>
           <Button href="/get-a-quote" size="lg">Get a Quote</Button>
         </div>
@@ -125,7 +125,7 @@ const directionsUrl = `https://www.google.com/maps/search/?api=1&query=${mapsQue
   .loc__services { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--s-2); }
   .loc__services a { color: var(--c-ink); font-family: var(--ff-display); font-weight: 600; }
   .loc__services a:hover { color: var(--c-accent); }
-  .loc__note { color: var(--c-ink-soft); font-size: var(--t-eyebrow); text-transform: uppercase; letter-spacing: var(--ls-wide); margin-top: var(--s-2); }
+  .loc__note { color: var(--c-ink-muted); font-size: var(--t-eyebrow); text-transform: uppercase; letter-spacing: var(--ls-wide); margin-top: var(--s-2); }
 
   .loc__cta-title { font-size: var(--t-h3); line-height: 1.05; color: var(--c-bg); max-width: 20ch; }
   .loc__cta-body { color: rgba(247, 246, 238, 0.72); max-width: 52ch; line-height: var(--lh-relaxed); }

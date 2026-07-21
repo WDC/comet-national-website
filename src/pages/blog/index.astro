@@ -169,7 +169,7 @@ const blogSchema: Record<string, unknown> = {
     display: inline-block;
     margin-top: var(--s-5);
     font-size: var(--t-small);
-    color: var(--c-ink-soft);
+    color: var(--c-ink-muted);
     font-feature-settings: "lnum" 1, "tnum" 1;
   }
   .blog-lead__art {
@@ -180,7 +180,7 @@ const blogSchema: Record<string, unknown> = {
   }
   .blog-lead:hover .blog-lead__art {
     border-color: var(--c-accent);
-    box-shadow: 0 16px 32px -24px rgba(194, 146, 55, 0.5);
+    box-shadow: 0 16px 32px -24px color-mix(in srgb, var(--c-accent) 50%, transparent);
   }
   .blog-lead__art img { width: 100%; height: auto; }
 
@@ -234,7 +234,7 @@ const blogSchema: Record<string, unknown> = {
   }
   .blog-card__meta {
     font-size: var(--t-small);
-    color: var(--c-ink-soft);
+    color: var(--c-ink-muted);
     font-feature-settings: "lnum" 1, "tnum" 1;
   }
 

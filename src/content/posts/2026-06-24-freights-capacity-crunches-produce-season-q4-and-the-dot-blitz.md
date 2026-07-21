@@ -51,6 +51,6 @@ What helps:
 
 The cheapest quote in a tight market is often the one that falls through, because the truck gets a better offer and your load sits. When capacity is scarce, service is what actually gets your freight delivered. A human who answers the phone, owns the problem, and finds you a deck is worth more than a rate that looked good until it evaporated.
 
-Comet National has been moving freight since 1995, across all 50 states and Canada, through every produce season, Q4, and Blitz in between. We handle flatbed and open-deck, partial flatbed, full truckload, partial dry van, and dry or refrigerated freight at LTL and truckload size. When one mode tightens, we've got another lever to pull.
+Comet National has been moving freight since 1995, across all 48 states and Canada, through every produce season, Q4, and Blitz in between. We handle flatbed and open-deck, partial flatbed, full truckload, partial dry van, and dry or refrigerated freight at LTL and truckload size. When one mode tightens, we've got another lever to pull.
 
 Got a load that has to move during a crunch, or a freight spend that keeps getting blown up by seasonal surprises? Call Comet and let's map it out before the calendar forces your hand.

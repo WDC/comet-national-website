@@ -6,7 +6,7 @@ import { getService } from "@lib/services";
 
 const service = getService("distressed-load-recovery")!;
 const description =
-  "Distressed load recovery: restack, rewrap, recover. When a load arrives damaged, shifted, or refused, we're the Atlanta dock that puts it back together. 24/7.";
+  "Distressed load recovery: restack, rewrap, recover. When a load arrives damaged, shifted, or refused, we’re the Atlanta dock that puts it back together. 24/7.";
 
 const relatedSlugs = ["transloading", "cross-docking", "hotshot"];
 ---
@@ -63,7 +63,7 @@ const relatedSlugs = ["transloading", "cross-docking", "hotshot"];
 
 <style>
   .svc-h2 { font-size: var(--t-h2); line-height: 1.05; margin-top: var(--s-3); margin-bottom: var(--s-5); max-width: 26ch; }
-  .svc-lede { color: var(--c-ink-muted); max-width: 64ch; font-size: 1.0625rem; }
+  .svc-lede { color: var(--c-ink-muted); max-width: 64ch; font-size: var(--t-body-sm); }
 
   .svc-bullets {
     list-style: none;
@@ -96,7 +96,7 @@ const relatedSlugs = ["transloading", "cross-docking", "hotshot"];
     display: grid;
     gap: var(--s-2);
   }
-  .svc-grid strong { font-size: 1.0625rem; color: var(--c-ink); }
+  .svc-grid strong { font-size: var(--t-body-sm); color: var(--c-ink); }
   .svc-grid span { font-size: var(--t-small); color: var(--c-ink-muted); line-height: 1.5; }
 
   @media (max-width: 760px) {

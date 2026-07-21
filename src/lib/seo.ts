@@ -9,6 +9,16 @@ export interface PageSeo {
   ogImage?: string;
   ogType?: "website" | "article";
   noindex?: boolean;
+  /** OG article metadata, emitted as `article:*` tags when ogType is "article". */
+  article?: {
+    publishedTime: string;
+    modifiedTime?: string;
+    author?: string;
+    tags?: string[];
+  };
+  /** Display title for the final breadcrumb segment when the route isn't in the
+   * static crumb-titles map (e.g. a blog post's real title instead of its slug). */
+  breadcrumbTitle?: string;
 }
 
 export interface SeoInput extends PageSeo {
@@ -40,7 +50,8 @@ export function resolveSeo(input: SeoInput): ResolvedSeo {
         : `${SITE.url}${input.ogImage}`
       : `${SITE.url}${SITE.defaultOgImage}`,
     ogType: input.ogType ?? "website",
-    robots: input.noindex ? "noindex,nofollow" : "index,follow,max-image-preview:large",
+    // noindex still follows: the 404 page's recovery links stay crawlable.
+    robots: input.noindex ? "noindex,follow" : "index,follow,max-image-preview:large",
   };
 }
 

@@ -103,6 +103,10 @@ a {
   color: inherit;
   text-decoration: none;
 }
+/* Phone numbers never break across lines. */
+a[href^="tel:"] {
+  white-space: nowrap;
+}
 } /* @layer base */
 
 /* --- Typography defaults --- */
@@ -336,7 +340,7 @@ blockquote {
   margin-top: var(--s-3);
   font-family: var(--ff-mono);
   font-size: var(--t-small);
-  color: var(--c-ink-soft);
+  color: var(--c-ink-muted);
 }
 
 /* Data tables: digits align in columns (tabular) and sit at cap height

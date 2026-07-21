@@ -23,17 +23,19 @@ export default defineConfig({
   },
   markdown: {
     // Smart quotes, ellipses, and dashes for editorial-grade punctuation in
-    // Markdown post bodies. The house style avoids em dashes; en dashes stay.
+    // Markdown post bodies. "oldschool" maps -- to en dash and --- to em dash,
+    // matching the hand-authored .astro copy (which uses real em dashes).
     remarkPlugins: [[/** @type {any} */ (remarkSmartypants), { dashes: "oldschool" }]],
     // Small-cap acronyms (LTL, FTL, RGN) the same way <Caps> does elsewhere.
     rehypePlugins: [/** @type {any} */ (rehypeSmallCaps)],
   },
   integrations: [
     mdx(),
+    // No global lastmod: stamping every URL with the build time would signal
+    // "everything changed" on each deploy.
     sitemap({
       changefreq: "weekly",
       priority: 0.7,
-      lastmod: new Date(),
     }),
   ],
   vite: {

@@ -45,15 +45,15 @@ export const SERVICES: ServiceItem[] = [
       },
       {
         q: "When does Flatbed LTL beat a full flatbed?",
-        a: "Roughly when your load runs 8–20 linear feet. Below a full trailer's worth of deck, sharing the space with other partials splits the cost. Over that, a dedicated flatbed is usually the better rate.",
+        a: "Roughly when your load runs 8–20 linear feet. Below a full trailer’s worth of deck, sharing the space with other partials splits the cost. Over that, a dedicated flatbed is usually the better rate.",
       },
       {
-        q: "Can you load if we don't have a forklift or dock?",
+        q: "Can you load if we don’t have a forklift or dock?",
         a: "Yes — flag it on the quote. We match the trailer and equipment to the site, from driver-assist to crane- or forklift-loaded, and put it on the dispatch so the driver arrives ready.",
       },
       {
         q: "What if my load is oversized or over-height?",
-        a: "Past legal flatbed dimensions we move it on open deck — step-deck, double-drop, or RGN — with permits and pilot cars arranged in-house. Send the dimensions and we'll route it.",
+        a: "Past legal flatbed dimensions we move it on open deck — step-deck, double-drop, or RGN — with permits and pilot cars arranged in-house. Send the dimensions and we’ll route it.",
       },
     ],
   },
@@ -66,15 +66,15 @@ export const SERVICES: ServiceItem[] = [
     faqs: [
       {
         q: "What freight is a good fit for Dry Van LTL?",
-        a: "Palletized, boxed, or crated goods that need to stay enclosed and dry and don't fill a full trailer. If it rides on standard pallets and is weather-sensitive, dry van LTL is usually the call.",
+        a: "Palletized, boxed, or crated goods that need to stay enclosed and dry and don’t fill a full trailer. If it rides on standard pallets and is weather-sensitive, dry van LTL is usually the call.",
       },
       {
         q: "Will my freight get reclassified after pickup?",
-        a: "We quote off the real commodity and dimensions, so you don't get a surprise reclass on the invoice. Give us accurate weight and dims up front and the number you're quoted is the number you pay.",
+        a: "We quote off the real commodity and dimensions, so you don’t get a surprise reclass on the invoice. Give us accurate weight and dims up front and the number you’re quoted is the number you pay.",
       },
       {
         q: "Do you offer liftgate or limited-access delivery?",
-        a: "Yes — liftgate, limited-access, and appointment deliveries are available as accessorials. Tell us at quote time so it's priced in rather than tacked on later.",
+        a: "Yes — liftgate, limited-access, and appointment deliveries are available as accessorials. Tell us at quote time so it’s priced in rather than tacked on later.",
       },
     ],
   },
@@ -108,15 +108,15 @@ export const SERVICES: ServiceItem[] = [
     faqs: [
       {
         q: "When should I book a full truckload instead of LTL?",
-        a: "When you have enough freight to fill a trailer, when the freight is fragile and you'd rather it not be handled at a cross-dock, or when timing is tight — a dedicated trailer runs point to point with no terminal stops.",
+        a: "When you have enough freight to fill a trailer, when the freight is fragile and you’d rather it not be handled at a cross-dock, or when timing is tight — a dedicated trailer runs point to point with no terminal stops.",
       },
       {
         q: "How fast can a truckload deliver?",
-        a: "It's one trailer, one customer, one delivery, so transit is governed by drive time and hours-of-service rather than the LTL hub network. Give us the lane and we'll quote honest transit, not optimistic transit.",
+        a: "It’s one trailer, one customer, one delivery, so transit is governed by drive time and hours-of-service rather than the LTL hub network. Give us the lane and we’ll quote honest transit, not optimistic transit.",
       },
       {
         q: "Do you run team drivers for urgent loads?",
-        a: "For time-critical full-trailer freight we can arrange team or expedited capacity. Ask at quote time and we'll price the option against a standard solo run.",
+        a: "For time-critical full-trailer freight we can arrange team or expedited capacity. Ask at quote time and we’ll price the option against a standard solo run.",
       },
     ],
   },
@@ -129,11 +129,11 @@ export const SERVICES: ServiceItem[] = [
     faqs: [
       {
         q: "What trailers do you run for open-deck freight?",
-        a: "Standard flatbed, step-deck, double-drop, and RGN — matched to the height and deck clearance your load needs. Send the dimensions and weight and we'll spec the right deck.",
+        a: "Standard flatbed, step-deck, double-drop, and RGN — matched to the height and deck clearance your load needs. Send the dimensions and weight and we’ll spec the right deck.",
       },
       {
         q: "Do you handle permits and escorts for oversized loads?",
-        a: "Yes. Permits, routing, and pilot/escort cars for over-dimensional freight are arranged in-house, so you're not stitching together a patchwork of vendors.",
+        a: "Yes. Permits, routing, and pilot/escort cars for over-dimensional freight are arranged in-house, so you’re not stitching together a patchwork of vendors.",
       },
       {
         q: "How is the load secured?",
@@ -150,7 +150,7 @@ export const SERVICES: ServiceItem[] = [
     faqs: [
       {
         q: "What temperature ranges do you carry?",
-        a: "Multi-temp reefer from frozen through fresh and controlled-ambient. Give us the set point and any protect-from-freeze requirement and it's noted on the dispatch.",
+        a: "Multi-temp reefer from frozen through fresh and controlled-ambient. Give us the set point and any protect-from-freeze requirement and it’s noted on the dispatch.",
       },
       {
         q: "Do you provide temperature records?",
@@ -158,7 +158,7 @@ export const SERVICES: ServiceItem[] = [
       },
       {
         q: "Can reefer freight move LTL, or only full trailers?",
-        a: "Both. We handle full reefer trailers and can consolidate smaller temperature-controlled loads; tell us the volume and we'll quote the cheaper structure.",
+        a: "Both. We handle full reefer trailers and can consolidate smaller temperature-controlled loads; tell us the volume and we’ll quote the cheaper structure.",
       },
     ],
   },
@@ -179,7 +179,7 @@ export const SERVICES: ServiceItem[] = [
       },
       {
         q: "Is hotshot the same as expedited truckload?",
-        a: "They overlap. Hotshot usually runs on smaller trucks and gooseneck trailers for lighter loads; for heavier urgent freight we'll quote expedited truckload instead. Tell us the weight and deadline and we'll pick the right one.",
+        a: "They overlap. Hotshot usually runs on smaller trucks and gooseneck trailers for lighter loads; for heavier urgent freight we’ll quote expedited truckload instead. Tell us the weight and deadline and we’ll pick the right one.",
       },
     ],
   },
@@ -194,7 +194,7 @@ export const SERVICES: ServiceItem[] = [
     faqs: [
       {
         q: "What is transloading?",
-        a: "Moving freight from one mode or trailer to another mid-route — container to van, flatbed to pup, or van to hotshot — when the original equipment can't finish the job. It happens at our Atlanta dock.",
+        a: "Moving freight from one mode or trailer to another mid-route — container to van, flatbed to pup, or van to hotshot — when the original equipment can’t finish the job. It happens at our Atlanta dock.",
       },
       {
         q: "How fast is the transfer?",
@@ -220,7 +220,7 @@ export const SERVICES: ServiceItem[] = [
       },
       {
         q: "Can you consolidate multiple inbound shipments?",
-        a: "Yes — several inbound loads in, one consolidated outbound trailer out (or the reverse: one in, fanned out). It's a common way to cut LTL cost to regional stops.",
+        a: "Yes — several inbound loads in, one consolidated outbound trailer out (or the reverse: one in, fanned out). It’s a common way to cut LTL cost to regional stops.",
       },
       {
         q: "Where is the dock?",
@@ -243,7 +243,7 @@ export const SERVICES: ServiceItem[] = [
       },
       {
         q: "How quickly can you respond?",
-        a: "Distressed loads are handled with 24/7 dispatch and same-shift recovery at our Lilburn dock. Call the dispatch line and we'll move on it.",
+        a: "Distressed loads are handled with 24/7 dispatch and same-shift recovery at our Lilburn dock. Call the dispatch line and we’ll move on it.",
       },
       {
         q: "Can you document the condition for a claim?",
@@ -260,7 +260,7 @@ export const SERVICES: ServiceItem[] = [
     faqs: [
       {
         q: "Do you offer short-term and long-term storage?",
-        a: "Both — from overflow staging measured in days to long-term pallet storage. Release freight on your schedule, whether that's a construction draw schedule or retail sell-through.",
+        a: "Both — from overflow staging measured in days to long-term pallet storage. Release freight on your schedule, whether that’s a construction draw schedule or retail sell-through.",
       },
       {
         q: "Can you pick and pack orders?",

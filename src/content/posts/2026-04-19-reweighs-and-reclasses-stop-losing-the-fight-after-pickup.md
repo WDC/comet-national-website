@@ -43,7 +43,7 @@ When that's the pattern, the fix isn't better paperwork. It's a different mode. 
 
 We've been booking and chasing freight since 1995, and we've read a lot of correction invoices. The pattern almost never changes: predictable freight priced correctly stays predictable, and mismeasured or misclassed freight bleeds money the moment it leaves the dock.
 
-So we do two things. First, we help you classify and document a shipment correctly up front, so the quote you approve is the bill you get. Second, when your freight keeps getting punished by an LTL network that doesn't want it, we move it the right way, whether that's partial flatbed, full truckload, or open-deck, across all 50 states and Canada.
+So we do two things. First, we help you classify and document a shipment correctly up front, so the quote you approve is the bill you get. Second, when your freight keeps getting punished by an LTL network that doesn't want it, we move it the right way, whether that's partial flatbed, full truckload, or open-deck, across all 48 states and Canada.
 
 And if the same correction charges keep showing up month after month, that's a freight-spend problem, not a one-load problem. We'll look at how you're shipping and tell you where the money is leaking.
 

@@ -22,20 +22,20 @@ const url = `${SITE.url}/services/${service.slug}`;
 // (industry pages already link out to services).
 const industries = getIndustriesForService(service.slug);
 
-// Vary the closing CTA by service family so all 11 pages don't end on the exact
+// Vary the closing CTA by service family so all 12 pages don't end on the exact
 // same "Tell us about the load" block.
 const CLOSERS: Record<ServiceCategory, { title: string; body: string }> = {
   trailer: {
     title: "Tell us about the load.",
-    body: "Dimensions, weight, where it's going, and when it has to be there. We'll put the right trailer under it.",
+    body: "Dimensions, weight, where it’s going, and when it has to be there. We’ll put the right trailer under it.",
   },
   facility: {
     title: "Tell us what the dock needs to do.",
-    body: "Transload, cross-dock, recover, or store — describe the freight and the deadline, and we'll handle it from our dock.",
+    body: "Transload, cross-dock, recover, or store — describe the freight and the deadline, and we’ll handle it from our dock.",
   },
   managed: {
     title: "Tell us about the problem.",
-    body: "One call, every mode. Describe the freight and we'll figure out how it moves — and move it.",
+    body: "One call, every mode. Describe the freight and we’ll figure out how it moves — and move it.",
   },
 };
 const closer = CLOSERS[service.category];
@@ -180,7 +180,7 @@ const closer = CLOSERS[service.category];
     color: inherit;
     transition: color var(--d-fast) var(--ease-out), letter-spacing var(--d-base) var(--ease-out);
   }
-  .pillar__crumbs a:hover { color: var(--c-accent); letter-spacing: 0.18em; }
+  .pillar__crumbs a:hover { color: var(--c-accent-deep); letter-spacing: 0.18em; }
   .pillar__hero-grid {
     display: grid;
     grid-template-columns: 1.1fr 1fr;
@@ -197,7 +197,7 @@ const closer = CLOSERS[service.category];
     margin-top: var(--s-5);
     font-size: clamp(1.25rem, 2vw, 1.75rem);
     line-height: 1.2;
-    color: var(--c-accent);
+    color: var(--c-accent-deep);
     font-weight: 600;
     max-width: 26ch;
   }
@@ -205,7 +205,7 @@ const closer = CLOSERS[service.category];
     margin-top: var(--s-5);
     color: var(--c-ink-muted);
     max-width: 50ch;
-    font-size: 1.0625rem;
+    font-size: var(--t-body-sm);
     line-height: 1.55;
   }
   .pillar__cta {
@@ -283,7 +283,7 @@ const closer = CLOSERS[service.category];
   .pillar__related-title { font-size: 1.25rem; line-height: 1.1; }
   .pillar__related-blurb { font-size: var(--t-small); color: var(--c-ink-muted); }
   .pillar__related-cta {
-    color: var(--c-accent);
+    color: var(--c-accent-deep);
     font-family: var(--ff-display);
     font-weight: 600;
   }
@@ -315,7 +315,7 @@ const closer = CLOSERS[service.category];
     background: var(--c-bg);
     transform: translateY(-1px);
   }
-  .pillar__industries-title { font-size: 1.0625rem; line-height: 1; }
+  .pillar__industries-title { font-size: var(--t-body-sm); line-height: 1; }
   .pillar__industries-cta { color: var(--c-accent-deep); font-weight: 700; }
 
   .pillar__faq-list {
@@ -368,7 +368,7 @@ const closer = CLOSERS[service.category];
     padding: 0 var(--s-8) var(--s-6) 0;
     color: var(--c-ink-muted);
     max-width: 68ch;
-    font-size: 1.0625rem;
+    font-size: var(--t-body-sm);
     line-height: var(--lh-relaxed);
   }
 

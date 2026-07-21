@@ -50,4 +50,4 @@ When a container is on the clock, the faster we can plan the outbound side, the 
 
 With that, we can plan the transload, line up the right trucks, and give you a real picture instead of a guess.
 
-Comet has moved freight since 1995, we cover all 50 states and Canada, and we're set up in metro Atlanta to take an ocean box off your hands and put its contents on the road. If you've got a container sitting at the port and the charges are starting to climb, call us or ask for a transload quote. We'll tell you how we'd get it rolling.
+Comet has moved freight since 1995, we cover all 48 states and Canada, and we're set up in metro Atlanta to take an ocean box off your hands and put its contents on the road. If you've got a container sitting at the port and the charges are starting to climb, call us or ask for a transload quote. We'll tell you how we'd get it rolling.

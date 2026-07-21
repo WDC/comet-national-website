@@ -62,7 +62,7 @@ RGN moves are where permits, routing, securement, and sometimes escorts come int
 
 Oversized and heavy loads bring their own layer: state permits, legal travel times, route restrictions around bridges and low clearances, and escort requirements. This is the part that stresses shippers out, and for good reason. One missed permit or a route with a bridge you cannot clear turns a shipment into a standstill.
 
-This is exactly the work Comet does every day. We handle standard flatbed, step-deck, and RGN loads across all 50 states and Canada, and we manage the tarping, strapping, securement, permits, and routing that come with the odd shapes and heavy hauls. If it has to ride on a deck and get strapped down, we can figure out how to move it.
+This is exactly the work Comet does every day. We handle standard flatbed, step-deck, and RGN loads across all 48 states and Canada, and we manage the tarping, strapping, securement, permits, and routing that come with the odd shapes and heavy hauls. If it has to ride on a deck and get strapped down, we can figure out how to move it.
 
 ## What if you do not need a whole trailer?
 

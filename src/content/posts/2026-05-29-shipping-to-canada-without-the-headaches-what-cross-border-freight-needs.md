@@ -52,4 +52,4 @@ If you're planning a Canada move, get these answers first:
 
 Answer those and most of the headache disappears before it starts.
 
-We move freight to all 50 states and Canada, dry or refrigerated, full truckload or partial, flatbed or open-deck. If you've got a load heading north and you'd rather not spend the week chasing it, call Comet or ask us for a quote. Tell us what it is and where it's going, and we'll tell you the cleanest way to get it there.
+We move freight to all 48 states and Canada, dry or refrigerated, full truckload or partial, flatbed or open-deck. If you've got a load heading north and you'd rather not spend the week chasing it, call Comet or ask us for a quote. Tell us what it is and where it's going, and we'll tell you the cleanest way to get it there.

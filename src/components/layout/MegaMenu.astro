@@ -4,10 +4,11 @@ import Caps from "@components/ui/Caps.astro";
 
 const groups: ServiceCategory[] = ["trailer", "facility", "managed"];
 ---
+<!-- A disclosure of plain navigation links — deliberately NOT role="menu",
+     which would promise arrow-key navigation this pattern doesn't implement. -->
 <div
   id="services-mega-menu"
   class="mega-menu"
-  role="menu"
   aria-labelledby="services-trigger"
 >
   <div class="mega-menu__inner container-content">
@@ -17,7 +18,7 @@ const groups: ServiceCategory[] = ["trailer", "facility", "managed"];
         <ul class="mega-menu__list">
           {SERVICES_BY_CATEGORY[g].map((s) => (
             <li>
-              <a href={`/services/${s.slug}`} class="mega-menu__item" role="menuitem">
+              <a href={`/services/${s.slug}`} class="mega-menu__item">
                 <span class="mega-menu__item-title"><Caps text={s.title} /></span>
                 <span class="mega-menu__item-blurb"><Caps text={s.blurb} /></span>
               </a>
@@ -29,7 +30,7 @@ const groups: ServiceCategory[] = ["trailer", "facility", "managed"];
     <div class="mega-menu__cta">
       <div class="eyebrow">Need a partner?</div>
       <p class="mega-menu__cta-line">One call, every mode. We solve the whole problem.</p>
-      <a href="/get-a-quote" class="mega-menu__cta-link">Get a quote →</a>
+      <a href="/get-a-quote" class="mega-menu__cta-link">Get a Quote →</a>
     </div>
   </div>
 </div>
@@ -42,7 +43,7 @@ const groups: ServiceCategory[] = ["trailer", "facility", "managed"];
     top: 100%;
     background: var(--c-bg-elevated);
     border-bottom: 1px solid var(--c-line);
-    box-shadow: 0 18px 32px -24px rgba(13, 17, 23, 0.18);
+    box-shadow: 0 18px 32px -24px rgba(22, 29, 18, 0.18);
     opacity: 0;
     visibility: hidden;
     transform: translateY(-4px);
@@ -87,7 +88,8 @@ const groups: ServiceCategory[] = ["trailer", "facility", "managed"];
   .mega-menu__item:focus-visible {
     border-left-color: var(--c-accent);
     background: var(--c-bg);
-    outline: none;
+    /* Keep the global :focus-visible outline — the 2px brass border alone
+       is below the 3:1 indicator minimum on this light ground. */
   }
   .mega-menu__item-title {
     font-family: var(--ff-display);

@@ -59,7 +59,7 @@ Give us that and you get a quote that holds up, not one that unravels at a termi
 
 ## Where Comet fits
 
-Open-deck freight is the house specialty here, and partial flatbed is a core part of it. We've been booking these loads since 1995, and we move freight to all 50 states and Canada. When you call, you get a person who has actually handled awkward freight, not a tracking number.
+Open-deck freight is the house specialty here, and partial flatbed is a core part of it. We've been booking these loads since 1995, and we move freight to all 48 states and Canada. When you call, you get a person who has actually handled awkward freight, not a tracking number.
 
 If your shipment is really about small partial flatbed moves, our sister brand **FlatbedLTL** (flatbed.delcoe.com) is built specifically for that, with pricing made for one to several pallets of deck freight.
 
