@@ -2,18 +2,21 @@
 import Logo from "./Logo.astro";
 import MegaMenu from "./MegaMenu.astro";
 import Button from "@components/ui/Button.astro";
+import Caps from "@components/ui/Caps.astro";
 import { SITE } from "@lib/site";
-
-const links = [
-  { label: "Services", href: "/services", hasMenu: true },
-  { label: "Industries", href: "/industries" },
-  { label: "Why Comet", href: "/why-comet" },
-  { label: "Blog", href: "/blog" },
-];
+import { NAV_SECTIONS, isSectionActive } from "@lib/nav";
 
 const pathname = Astro.url.pathname;
-function isActive(href: string) {
-  if (href === "/") return pathname === "/";
+
+// Every top-level section carries a slab of sub-pages (see src/lib/nav.ts).
+// Desktop renders them as full-width mega panels; the mobile drawer renders
+// the same data as expanding slabs — one nav model for all viewports.
+const sections = NAV_SECTIONS.map((s) => ({
+  ...s,
+  active: isSectionActive(s, pathname),
+}));
+
+function isCurrent(href: string) {
   return pathname === href || pathname.startsWith(`${href}/`);
 }
 ---
@@ -23,25 +26,23 @@ function isActive(href: string) {
 
     <nav class="site-nav" aria-label="Primary">
       <ul class="site-nav__list">
-        {links.map((l) => (
-          <li class={`site-nav__item${l.hasMenu ? " has-menu" : ""}`}>
+        {sections.map((s) => (
+          <li class="site-nav__item has-menu">
             <a
-              href={l.href}
+              href={s.href}
               class="site-nav__link"
-              id={l.hasMenu ? "services-trigger" : undefined}
-              aria-expanded={l.hasMenu ? "false" : undefined}
-              aria-controls={l.hasMenu ? "services-mega-menu" : undefined}
-              aria-current={isActive(l.href) ? "page" : undefined}
-              data-active={isActive(l.href)}
+              id={`${s.id}-trigger`}
+              aria-expanded="false"
+              aria-controls={`${s.id}-mega-menu`}
+              aria-current={isCurrent(s.href) ? "page" : undefined}
+              data-active={s.active}
             >
-              {l.label}
-              {l.hasMenu && (
-                <svg width="10" height="6" viewBox="0 0 10 6" aria-hidden="true">
-                  <path d="M1 1 L5 5 L9 1" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="square" />
-                </svg>
-              )}
+              {s.label}
+              <svg width="10" height="6" viewBox="0 0 10 6" aria-hidden="true">
+                <path d="M1 1 L5 5 L9 1" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="square" />
+              </svg>
             </a>
-            {l.hasMenu && <MegaMenu />}
+            <MegaMenu section={s} />
           </li>
         ))}
       </ul>
@@ -70,11 +71,59 @@ function isActive(href: string) {
   </div>
 
   <div id="mobile-nav" class="site-mobile-nav" data-mobile-nav hidden>
-    <ul>
-      {links.map((l) => (
-        <li><a href={l.href} aria-current={isActive(l.href) ? "page" : undefined}>{l.label}</a></li>
+    <ul class="m-nav__sections">
+      {sections.map((s) => (
+        <li class="m-nav__section">
+          <button
+            type="button"
+            class="m-nav__section-toggle"
+            aria-expanded={s.active ? "true" : "false"}
+            aria-controls={`m-panel-${s.id}`}
+            data-active={s.active}
+            data-accordion-toggle
+          >
+            <span>{s.label}</span>
+            <svg width="12" height="8" viewBox="0 0 12 8" aria-hidden="true">
+              <path d="M1 1.5 L6 6.5 L11 1.5" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="square" />
+            </svg>
+          </button>
+          <div id={`m-panel-${s.id}`} class="m-nav__panel" hidden={!s.active} data-accordion-panel>
+            {s.groups.map((g) => (
+              <div class="m-nav__group">
+                <div class="eyebrow m-nav__group-label">{g.label}</div>
+                <ul class="m-nav__list">
+                  {g.items.map((item) => (
+                    <li>
+                      <a
+                        href={item.href}
+                        class="m-nav__item"
+                        aria-current={isCurrent(item.href) ? "page" : undefined}
+                      >
+                        <span class="m-nav__item-title"><Caps text={item.title} /></span>
+                        {item.blurb && (
+                          <span class="m-nav__item-blurb"><Caps text={item.blurb} /></span>
+                        )}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+            <a href={s.href} class="m-nav__overview">
+              {s.overviewLabel} <span aria-hidden="true">→</span>
+            </a>
+          </div>
+        </li>
       ))}
-      <li><a href="/get-a-quote" class="mobile-cta">Get a Quote</a></li>
+      <li class="m-nav__extras">
+        <a href={`tel:${SITE.phoneE164}`} class="m-nav__phone">
+          <svg class="phone-icon" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
+            <path d="M3.654 1.328a.678.678 0 00-1.015-.063L1.605 2.3c-.483.484-.661 1.169-.45 1.77a17.6 17.6 0 004.168 6.608 17.6 17.6 0 006.608 4.168c.601.211 1.286.033 1.77-.45l1.034-1.034a.678.678 0 00-.063-1.015l-2.307-1.794a.678.678 0 00-.58-.122l-2.19.547a1.745 1.745 0 01-1.657-.459L5.482 8.157a1.745 1.745 0 01-.46-1.657l.548-2.19a.678.678 0 00-.122-.58L3.654 1.328z" fill="currentColor"/>
+          </svg>
+          <span>{SITE.phone}</span>
+        </a>
+        <a href="/get-a-quote" class="mobile-cta">Get a Quote</a>
+      </li>
     </ul>
   </div>
 </header>
@@ -85,8 +134,8 @@ function isActive(href: string) {
   // "desktop nav visible but hover-only menu" dead zone on touch tablets.
   const canHover = window.matchMedia("(hover: hover)").matches;
 
-  // Mega-menu: open on hover & keyboard focus (pointer-capable), or tap-to-open
-  // on touch. Respects reduced-motion via CSS.
+  // Mega-menu slabs: open on hover & keyboard focus (pointer-capable), or
+  // tap-to-open on touch. Respects reduced-motion via CSS.
   const triggers = document.querySelectorAll<HTMLElement>(".site-nav__item.has-menu");
   const closers: Array<(returnFocus?: boolean) => void> = [];
   triggers.forEach((item) => {
@@ -98,6 +147,10 @@ function isActive(href: string) {
 
     const open = () => {
       if (closeTimer) window.clearTimeout(closeTimer);
+      // Only one slab open at a time — hovering a sibling closes the rest.
+      closers.forEach((c) => {
+        if (c !== closeNow) c();
+      });
       openTimer = window.setTimeout(() => {
         menu.classList.add("is-open");
         link.setAttribute("aria-expanded", "true");
@@ -110,13 +163,15 @@ function isActive(href: string) {
         link.setAttribute("aria-expanded", "false");
       }, 140);
     };
-    closers.push((returnFocus = false) => {
+    const closeNow = (returnFocus = false) => {
+      if (openTimer) window.clearTimeout(openTimer);
       const wasOpen = menu.classList.contains("is-open");
       menu.classList.remove("is-open");
       link.setAttribute("aria-expanded", "false");
       // Don't strand keyboard focus inside a hidden menu.
       if (returnFocus && wasOpen && item.contains(document.activeElement)) link.focus();
-    });
+    };
+    closers.push(closeNow);
 
     // Keyboard focus opens the menu on every device class.
     item.addEventListener("focusin", open);
@@ -132,6 +187,7 @@ function isActive(href: string) {
       link.addEventListener("click", (e) => {
         if (!menu.classList.contains("is-open")) {
           e.preventDefault();
+          closers.forEach((c) => c());
           menu.classList.add("is-open");
           link.setAttribute("aria-expanded", "true");
         }
@@ -151,12 +207,17 @@ function isActive(href: string) {
     if (e.key === "Escape") closers.forEach((c) => c(true));
   });
 
-  // Mobile nav toggle — with Escape-to-close, outside-click close, focus move,
-  // and a simple Tab focus trap while open.
+  // Mobile drawer — same slab data as the desktop panels, rendered as an
+  // accordion. Escape-to-close, outside-click close, focus move, and a simple
+  // Tab focus trap while open.
   const toggle = document.querySelector<HTMLButtonElement>("[data-mobile-toggle]");
   const mnav = document.querySelector<HTMLElement>("[data-mobile-nav]");
   if (toggle && mnav) {
-    const focusables = () => [...mnav.querySelectorAll<HTMLElement>("a[href]")];
+    // Anything focusable that isn't inside a collapsed slab panel.
+    const focusables = () =>
+      [...mnav.querySelectorAll<HTMLElement>("a[href], button")].filter(
+        (el) => !el.closest("[hidden]"),
+      );
     const isOpen = () => toggle.getAttribute("aria-expanded") === "true";
 
     const openNav = () => {
@@ -172,12 +233,30 @@ function isActive(href: string) {
 
     toggle.addEventListener("click", () => (isOpen() ? closeNav() : openNav()));
 
+    // Section slabs expand one at a time.
+    const accordions = [...mnav.querySelectorAll<HTMLButtonElement>("[data-accordion-toggle]")];
+    accordions.forEach((btn) => {
+      const panel = document.getElementById(btn.getAttribute("aria-controls") || "");
+      if (!panel) return;
+      btn.addEventListener("click", () => {
+        const expanded = btn.getAttribute("aria-expanded") === "true";
+        accordions.forEach((other) => {
+          other.setAttribute("aria-expanded", "false");
+          document.getElementById(other.getAttribute("aria-controls") || "")?.setAttribute("hidden", "");
+        });
+        if (!expanded) {
+          btn.setAttribute("aria-expanded", "true");
+          panel.removeAttribute("hidden");
+        }
+      });
+    });
+
     // Close after choosing a destination.
     mnav.addEventListener("click", (e) => {
       if ((e.target as Element)?.closest("a[href]")) closeNav(false);
     });
 
-    // Escape closes; outside tap closes; Tab is trapped within the panel.
+    // Escape closes; outside tap closes; Tab is trapped within the drawer.
     document.addEventListener("keydown", (e) => {
       if (!isOpen()) return;
       if (e.key === "Escape") {
@@ -266,6 +345,12 @@ function isActive(href: string) {
   .site-nav__link[data-active="true"] {
     color: var(--c-accent-deep);
   }
+  .site-nav__link svg {
+    transition: transform var(--d-fast) var(--ease-out);
+  }
+  .site-nav__link[aria-expanded="true"] svg {
+    transform: rotate(180deg);
+  }
   /* Active underline is provided by .site-nav__link::after in motion.css */
   .site-header__actions {
     display: flex;
@@ -320,7 +405,10 @@ function isActive(href: string) {
   .site-mobile-nav {
     border-top: 1px solid var(--c-line);
     background: var(--c-bg-elevated);
-    padding: var(--s-3) var(--content-pad-x);
+    padding: var(--s-3) var(--content-pad-x) var(--s-5);
+    max-height: calc(100dvh - 72px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
     animation: mobile-slide-down 280ms var(--ease-out);
   }
   @keyframes mobile-slide-down {
@@ -328,35 +416,130 @@ function isActive(href: string) {
     to   { opacity: 1; transform: translateY(0); }
   }
   .site-mobile-nav[hidden] { display: none; }
-  .site-mobile-nav ul {
+  .m-nav__sections {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+  }
+  .m-nav__section {
+    border-bottom: 1px solid var(--c-line-soft);
+  }
+  .m-nav__section-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: var(--s-3);
+    font-family: var(--ff-display);
+    font-weight: 600;
+    font-size: 1rem;
+    letter-spacing: var(--ls-snug);
+    color: var(--c-ink);
+    text-align: left;
+    transition: color var(--d-fast) var(--ease-out);
+  }
+  .m-nav__section-toggle:hover,
+  .m-nav__section-toggle[data-active="true"] {
+    color: var(--c-accent-deep);
+  }
+  .m-nav__section-toggle svg {
+    flex: none;
+    transition: transform var(--d-fast) var(--ease-out);
+  }
+  .m-nav__section-toggle[aria-expanded="true"] svg {
+    transform: rotate(180deg);
+  }
+
+  /* The expanded slab — same grouped sub-tabs as the desktop panel. */
+  .m-nav__panel {
+    padding: var(--s-1) var(--s-3) var(--s-4);
+    display: grid;
+    gap: var(--s-4);
+    animation: mobile-slide-down 240ms var(--ease-out);
+  }
+  .m-nav__panel[hidden] { display: none; }
+  .m-nav__group-label {
+    margin-bottom: var(--s-2);
+  }
+  .m-nav__list {
     list-style: none;
     margin: 0;
     padding: 0;
     display: grid;
     gap: var(--s-1);
   }
-  .site-mobile-nav a {
-    display: block;
-    padding: var(--s-3);
+  .m-nav__item {
+    display: grid;
+    gap: 2px;
+    padding: var(--s-2) 0 var(--s-2) var(--s-3);
+    border-left: 2px solid var(--c-line-soft);
+    transition: border-color var(--d-fast) var(--ease-out), background var(--d-fast) var(--ease-out);
+  }
+  .m-nav__item:hover,
+  .m-nav__item:focus-visible,
+  .m-nav__item[aria-current="page"] {
+    border-left-color: var(--c-accent);
+    background: var(--c-bg);
+  }
+  .m-nav__item-title {
     font-family: var(--ff-display);
     font-weight: 600;
+    font-size: 0.95rem;
     color: var(--c-ink);
-    border-bottom: 1px solid var(--c-line-soft);
-    position: relative;
-    transition: padding-left var(--d-fast) var(--ease-out), color var(--d-fast) var(--ease-out);
+    letter-spacing: var(--ls-snug);
   }
-  .site-mobile-nav a:hover,
-  .site-mobile-nav a:focus-visible {
+  .m-nav__item[aria-current="page"] .m-nav__item-title {
     color: var(--c-accent-deep);
-    padding-left: calc(var(--s-3) + 6px);
   }
-  .site-mobile-nav .mobile-cta {
+  .m-nav__item-blurb {
+    font-size: var(--t-small);
+    color: var(--c-ink-muted);
+    line-height: 1.4;
+  }
+  .m-nav__overview {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    justify-self: start;
+    font-family: var(--ff-display);
+    font-weight: 600;
+    font-size: 0.9rem;
+    letter-spacing: var(--ls-snug);
+    color: var(--c-accent-deep);
+  }
+  .m-nav__overview:hover,
+  .m-nav__overview:focus-visible {
+    color: var(--c-ink);
+  }
+
+  .m-nav__extras {
+    display: grid;
+    gap: var(--s-3);
+    padding-top: var(--s-4);
+  }
+  .m-nav__phone {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: var(--s-2);
+    font-family: var(--ff-mono);
+    font-size: var(--t-body);
+    color: var(--c-ink);
+    font-feature-settings: "lnum" 1, "tnum" 1;
+    font-variant-numeric: tabular-nums lining-nums;
+  }
+  .m-nav__phone:hover { color: var(--c-accent-deep); }
+  .mobile-cta {
+    display: block;
+    padding: var(--s-3);
     background: var(--c-accent);
     color: var(--c-accent-ink);
-    margin-top: var(--s-2);
+    font-family: var(--ff-display);
+    font-weight: 600;
     border-radius: var(--r-sm);
     text-align: center;
-    border-bottom: none;
   }
 
   @media (max-width: 960px) {
