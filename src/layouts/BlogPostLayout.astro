@@ -56,6 +56,8 @@ const schema = articleSchema({
   extraSchema={[schema]}
 >
   <article class="post">
+    <!-- Brass reading-progress hairline; lib/motion.ts drives --progress. -->
+    <div data-reading-progress data-target=".post-body" aria-hidden="true"></div>
     <header class="post__hero section-tight" data-reveal>
       <div class="container-content post__hero-inner">
         <nav aria-label="Breadcrumb" class="post__crumbs mono">

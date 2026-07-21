@@ -4,7 +4,7 @@ import Button from "@components/ui/Button.astro";
 import ServiceSchema from "@components/seo/ServiceSchema.astro";
 import HowItWorksFlow from "@components/animations/HowItWorksFlow.astro";
 import { SITE } from "@lib/site";
-import { type ServiceItem, type ServiceCategory, getService, getIndustriesForService } from "@lib/services";
+import { SERVICES, type ServiceItem, type ServiceCategory, getService, getIndustriesForService } from "@lib/services";
 import Caps from "@components/ui/Caps.astro";
 
 interface Props {
@@ -22,6 +22,16 @@ const url = `${SITE.url}/services/${service.slug}`;
 // (industry pages already link out to services).
 const industries = getIndustriesForService(service.slug);
 
+// Each service family gets its own hero flavor so the twelve pages stop
+// reading as one template:
+//   trailer  → "blueprint": full-bleed pine with a drafting grid, framed art
+//   facility → "ledger": cream ground, watermark word, quick-facts spec strip
+//   managed  → "editorial": centered display type over a running mode ticker
+const flavor: ServiceCategory = service.category;
+const watermarkWord = service.title.split(" ")[0];
+const categoryLabel =
+  flavor === "trailer" ? "By trailer" : flavor === "facility" ? "By facility" : "Managed";
+
 // Vary the closing CTA by service family so all 12 pages don't end on the exact
 // same "Tell us about the load" block.
 const CLOSERS: Record<ServiceCategory, { title: string; body: string }> = {
@@ -38,7 +48,7 @@ const CLOSERS: Record<ServiceCategory, { title: string; body: string }> = {
     body: "One call, every mode. Describe the freight and we’ll figure out how it moves — and move it.",
   },
 };
-const closer = CLOSERS[service.category];
+const closer = CLOSERS[flavor];
 ---
 <BaseLayout
   title={title}
@@ -55,36 +65,121 @@ const closer = CLOSERS[service.category];
     faq={service.faqs}
   />
 
-  <article class="pillar">
-    <header class="pillar__hero section-tight section-bar" data-reveal>
-      <div class="container-content pillar__hero-inner">
-        <nav aria-label="Breadcrumb" class="pillar__crumbs mono">
-          <a href="/">Home</a>
-          <span aria-hidden="true">/</span>
-          <a href="/services">Services</a>
-          <span aria-hidden="true">/</span>
-          <span>{service.title}</span>
-        </nav>
+  <article class={`pillar pillar--${flavor}`}>
+    {flavor === "trailer" && (
+      <header class="pillar__hero pillar__hero--blueprint section-tight on-dark" data-reveal>
+        <span class="watermark pillar__watermark" aria-hidden="true">{watermarkWord}</span>
+        <div class="container-content pillar__hero-inner">
+          <nav aria-label="Breadcrumb" class="pillar__crumbs mono">
+            <a href="/">Home</a>
+            <span aria-hidden="true">/</span>
+            <a href="/services">Services</a>
+            <span aria-hidden="true">/</span>
+            <span>{service.title}</span>
+          </nav>
 
-        <div class="pillar__hero-grid">
-          <div class="reveal-stagger" data-reveal>
-            <p class="eyebrow">Service · {service.category === "trailer" ? "By trailer" : service.category === "facility" ? "By facility" : "Managed"}</p>
-            <h1 class="pillar__headline display"><Caps text={service.title} /></h1>
+          <div class="pillar__hero-grid">
+            <div class="reveal-stagger" data-reveal>
+              <p class="eyebrow">Service · {categoryLabel}</p>
+              <h1 class="pillar__headline display"><Caps text={service.title} /></h1>
+              {service.equityLine && (
+                <p class="pillar__equity display"><Caps text={service.equityLine} /></p>
+              )}
+              <p class="pillar__blurb"><Caps text={service.blurb} /></p>
+              <div class="pillar__cta">
+                <Button href="/get-a-quote" size="lg">Get a Quote</Button>
+                <a class="pillar__phone mono" href={`tel:${SITE.phoneE164}`}>or call {SITE.phone}</a>
+              </div>
+            </div>
+            <aside class="pillar__art pillar__art--framed frame-ticks reveal-scale" data-reveal data-tilt="3" style="--reveal-delay: 200ms">
+              <slot name="hero-art" />
+            </aside>
+          </div>
+        </div>
+      </header>
+    )}
+
+    {flavor === "facility" && (
+      <header class="pillar__hero pillar__hero--ledger section-tight section-bar" data-reveal>
+        <span class="watermark pillar__watermark" aria-hidden="true">{watermarkWord}</span>
+        <div class="container-content pillar__hero-inner">
+          <nav aria-label="Breadcrumb" class="pillar__crumbs mono">
+            <a href="/">Home</a>
+            <span aria-hidden="true">/</span>
+            <a href="/services">Services</a>
+            <span aria-hidden="true">/</span>
+            <span>{service.title}</span>
+          </nav>
+
+          <div class="pillar__hero-grid">
+            <div class="pillar__ledger-copy reveal-stagger" data-reveal>
+              <p class="eyebrow">Service · {categoryLabel}</p>
+              <h1 class="pillar__headline display"><Caps text={service.title} /></h1>
+              {service.equityLine && (
+                <p class="pillar__equity display"><Caps text={service.equityLine} /></p>
+              )}
+              <p class="pillar__blurb"><Caps text={service.blurb} /></p>
+              <div class="pillar__cta">
+                <Button href="/get-a-quote" size="lg">Get a Quote</Button>
+                <a class="pillar__phone mono" href={`tel:${SITE.phoneE164}`}>or call {SITE.phone}</a>
+              </div>
+            </div>
+            <aside class="pillar__art reveal-right" data-reveal data-parallax="18" style="--reveal-delay: 200ms">
+              <slot name="hero-art" />
+            </aside>
+          </div>
+
+          <ul class="spec-strip pillar__facts reveal-stagger" data-reveal>
+            <li><span class="spec-strip__num tnum">1995</span><span class="spec-strip__label">On the dock since</span></li>
+            <li><span class="spec-strip__num"><abbr class="sc" title="Atlanta">ATL</abbr></span><span class="spec-strip__label">Home facility</span></li>
+            <li><span class="spec-strip__num"><abbr class="sc" title="United States">US</abbr> + <abbr class="sc" title="Canada">CA</abbr></span><span class="spec-strip__label">Coverage</span></li>
+            <li><span class="spec-strip__num tnum">1</span><span class="spec-strip__label">Call to place it</span></li>
+          </ul>
+        </div>
+      </header>
+    )}
+
+    {flavor === "managed" && (
+      <header class="pillar__hero pillar__hero--editorial section-tight" data-reveal>
+        <div class="container-content pillar__hero-inner">
+          <nav aria-label="Breadcrumb" class="pillar__crumbs pillar__crumbs--center mono">
+            <a href="/">Home</a>
+            <span aria-hidden="true">/</span>
+            <a href="/services">Services</a>
+            <span aria-hidden="true">/</span>
+            <span>{service.title}</span>
+          </nav>
+
+          <div class="pillar__editorial reveal-stagger" data-reveal>
+            <p class="eyebrow">Service · {categoryLabel}</p>
+            <h1 class="pillar__headline pillar__headline--xl display"><Caps text={service.title} /></h1>
             {service.equityLine && (
-              <p class="pillar__equity display"><Caps text={service.equityLine} /></p>
+              <p class="pillar__equity pillar__equity--serif"><Caps text={service.equityLine} /></p>
             )}
             <p class="pillar__blurb"><Caps text={service.blurb} /></p>
-            <div class="pillar__cta">
+            <div class="pillar__cta pillar__cta--center">
               <Button href="/get-a-quote" size="lg">Get a Quote</Button>
               <a class="pillar__phone mono" href={`tel:${SITE.phoneE164}`}>or call {SITE.phone}</a>
             </div>
           </div>
-          <aside class="pillar__art reveal" data-reveal style="--reveal-delay: 200ms">
+
+          <aside class="pillar__art pillar__art--center frame-ticks reveal-scale" data-reveal data-tilt="2" style="--reveal-delay: 260ms">
             <slot name="hero-art" />
           </aside>
         </div>
-      </div>
-    </header>
+
+        <!-- Every mode this desk can put under the freight — a running ticker. -->
+        <div class="pillar__ticker marquee" data-marquee aria-hidden="true">
+          <div class="marquee__track">
+            {SERVICES.map((s) => (
+              <span class="pillar__ticker-item mono">
+                {s.title} <span class="pillar__ticker-dot">·</span>
+              </span>
+            ))}
+          </div>
+        </div>
+      </header>
+    )}
 
     <div class="container-content pillar__body">
       <slot />
@@ -123,7 +218,7 @@ const closer = CLOSERS[service.category];
               const s = getService(slug);
               if (!s) return null;
               return (
-                <li>
+                <li class="card-sweep">
                   <a href={`/services/${s.slug}`} class="link-arrow">
                     <span class="pillar__related-title display"><Caps text={s.title} /></span>
                     <span class="pillar__related-blurb"><Caps text={s.blurb} /></span>
@@ -153,6 +248,8 @@ const closer = CLOSERS[service.category];
         </section>
       )}
 
+      <hr class="route-rule" data-reveal />
+
       <section class="pillar__final-cta section-tight reveal on-dark" data-reveal>
         <h2 class="pillar__h2 display">{closer.title}</h2>
         <p class="pillar__final-body">{closer.body}</p>
@@ -163,9 +260,19 @@ const closer = CLOSERS[service.category];
 </BaseLayout>
 
 <style>
+  /* ------------------------------------------------------------------ *
+   * Shared hero scaffolding — each flavor layers on top of this.
+   * ------------------------------------------------------------------ */
   .pillar__hero {
+    position: relative;
+    overflow: hidden;
     background: var(--c-bg-elevated);
     border-bottom: 1px solid var(--c-line);
+  }
+  .pillar__hero-inner { position: relative; z-index: 1; }
+  .pillar__watermark {
+    right: -0.06em;
+    bottom: -0.18em;
   }
   .pillar__crumbs {
     display: flex;
@@ -181,6 +288,7 @@ const closer = CLOSERS[service.category];
     transition: color var(--d-fast) var(--ease-out), letter-spacing var(--d-base) var(--ease-out);
   }
   .pillar__crumbs a:hover { color: var(--c-accent-deep); letter-spacing: 0.18em; }
+  .pillar__crumbs--center { justify-content: center; }
   .pillar__hero-grid {
     display: grid;
     grid-template-columns: 1.1fr 1fr;
@@ -193,6 +301,10 @@ const closer = CLOSERS[service.category];
     margin-top: var(--s-3);
     max-width: 14ch;
   }
+  .pillar__headline--xl {
+    font-size: clamp(2.75rem, 6vw, 4.75rem);
+    max-width: none;
+  }
   .pillar__equity {
     margin-top: var(--s-5);
     font-size: clamp(1.25rem, 2vw, 1.75rem);
@@ -200,6 +312,14 @@ const closer = CLOSERS[service.category];
     color: var(--c-accent-deep);
     font-weight: 600;
     max-width: 26ch;
+  }
+  /* Managed flavor sets the equity line in the serif italic — an editorial
+     voice the trailer/facility pages deliberately don't use. */
+  .pillar__equity--serif {
+    font-family: var(--ff-body);
+    font-style: italic;
+    font-weight: 500;
+    max-width: none;
   }
   .pillar__blurb {
     margin-top: var(--s-5);
@@ -215,9 +335,8 @@ const closer = CLOSERS[service.category];
     gap: var(--s-5);
     flex-wrap: wrap;
   }
-  .pillar__phone {
-    color: var(--c-ink-muted);
-  }
+  .pillar__cta--center { justify-content: center; }
+  .pillar__phone { color: var(--c-ink-muted); }
 
   .pillar__art {
     background: var(--c-bg);
@@ -231,6 +350,89 @@ const closer = CLOSERS[service.category];
     box-shadow: 0 12px 28px -20px color-mix(in srgb, var(--c-accent) 40%, transparent);
   }
 
+  /* ------------------------------------------------------------------ *
+   * Flavor: trailer — "blueprint". Pine ground, drafting grid, framed art.
+   * ------------------------------------------------------------------ */
+  .pillar--trailer .pillar__hero--blueprint {
+    background:
+      repeating-linear-gradient(0deg, transparent 0 47px, rgba(255, 255, 255, 0.045) 47px 48px),
+      repeating-linear-gradient(90deg, transparent 0 47px, rgba(255, 255, 255, 0.045) 47px 48px),
+      linear-gradient(155deg, var(--c-pine-deep) 20%, var(--c-pine) 100%);
+    border-bottom: 2px solid var(--c-accent);
+    color: var(--c-bg);
+  }
+  .pillar--trailer .pillar__watermark {
+    --watermark-stroke: rgba(255, 255, 255, 0.07);
+  }
+  .pillar--trailer .pillar__crumbs { color: rgba(255, 255, 255, 0.62); }
+  .pillar--trailer .pillar__crumbs a:hover { color: var(--c-accent); }
+  .pillar--trailer .pillar__equity { color: var(--c-accent); }
+  .pillar--trailer .pillar__blurb { color: rgba(255, 255, 255, 0.72); }
+  .pillar--trailer .pillar__phone { color: rgba(255, 255, 255, 0.62); }
+  .pillar--trailer .pillar__phone:hover { color: var(--c-accent); }
+  .pillar__art--framed {
+    border-color: rgba(255, 255, 255, 0.16);
+    box-shadow: 0 24px 48px -24px rgba(0, 0, 0, 0.5);
+  }
+
+  /* ------------------------------------------------------------------ *
+   * Flavor: facility — "ledger". Watermark word + quick-facts spec strip.
+   * ------------------------------------------------------------------ */
+  .pillar--facility .pillar__hero--ledger { background: var(--c-bg-elevated); }
+  .pillar--facility .pillar__watermark {
+    --watermark-stroke: color-mix(in srgb, var(--c-pine) 14%, transparent);
+    right: auto;
+    left: -0.04em;
+    top: -0.1em;
+    bottom: auto;
+  }
+  .pillar__ledger-copy {
+    border-left: 3px solid var(--c-accent);
+    padding-left: clamp(var(--s-5), 3vw, var(--s-8));
+  }
+  .pillar__facts { margin-top: clamp(var(--s-8), 4vw, var(--s-12)); }
+
+  /* ------------------------------------------------------------------ *
+   * Flavor: managed — "editorial". Centered type over a mode ticker.
+   * ------------------------------------------------------------------ */
+  .pillar--managed .pillar__hero--editorial {
+    background:
+      radial-gradient(120% 90% at 50% 0%, color-mix(in srgb, var(--c-accent) 9%, transparent) 0%, transparent 55%),
+      var(--c-bg-elevated);
+  }
+  .pillar__editorial {
+    text-align: center;
+    max-width: 62rem;
+    margin-inline: auto;
+  }
+  .pillar__editorial .pillar__headline--xl,
+  .pillar__editorial .pillar__equity,
+  .pillar__editorial .pillar__blurb {
+    margin-inline: auto;
+  }
+  .pillar__editorial .pillar__blurb { max-width: 56ch; }
+  .pillar__art--center {
+    max-width: 560px;
+    margin: clamp(var(--s-8), 4vw, var(--s-12)) auto 0;
+  }
+  .pillar__ticker {
+    margin-top: clamp(var(--s-8), 4vw, var(--s-12));
+    border-top: 1px solid var(--c-line);
+    padding-block: var(--s-4);
+    --marquee-gap: var(--s-8);
+  }
+  .pillar__ticker-item {
+    font-size: var(--t-small);
+    letter-spacing: var(--ls-wide);
+    text-transform: uppercase;
+    color: var(--c-ink-muted);
+    white-space: nowrap;
+  }
+  .pillar__ticker-dot { color: var(--c-accent); }
+
+  /* ------------------------------------------------------------------ *
+   * Body sections (shared by every flavor).
+   * ------------------------------------------------------------------ */
   .pillar__body {
     padding-block: var(--s-16);
     display: grid;
@@ -268,6 +470,7 @@ const closer = CLOSERS[service.category];
     transform: scaleX(0);
     transform-origin: left;
     transition: transform var(--d-base) var(--ease-out);
+    z-index: 1;
   }
   .pillar__related-list li:hover::before { transform: scaleX(1); }
   .pillar__related-list a {
@@ -371,14 +574,33 @@ const closer = CLOSERS[service.category];
     font-size: var(--t-body-sm);
     line-height: var(--lh-relaxed);
   }
+  /* Answers ease in when a question opens. */
+  .pillar__faq-item[open] .pillar__faq-a {
+    animation: faq-open 360ms var(--ease-out);
+  }
+  @keyframes faq-open {
+    from { opacity: 0; transform: translateY(-6px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
 
   .pillar__final-cta {
+    position: relative;
+    overflow: hidden;
     text-align: center;
     background: var(--c-pine-deep);
     color: var(--c-bg);
     padding: var(--s-16);
     border-radius: var(--r-md);
   }
+  /* Soft brass glow behind the closing ask. */
+  .pillar__final-cta::before {
+    content: "";
+    position: absolute;
+    inset: -40% -20%;
+    background: radial-gradient(closest-side, color-mix(in srgb, var(--c-accent) 14%, transparent), transparent 70%);
+    pointer-events: none;
+  }
+  .pillar__final-cta > * { position: relative; }
   .pillar__final-cta .pillar__h2 { color: var(--c-bg); }
   .pillar__final-body {
     color: rgba(255, 255, 255, 0.72);
@@ -389,6 +611,9 @@ const closer = CLOSERS[service.category];
 
   @media (max-width: 880px) {
     .pillar__hero-grid { grid-template-columns: 1fr; }
+    .pillar__watermark { display: none; }
+    .pillar__ledger-copy { border-left: 0; padding-left: 0; }
+    .pillar__facts > li { padding: var(--s-3) var(--s-4); }
   }
   /* Related services: 3 → 2 → 1 so the tablet range keeps a two-up grid. */
   @media (max-width: 960px) {

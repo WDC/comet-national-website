@@ -16,20 +16,26 @@ const { industry, pageTitle, pageDescription } = Astro.props;
 const title = pageTitle ?? `${industry.title} Freight | ${SITE.name}`;
 const url = `${SITE.url}/industries/${industry.slug}`;
 
+// Industry pages read as a different document than service pages: art leads on
+// the left like a plate in a field guide, the buyer line becomes a mono tag,
+// and the services this industry buys render as a numbered route card rather
+// than another bordered grid.
+const initial = industry.title.charAt(0);
+
 // Structured data: the set of services this industry recombines, as an ItemList.
 const industryServices = industry.serviceSlugs
   .map((slug) => getService(slug))
-  .filter((s): s is NonNullable<typeof s> => Boolean(s))
-  .map((s) => ({ name: s.title, url: `${SITE.url}/services/${s.slug}` }));
+  .filter((s): s is NonNullable<typeof s> => Boolean(s));
 const listSchema = itemListSchema({
   name: `Freight services for ${industry.title.toLowerCase()}`,
   url,
-  items: industryServices,
+  items: industryServices.map((s) => ({ name: s.title, url: `${SITE.url}/services/${s.slug}` })),
 });
 ---
 <BaseLayout title={title} description={pageDescription} ogType="website" extraSchema={[listSchema]}>
   <article class="ind">
-    <header class="ind__hero section-tight">
+    <header class="ind__hero section-tight" data-reveal>
+      <span class="watermark ind__watermark" aria-hidden="true">{initial}</span>
       <div class="container-content ind__hero-inner">
         <nav aria-label="Breadcrumb" class="ind__crumbs mono">
           <a href="/">Home</a>
@@ -40,32 +46,32 @@ const listSchema = itemListSchema({
         </nav>
 
         <div class="ind__hero-grid">
-          <div>
-            <p class="eyebrow">Industry · Built around how you buy</p>
-            <h1 class="ind__headline display reveal" data-reveal><Caps text={industry.title} /></h1>
+          <aside class="ind__art frame-ticks reveal-left" data-reveal data-tilt="2">
+            <slot name="hero-art" />
+          </aside>
+          <div class="ind__copy">
+            {industry.buyer && (
+              <p class="ind__buyer mono reveal" data-reveal>
+                <span class="ind__buyer-tick" aria-hidden="true">▸</span> For: {industry.buyer}
+              </p>
+            )}
+            <p class="eyebrow reveal" data-reveal style="--reveal-delay: 60ms">Industry · Built around how you buy</p>
+            <h1 class="ind__headline display reveal" data-reveal style="--reveal-delay: 120ms"><Caps text={industry.title} /></h1>
             {industry.equityLine && (
-              <p class="ind__equity display reveal" data-reveal style="--reveal-delay: 120ms">
+              <p class="ind__equity display reveal" data-reveal style="--reveal-delay: 200ms">
                 <Caps text={industry.equityLine} />
               </p>
             )}
             {industry.heroLede && (
-              <p class="ind__lede reveal" data-reveal style="--reveal-delay: 240ms">
+              <p class="ind__lede reveal" data-reveal style="--reveal-delay: 280ms">
                 <Caps text={industry.heroLede} />
               </p>
             )}
-            {industry.buyer && (
-              <p class="ind__buyer mono reveal" data-reveal style="--reveal-delay: 320ms">
-                For: {industry.buyer}
-              </p>
-            )}
-            <div class="ind__cta reveal" data-reveal style="--reveal-delay: 400ms">
+            <div class="ind__cta reveal" data-reveal style="--reveal-delay: 360ms">
               <Button href="/get-a-quote" size="lg">Get a Quote</Button>
               <a class="ind__phone mono" href={`tel:${SITE.phoneE164}`}>or call {SITE.phone}</a>
             </div>
           </div>
-          <aside class="ind__art">
-            <slot name="hero-art" />
-          </aside>
         </div>
       </div>
     </header>
@@ -73,25 +79,30 @@ const listSchema = itemListSchema({
     <div class="container-content ind__body">
       <slot />
 
-      <!-- Services band: composed for this industry -->
+      <!-- Route card: the services this industry actually buys, as a manifest -->
       <section class="ind__services" data-reveal>
-        <p class="eyebrow">Services we recombine for {industry.title.toLowerCase()}</p>
-        <h2 class="ind__h2 display">The modes this industry actually buys.</h2>
-        <ul class="ind__services-list reveal-stagger" data-reveal>
-          {industry.serviceSlugs.map((slug) => {
-            const s = getService(slug);
-            if (!s) return null;
-            return (
-              <li>
-                <a href={`/services/${s.slug}`}>
-                  <span class="ind__services-title display"><Caps text={s.title} /></span>
-                  <span class="ind__services-blurb"><Caps text={s.blurb} /></span>
-                  <span class="ind__services-cta">Explore service <span class="arrow" aria-hidden="true">→</span></span>
-                </a>
-              </li>
-            );
-          })}
-        </ul>
+        <div class="ind__services-head">
+          <div>
+            <p class="eyebrow">Services we recombine for {industry.title.toLowerCase()}</p>
+            <h2 class="ind__h2 display">The modes this industry actually buys.</h2>
+          </div>
+          <span class="ind__services-count mono tnum" aria-hidden="true">
+            {String(industryServices.length).padStart(2, "0")} modes
+          </span>
+        </div>
+        <ol class="manifest ind__manifest reveal-stagger" data-reveal>
+          {industryServices.map((s) => (
+            <li>
+              <a href={`/services/${s.slug}`} class="ind__manifest-link link-arrow">
+                <span class="ind__manifest-main">
+                  <span class="ind__manifest-title display"><Caps text={s.title} /></span>
+                  <span class="ind__manifest-blurb"><Caps text={s.blurb} /></span>
+                </span>
+                <span class="ind__manifest-cta mono">Explore <span class="arrow" aria-hidden="true">→</span></span>
+              </a>
+            </li>
+          ))}
+        </ol>
       </section>
 
       <section class="ind__how" data-reveal>
@@ -99,6 +110,8 @@ const listSchema = itemListSchema({
         <h2 class="ind__h2 display">Quote. Schedule. Rest easy.</h2>
         <HowItWorksFlow />
       </section>
+
+      <hr class="route-rule" data-reveal />
 
       <section class="ind__final-cta section-tight on-dark" data-reveal>
         <h2 class="ind__h2 display">Tell us about the freight.</h2>
@@ -113,9 +126,20 @@ const listSchema = itemListSchema({
 
 <style>
   .ind__hero {
-    background: var(--c-bg-elevated);
-    border-bottom: 1px solid var(--c-line);
+    position: relative;
+    overflow: hidden;
+    background:
+      linear-gradient(180deg, var(--c-bg-elevated) 0%, var(--c-bg) 100%);
+    border-bottom: 2px solid var(--c-accent);
   }
+  /* Oversized industry initial — a stamped plate mark behind the hero. */
+  .ind__watermark {
+    --watermark-size: clamp(14rem, 34vw, 30rem);
+    --watermark-stroke: color-mix(in srgb, var(--c-pine) 12%, transparent);
+    right: -0.04em;
+    top: -0.08em;
+  }
+  .ind__hero-inner { position: relative; z-index: 1; }
   .ind__crumbs {
     display: flex;
     gap: var(--s-2);
@@ -125,12 +149,14 @@ const listSchema = itemListSchema({
     text-transform: uppercase;
     margin-bottom: var(--s-8);
   }
-  .ind__crumbs a { color: inherit; }
-  .ind__crumbs a:hover { color: var(--c-accent); }
+  .ind__crumbs a { color: inherit; transition: color var(--d-fast) var(--ease-out); }
+  .ind__crumbs a:hover { color: var(--c-accent-deep); }
+  /* Art leads — a plate on the left, copy on the right. Mirrors of the
+     service pages on purpose: you can feel which family of page you're on. */
   .ind__hero-grid {
     display: grid;
-    grid-template-columns: 1.1fr 1fr;
-    gap: var(--s-10);
+    grid-template-columns: 1fr 1.15fr;
+    gap: clamp(var(--s-8), 4vw, var(--s-16));
     align-items: center;
   }
   .ind__headline {
@@ -143,7 +169,7 @@ const listSchema = itemListSchema({
     margin-top: var(--s-5);
     font-size: clamp(1.25rem, 2vw, 1.75rem);
     line-height: 1.2;
-    color: var(--c-accent);
+    color: var(--c-accent-deep);
     font-weight: 600;
     max-width: 30ch;
   }
@@ -155,11 +181,18 @@ const listSchema = itemListSchema({
     line-height: 1.55;
   }
   .ind__buyer {
-    margin-top: var(--s-5);
+    display: inline-flex;
+    align-items: baseline;
+    gap: var(--s-2);
+    margin-bottom: var(--s-4);
+    padding: var(--s-2) var(--s-4);
+    border: 1px solid var(--c-line);
+    background: var(--c-bg-elevated);
     font-size: var(--t-small);
     color: var(--c-ink-muted);
     letter-spacing: var(--ls-wide);
   }
+  .ind__buyer-tick { color: var(--c-accent); }
   .ind__cta {
     margin-top: var(--s-8);
     display: flex;
@@ -170,10 +203,15 @@ const listSchema = itemListSchema({
   .ind__phone { color: var(--c-ink-muted); }
 
   .ind__art {
-    background: var(--c-bg);
+    background: var(--c-bg-elevated);
     padding: var(--s-6);
     border: 1px solid var(--c-line);
     border-radius: var(--r-md);
+    transition: border-color var(--d-base) var(--ease-out), box-shadow var(--d-base) var(--ease-out);
+  }
+  .ind__art:hover {
+    border-color: var(--c-accent);
+    box-shadow: 0 12px 28px -20px color-mix(in srgb, var(--c-accent) 40%, transparent);
   }
 
   .ind__body {
@@ -189,43 +227,64 @@ const listSchema = itemListSchema({
     max-width: 24ch;
   }
 
-  .ind__services-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1px;
-    background: var(--c-line);
-    border: 1px solid var(--c-line);
+  .ind__services-head {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: var(--s-6);
   }
-  .ind__services-list li { background: var(--c-bg); }
-  .ind__services-list a {
-    display: grid;
-    grid-template-rows: auto 1fr auto;
-    gap: var(--s-3);
-    padding: var(--s-6);
-    color: var(--c-ink);
-    min-height: 160px;
-  }
-  .ind__services-list a:hover { background: var(--c-bg-elevated); }
-  .ind__services-title { font-size: 1.375rem; line-height: 1.1; }
-  .ind__services-blurb { font-size: var(--t-small); color: var(--c-ink-muted); line-height: 1.5; }
-  .ind__services-cta {
-    color: var(--c-accent);
-    font-family: var(--ff-display);
-    font-weight: 600;
+  .ind__services-head .ind__h2 { margin-bottom: var(--s-6); }
+  .ind__services-count {
+    flex: none;
+    margin-bottom: var(--s-6);
     font-size: var(--t-small);
-    letter-spacing: var(--ls-snug);
+    letter-spacing: var(--ls-wider);
+    text-transform: uppercase;
+    color: var(--c-accent-deep);
+  }
+  .ind__manifest-link {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--s-6);
+    color: var(--c-ink);
+  }
+  .ind__manifest-main {
+    display: grid;
+    gap: var(--s-1);
+  }
+  .ind__manifest-title {
+    font-size: 1.375rem;
+    line-height: 1.1;
+    transition: color var(--d-fast) var(--ease-out);
+  }
+  .ind__manifest-link:hover .ind__manifest-title { color: var(--c-accent-deep); }
+  .ind__manifest-blurb { font-size: var(--t-small); color: var(--c-ink-muted); line-height: 1.5; }
+  .ind__manifest-cta {
+    flex: none;
+    font-size: var(--t-small);
+    letter-spacing: var(--ls-wide);
+    text-transform: uppercase;
+    color: var(--c-accent-deep);
   }
 
   .ind__final-cta {
+    position: relative;
+    overflow: hidden;
     text-align: center;
     background: var(--c-pine-deep);
     color: var(--c-bg);
     padding: var(--s-16);
     border-radius: var(--r-md);
   }
+  .ind__final-cta::before {
+    content: "";
+    position: absolute;
+    inset: -40% -20%;
+    background: radial-gradient(closest-side, color-mix(in srgb, var(--c-accent) 14%, transparent), transparent 70%);
+    pointer-events: none;
+  }
+  .ind__final-cta > * { position: relative; }
   .ind__final-cta .ind__h2 { color: var(--c-bg); margin-inline: auto; }
   .ind__final-body {
     color: rgba(255, 255, 255, 0.72);
@@ -236,6 +295,10 @@ const listSchema = itemListSchema({
 
   @media (max-width: 880px) {
     .ind__hero-grid { grid-template-columns: 1fr; }
-    .ind__services-list { grid-template-columns: 1fr; }
+    /* Stacked: copy first, plate art after — reading order beats plate order. */
+    .ind__art { order: 2; max-width: 480px; }
+    .ind__watermark { display: none; }
+    .ind__services-head { flex-direction: column; align-items: flex-start; gap: 0; }
+    .ind__manifest-link { flex-direction: column; gap: var(--s-2); }
   }
 </style>

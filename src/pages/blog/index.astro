@@ -49,7 +49,15 @@ const blogSchema: Record<string, unknown> = {
       <p class="eyebrow">The Comet National blog</p>
       <h1 class="blog-hero__title display">Freight, plain-spoken.</h1>
       <p class="blog-hero__lede">{description}</p>
+      <p class="blog-hero__dateline mono tnum">
+        {String(posts.length).padStart(2, "0")} dispatches
+        <span class="blog-hero__dateline-dot" aria-hidden="true">·</span>
+        Atlanta, <span class="sc">GA</span>
+        <span class="blog-hero__dateline-dot" aria-hidden="true">·</span>
+        Est. 1995
+      </p>
     </div>
+    <div class="blog-hero__rules container-content" aria-hidden="true"></div>
   </section>
 
   <div class="container-content blog-body">
@@ -84,7 +92,7 @@ const blogSchema: Record<string, unknown> = {
       <ul class="blog-grid reveal-stagger" data-reveal>
         {rest.map((p) => (
           <li>
-            <a href={postPath(p)} class="blog-card">
+            <a href={postPath(p)} class="blog-card card-sweep">
               <span class="blog-card__eyebrow mono">{p.data.category ?? "Blog"}</span>
               <h3 class="blog-card__title display"><Caps text={p.data.title} /></h3>
               <p class="blog-card__summary"><Caps text={p.data.summary} /></p>
@@ -101,9 +109,24 @@ const blogSchema: Record<string, unknown> = {
 </BaseLayout>
 
 <style>
+  /* Masthead flavor — the blog reads as the front page of a broadsheet:
+     serif-italic standfirst, mono dateline, and a double rule under the head. */
   .blog-hero {
     background: var(--c-bg-elevated);
-    border-bottom: 1px solid var(--c-line);
+  }
+  .blog-hero__dateline {
+    margin-top: var(--s-5);
+    font-size: var(--t-small);
+    letter-spacing: var(--ls-wide);
+    text-transform: uppercase;
+    color: var(--c-ink-muted);
+  }
+  .blog-hero__dateline-dot { color: var(--c-accent); padding-inline: var(--s-2); }
+  .blog-hero__rules {
+    margin-top: clamp(var(--s-6), 3vw, var(--s-8));
+    border-top: 3px double var(--c-ink);
+    padding-top: 3px;
+    box-shadow: 0 4px 0 -3px var(--c-line);
   }
   .blog-hero__crumbs {
     display: flex;
@@ -123,6 +146,8 @@ const blogSchema: Record<string, unknown> = {
   .blog-hero__lede {
     margin-top: var(--s-5);
     max-width: 62ch;
+    font-family: var(--ff-body);
+    font-style: italic;
     font-size: var(--t-lede);
     line-height: var(--lh-snug);
     color: var(--c-ink-muted);

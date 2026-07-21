@@ -9,6 +9,7 @@ import { SITE } from "@lib/site";
   description="Get a fast freight quote from Comet National — flatbed LTL, truckload, transloading, and more. Atlanta-based, most requests answered within one business hour."
 >
   <section class="quote-page section-tight section-bar" data-reveal>
+    <span class="watermark quote-page__mark tnum" aria-hidden="true">01</span>
     <div class="container-content quote-page__inner">
       <div class="reveal-stagger" data-reveal>
         <p class="eyebrow">Step 01 · Tell us about the load</p>
@@ -23,7 +24,7 @@ import { SITE } from "@lib/site";
         <QuoteForm />
 
         <aside class="quote-page__aside reveal" data-reveal style="--reveal-delay: 200ms">
-          <div class="quote-page__panel">
+          <div class="quote-page__panel frame-ticks">
             <p class="eyebrow">Or call dispatch</p>
             <a class="quote-page__phone display" href={`tel:${SITE.phoneE164}`}>{SITE.phone}</a>
             <p class="mono quote-page__small">Mon–Fri · 8a–5p ET</p>
@@ -46,7 +47,14 @@ import { SITE } from "@lib/site";
 </BaseLayout>
 
 <style>
-  .quote-page__inner { max-width: 1180px; }
+  .quote-page { position: relative; overflow: hidden; }
+  .quote-page__mark {
+    --watermark-stroke: color-mix(in srgb, var(--c-pine) 8%, transparent);
+    --watermark-size: clamp(10rem, 24vw, 22rem);
+    right: -0.03em;
+    top: -0.12em;
+  }
+  .quote-page__inner { position: relative; z-index: 1; max-width: 1180px; }
   .quote-page__title { font-size: clamp(2.75rem, 5vw, 4.5rem); line-height: 1; margin-top: var(--s-3); }
   .quote-page__lede { margin-top: var(--s-5); color: var(--c-ink-muted); max-width: 60ch; font-size: 1.125rem; }
   .quote-page__grid {

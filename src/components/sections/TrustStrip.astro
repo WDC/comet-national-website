@@ -8,11 +8,13 @@ const clients = ["Sika", "Atlas Concrete", "Capital Steel", "GMC Group", "Pionee
 <section class="trust" aria-label="Trusted by industrial buyers" data-trust>
   <div class="container-content trust__inner">
     <p class="trust__line"><span class="trust__accent" data-trust-dot>·</span> {SITE.trustLine}</p>
-    <ul class="trust__logos reveal-stagger" data-reveal aria-label="Selected clients">
-      {clients.map((c) => (
-        <li class="trust__logo display">{c}</li>
-      ))}
-    </ul>
+    <div class="trust__ticker marquee" data-marquee aria-label="Selected clients">
+      <div class="marquee__track">
+        {clients.map((c) => (
+          <span class="trust__logo display">{c} <span class="trust__logo-dot" aria-hidden="true">·</span></span>
+        ))}
+      </div>
+    </div>
   </div>
 </section>
 
@@ -37,24 +39,9 @@ const clients = ["Sika", "Atlas Concrete", "Capital Steel", "GMC Group", "Pionee
     font-size: 1rem;
     letter-spacing: var(--ls-snug);
   }
-  /* Flex-wrap with natural-width items: every wordmark keeps its own width,
-     so long names can never overflow a fixed track and collide. Wrapped rows
-     align to the left edge and share an even gap. */
-  .trust__logos {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: flex-end;
-    /* Column gap carries the hairline dividers below; keep it wider than the
-       row gap so wrapped rows still breathe. */
-    gap: var(--s-4) 0;
-  }
-  /* Deliberate "trusted by" wordmark row: uppercase, tracked, full-strength ink
-     with hairline brass dividers between names — reads as a curated client list
-     rather than greyed-out placeholder text. */
+  /* Wordmarks run past as a slow ticker (pauses on hover; static wrapped row
+     with no JS or under reduced motion — see flourish.css .marquee). */
+  .trust__ticker { --marquee-gap: var(--s-8); }
   .trust__logo {
     white-space: nowrap;
     font-weight: 700;
@@ -63,27 +50,13 @@ const clients = ["Sika", "Atlas Concrete", "Capital Steel", "GMC Group", "Pionee
     text-transform: uppercase;
     color: var(--c-ink);
     cursor: default;
-    padding-inline: var(--s-5);
-    white-space: nowrap;
-    position: relative;
-    transition:
-      color var(--d-fast) var(--ease-out),
-      transform var(--d-fast) var(--ease-out);
+    transition: color var(--d-fast) var(--ease-out);
   }
-  .trust__logo + .trust__logo::before {
-    content: "";
-    position: absolute;
-    left: 0;
-    top: 50%;
-    height: 0.85em;
-    width: 1px;
-    background: var(--c-line);
-    transform: translateY(-50%);
-  }
-  .trust__logos > .trust__logo:last-child { padding-right: 0; }
-  .trust__logo:hover {
-    color: var(--c-accent-deep);
-    transform: translateY(-1px);
+  .trust__logo:hover { color: var(--c-accent-deep); }
+  .trust__logo-dot {
+    color: var(--c-accent);
+    padding-inline-start: var(--s-8);
+    font-weight: 400;
   }
   .trust__accent {
     color: var(--c-accent);
@@ -100,8 +73,6 @@ const clients = ["Sika", "Atlas Concrete", "Capital Steel", "GMC Group", "Pionee
 
   @media (max-width: 760px) {
     .trust__inner { grid-template-columns: 1fr; }
-    .trust__logos { justify-content: flex-start; }
-    .trust__logo:first-child { padding-left: 0; }
   }
 </style>
 
