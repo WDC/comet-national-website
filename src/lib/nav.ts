@@ -47,9 +47,22 @@ export interface NavSection {
   cta: NavCta;
 }
 
+/** A plain top-level nav entry with no mega-menu slab — just a link. */
+export interface NavLink {
+  id: string;
+  label: string;
+  href: string;
+}
+
+export type NavItem = NavSection | NavLink;
+
+export function isNavSection(item: NavItem): item is NavSection {
+  return "groups" in item;
+}
+
 const serviceCategories: ServiceCategory[] = ["trailer", "facility", "managed"];
 
-export const NAV_SECTIONS: NavSection[] = [
+export const NAV_ITEMS: NavItem[] = [
   {
     id: "services",
     label: "Services",
@@ -117,11 +130,6 @@ export const NAV_SECTIONS: NavSection[] = [
             blurb: "Haul for Comet — steady lanes, fair rates, dispatchers who answer.",
           },
           {
-            title: "Blog",
-            href: "/blog",
-            blurb: "Freight guides and plain-spoken answers from the dispatch floor.",
-          },
-          {
             title: "Contact",
             href: "/contact",
             blurb: "Reach sales and dispatch by phone, email, or the quote form.",
@@ -135,6 +143,11 @@ export const NAV_SECTIONS: NavSection[] = [
       label: SITE.phone,
       href: `tel:${SITE.phoneE164}`,
     },
+  },
+  {
+    id: "blog",
+    label: "Blog",
+    href: "/blog",
   },
 ];
 

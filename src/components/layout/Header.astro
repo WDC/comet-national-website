@@ -4,21 +4,22 @@ import MegaMenu from "./MegaMenu.astro";
 import Button from "@components/ui/Button.astro";
 import Caps from "@components/ui/Caps.astro";
 import { SITE } from "@lib/site";
-import { NAV_SECTIONS, isSectionActive } from "@lib/nav";
+import { NAV_ITEMS, isSectionActive, isNavSection } from "@lib/nav";
 
 const pathname = Astro.url.pathname;
-
-// Every top-level section carries a slab of sub-pages (see src/lib/nav.ts).
-// Desktop renders them as full-width mega panels; the mobile drawer renders
-// the same data as expanding slabs — one nav model for all viewports.
-const sections = NAV_SECTIONS.map((s) => ({
-  ...s,
-  active: isSectionActive(s, pathname),
-}));
 
 function isCurrent(href: string) {
   return pathname === href || pathname.startsWith(`${href}/`);
 }
+
+// Most top-level entries carry a slab of sub-pages (see src/lib/nav.ts) and
+// render as full-width mega panels on desktop / expanding slabs in the
+// mobile drawer. A plain NavLink (e.g. Blog) renders as a bare link instead.
+const items = NAV_ITEMS.map((item) =>
+  isNavSection(item)
+    ? { ...item, active: isSectionActive(item, pathname) }
+    : { ...item, active: isCurrent(item.href) },
+);
 ---
 <header class="site-header" data-header>
   <div class="site-header__bar container-content">
@@ -26,25 +27,38 @@ function isCurrent(href: string) {
 
     <nav class="site-nav" aria-label="Primary">
       <ul class="site-nav__list">
-        {sections.map((s) => (
-          <li class="site-nav__item has-menu">
-            <a
-              href={s.href}
-              class="site-nav__link"
-              id={`${s.id}-trigger`}
-              aria-expanded="false"
-              aria-controls={`${s.id}-mega-menu`}
-              aria-current={isCurrent(s.href) ? "page" : undefined}
-              data-active={s.active}
-            >
-              {s.label}
-              <svg width="10" height="6" viewBox="0 0 10 6" aria-hidden="true">
-                <path d="M1 1 L5 5 L9 1" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="square" />
-              </svg>
-            </a>
-            <MegaMenu section={s} />
-          </li>
-        ))}
+        {items.map((s) =>
+          isNavSection(s) ? (
+            <li class="site-nav__item has-menu">
+              <a
+                href={s.href}
+                class="site-nav__link"
+                id={`${s.id}-trigger`}
+                aria-expanded="false"
+                aria-controls={`${s.id}-mega-menu`}
+                aria-current={isCurrent(s.href) ? "page" : undefined}
+                data-active={s.active}
+              >
+                {s.label}
+                <svg width="10" height="6" viewBox="0 0 10 6" aria-hidden="true">
+                  <path d="M1 1 L5 5 L9 1" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="square" />
+                </svg>
+              </a>
+              <MegaMenu section={s} />
+            </li>
+          ) : (
+            <li class="site-nav__item">
+              <a
+                href={s.href}
+                class="site-nav__link"
+                aria-current={isCurrent(s.href) ? "page" : undefined}
+                data-active={s.active}
+              >
+                {s.label}
+              </a>
+            </li>
+          ),
+        )}
       </ul>
     </nav>
 
@@ -72,49 +86,62 @@ function isCurrent(href: string) {
 
   <div id="mobile-nav" class="site-mobile-nav" data-mobile-nav hidden>
     <ul class="m-nav__sections">
-      {sections.map((s) => (
-        <li class="m-nav__section">
-          <button
-            type="button"
-            class="m-nav__section-toggle"
-            aria-expanded={s.active ? "true" : "false"}
-            aria-controls={`m-panel-${s.id}`}
-            data-active={s.active}
-            data-accordion-toggle
-          >
-            <span>{s.label}</span>
-            <svg width="12" height="8" viewBox="0 0 12 8" aria-hidden="true">
-              <path d="M1 1.5 L6 6.5 L11 1.5" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="square" />
-            </svg>
-          </button>
-          <div id={`m-panel-${s.id}`} class="m-nav__panel" hidden={!s.active} data-accordion-panel>
-            {s.groups.map((g) => (
-              <div class="m-nav__group">
-                <div class="eyebrow m-nav__group-label">{g.label}</div>
-                <ul class="m-nav__list">
-                  {g.items.map((item) => (
-                    <li>
-                      <a
-                        href={item.href}
-                        class="m-nav__item"
-                        aria-current={isCurrent(item.href) ? "page" : undefined}
-                      >
-                        <span class="m-nav__item-title"><Caps text={item.title} /></span>
-                        {item.blurb && (
-                          <span class="m-nav__item-blurb"><Caps text={item.blurb} /></span>
-                        )}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-            <a href={s.href} class="m-nav__overview">
-              {s.overviewLabel} <span aria-hidden="true">→</span>
+      {items.map((s) =>
+        isNavSection(s) ? (
+          <li class="m-nav__section">
+            <button
+              type="button"
+              class="m-nav__section-toggle"
+              aria-expanded={s.active ? "true" : "false"}
+              aria-controls={`m-panel-${s.id}`}
+              data-active={s.active}
+              data-accordion-toggle
+            >
+              <span>{s.label}</span>
+              <svg width="12" height="8" viewBox="0 0 12 8" aria-hidden="true">
+                <path d="M1 1.5 L6 6.5 L11 1.5" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="square" />
+              </svg>
+            </button>
+            <div id={`m-panel-${s.id}`} class="m-nav__panel" hidden={!s.active} data-accordion-panel>
+              {s.groups.map((g) => (
+                <div class="m-nav__group">
+                  <div class="eyebrow m-nav__group-label">{g.label}</div>
+                  <ul class="m-nav__list">
+                    {g.items.map((item) => (
+                      <li>
+                        <a
+                          href={item.href}
+                          class="m-nav__item"
+                          aria-current={isCurrent(item.href) ? "page" : undefined}
+                        >
+                          <span class="m-nav__item-title"><Caps text={item.title} /></span>
+                          {item.blurb && (
+                            <span class="m-nav__item-blurb"><Caps text={item.blurb} /></span>
+                          )}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+              <a href={s.href} class="m-nav__overview">
+                {s.overviewLabel} <span aria-hidden="true">→</span>
+              </a>
+            </div>
+          </li>
+        ) : (
+          <li class="m-nav__section">
+            <a
+              href={s.href}
+              class="m-nav__section-toggle m-nav__section-toggle--link"
+              aria-current={isCurrent(s.href) ? "page" : undefined}
+              data-active={s.active}
+            >
+              <span>{s.label}</span>
             </a>
-          </div>
-        </li>
-      ))}
+          </li>
+        ),
+      )}
       <li class="m-nav__extras">
         <a href={`tel:${SITE.phoneE164}`} class="m-nav__phone">
           <svg class="phone-icon" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
