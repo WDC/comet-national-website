@@ -1,26 +1,43 @@
 ---
-import { SERVICES_BY_CATEGORY, SERVICE_CATEGORY_LABEL, type ServiceCategory } from "@lib/services";
+/**
+ * Full-width "slab" panel for one top-level nav section. Data-driven from
+ * src/lib/nav.ts so Services, Industries, and Company all get the same
+ * treatment. Rendered inside the desktop navbar; the mobile drawer renders
+ * the same NavSection data as expanding slabs (see Header.astro).
+ */
+import type { NavSection } from "@lib/nav";
 import Caps from "@components/ui/Caps.astro";
 
-const groups: ServiceCategory[] = ["trailer", "facility", "managed"];
+interface Props {
+  section: NavSection;
+}
+const { section } = Astro.props;
+
+// Single-group sections (Industries, Company) spread their items across two
+// columns so the slab keeps the same landscape shape as the Services panel.
+const wide = section.groups.length === 1;
+const columns = wide ? 2 : section.groups.length;
 ---
 <!-- A disclosure of plain navigation links — deliberately NOT role="menu",
      which would promise arrow-key navigation this pattern doesn't implement. -->
 <div
-  id="services-mega-menu"
+  id={`${section.id}-mega-menu`}
   class="mega-menu"
-  aria-labelledby="services-trigger"
+  aria-labelledby={`${section.id}-trigger`}
+  style={`--slab-cols: ${columns}`}
 >
   <div class="mega-menu__inner container-content">
-    {groups.map((g) => (
-      <div class="mega-menu__group">
-        <div class="eyebrow mega-menu__group-label">{SERVICE_CATEGORY_LABEL[g]}</div>
+    {section.groups.map((g) => (
+      <div class={`mega-menu__group${wide ? " mega-menu__group--wide" : ""}`}>
+        <div class="eyebrow mega-menu__group-label">{g.label}</div>
         <ul class="mega-menu__list">
-          {SERVICES_BY_CATEGORY[g].map((s) => (
+          {g.items.map((item) => (
             <li>
-              <a href={`/services/${s.slug}`} class="mega-menu__item">
-                <span class="mega-menu__item-title"><Caps text={s.title} /></span>
-                <span class="mega-menu__item-blurb"><Caps text={s.blurb} /></span>
+              <a href={item.href} class="mega-menu__item">
+                <span class="mega-menu__item-title"><Caps text={item.title} /></span>
+                {item.blurb && (
+                  <span class="mega-menu__item-blurb"><Caps text={item.blurb} /></span>
+                )}
               </a>
             </li>
           ))}
@@ -28,9 +45,14 @@ const groups: ServiceCategory[] = ["trailer", "facility", "managed"];
       </div>
     ))}
     <div class="mega-menu__cta on-dark">
-      <div class="eyebrow">Need a partner?</div>
-      <p class="mega-menu__cta-line">One call, every mode. We solve the whole problem.</p>
-      <a href="/get-a-quote" class="mega-menu__cta-link">Get a Quote →</a>
+      <div class="eyebrow">{section.cta.eyebrow}</div>
+      <p class="mega-menu__cta-line">{section.cta.line}</p>
+      <a href={section.cta.href} class="mega-menu__cta-link">{section.cta.label} →</a>
+    </div>
+    <div class="mega-menu__footer">
+      <a href={section.href} class="mega-menu__overview">
+        {section.overviewLabel} <span aria-hidden="true">→</span>
+      </a>
     </div>
   </div>
 </div>
@@ -60,9 +82,16 @@ const groups: ServiceCategory[] = ["trailer", "facility", "managed"];
   }
   .mega-menu__inner {
     display: grid;
-    grid-template-columns: repeat(3, 1fr) 0.85fr;
-    gap: var(--s-10);
-    padding-block: var(--s-10);
+    grid-template-columns: repeat(var(--slab-cols, 3), 1fr) 0.85fr;
+    gap: var(--s-8) var(--s-10);
+    padding-block: var(--s-10) var(--s-6);
+  }
+  .mega-menu__group--wide {
+    grid-column: span var(--slab-cols, 2);
+  }
+  .mega-menu__group--wide .mega-menu__list {
+    grid-template-columns: repeat(var(--slab-cols, 2), 1fr);
+    column-gap: var(--s-10);
   }
   .mega-menu__group-label {
     margin-bottom: var(--s-4);
@@ -110,6 +139,7 @@ const groups: ServiceCategory[] = ["trailer", "facility", "managed"];
     border-radius: var(--r-md);
     display: grid;
     align-content: start;
+    align-self: start;
     gap: var(--s-3);
   }
   .mega-menu__cta .eyebrow {
@@ -131,12 +161,39 @@ const groups: ServiceCategory[] = ["trailer", "facility", "managed"];
   .mega-menu__cta-link:hover {
     color: var(--c-accent-hover);
   }
+  .mega-menu__footer {
+    grid-column: 1 / -1;
+    border-top: 1px solid var(--c-line-soft);
+    padding-top: var(--s-4);
+  }
+  .mega-menu__overview {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--ff-display);
+    font-weight: 600;
+    font-size: 0.9rem;
+    letter-spacing: var(--ls-snug);
+    color: var(--c-ink);
+    transition: color var(--d-fast) var(--ease-out);
+  }
+  .mega-menu__overview:hover,
+  .mega-menu__overview:focus-visible {
+    color: var(--c-accent-deep);
+  }
 
   @media (max-width: 900px) {
     .mega-menu__inner {
       grid-template-columns: 1fr;
       gap: var(--s-6);
       padding-block: var(--s-6);
+    }
+    .mega-menu__group--wide,
+    .mega-menu__footer {
+      grid-column: auto;
+    }
+    .mega-menu__group--wide .mega-menu__list {
+      grid-template-columns: 1fr;
     }
   }
 </style>
