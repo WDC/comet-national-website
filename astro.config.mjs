@@ -6,6 +6,7 @@ import sitemap from "@astrojs/sitemap";
 import tailwindcss from "@tailwindcss/vite";
 import remarkSmartypants from "remark-smartypants";
 import { rehypeSmallCaps } from "./src/lib/rehype-smallcaps";
+import { sitemapAlias } from "./src/lib/sitemap-alias";
 
 const SITE = "https://cometnational.com";
 
@@ -37,6 +38,8 @@ export default defineConfig({
       changefreq: "weekly",
       priority: 0.7,
     }),
+    // Serves the generated index at /sitemap.xml too — must stay after sitemap().
+    sitemapAlias(),
   ],
   vite: {
     plugins: [tailwindcss()],
