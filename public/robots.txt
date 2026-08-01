@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 Disallow: /api/
 
-Sitemap: https://cometnational.com/sitemap-index.xml
+Sitemap: https://cometnational.com/sitemap.xml
