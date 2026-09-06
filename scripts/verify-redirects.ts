@@ -10,12 +10,13 @@
  */
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
+import { SITE } from "../src/lib/site";
 
 const ROOT = resolve(import.meta.dirname, "..");
 const CSV_PATH = resolve(ROOT, "migration/redirects.csv");
 const STAGING = process.env.STAGING ?? "";
 const PROD = process.env.PROD === "1";
-const PRIMARY = "https://cometnational.com";
+const PRIMARY = SITE.url;
 
 interface Row {
   legacy_host: string;
@@ -39,10 +40,10 @@ function parse(text: string): Row[] {
 
 async function checkOne(r: Row): Promise<{ ok: boolean; status: number; location: string; from: string; expect: string }> {
   // Replace :slug-style param with a sample value for the test
-  const samplePath = r.legacy_path.replace(/:\w+/g, "sample").replace(/\/\(\.\*\)/, "/sample");
+  const samplePath = r.legacy_path.replace(/:\w+(\([^)]*\))?/g, "2021").replace(/\/\(\.\*\)/, "/sample");
   const baseUrl = PROD ? `https://${r.legacy_host}` : STAGING || `https://${r.legacy_host}`;
   const url = `${baseUrl}${samplePath}`;
-  const expectedDest = `${PRIMARY}${r.new_path.replace(/:\w+/g, "sample").replace(/\/\(\.\*\)/, "/sample")}`;
+  const expectedDest = `${PRIMARY}${r.new_path.replace(/:\w+/g, "sample").replace(/\/\(\.\*\)/, "/sample").replace(/\$1/, "sample")}`;
 
   try {
     const res = await fetch(url, { redirect: "manual", headers: { "User-Agent": "comet-redirect-verify/1" } });

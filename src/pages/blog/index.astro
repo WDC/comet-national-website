@@ -1,6 +1,7 @@
 ---
 import BaseLayout from "@layouts/BaseLayout.astro";
 import Caps from "@components/ui/Caps.astro";
+import HeroPhoto from "@components/ui/HeroPhoto.astro";
 import { SITE } from "@lib/site";
 import {
   getPublishedPosts,
@@ -40,7 +41,8 @@ const blogSchema: Record<string, unknown> = {
 ---
 <BaseLayout title={title} description={description} extraSchema={[blogSchema]}>
   <section class="blog-hero section-tight" data-reveal>
-    <div class="container-content">
+    <HeroPhoto photo="blog" tone="light" />
+    <div class="container-content blog-hero__inner">
       <nav aria-label="Breadcrumb" class="blog-hero__crumbs mono">
         <a href="/">Home</a>
         <span aria-hidden="true">/</span>
@@ -112,8 +114,12 @@ const blogSchema: Record<string, unknown> = {
   /* Masthead flavor — the blog reads as the front page of a broadsheet:
      serif-italic standfirst, mono dateline, and a double rule under the head. */
   .blog-hero {
+    position: relative;
+    overflow: hidden;
     background: var(--c-bg-elevated);
   }
+  .blog-hero__inner,
+  .blog-hero__rules { position: relative; z-index: 1; }
   .blog-hero__dateline {
     margin-top: var(--s-5);
     font-size: var(--t-small);

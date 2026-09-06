@@ -6,6 +6,8 @@ import HowItWorksFlow from "@components/animations/HowItWorksFlow.astro";
 import { SITE } from "@lib/site";
 import { SERVICES, type ServiceItem, type ServiceCategory, getService, getIndustriesForService } from "@lib/services";
 import Caps from "@components/ui/Caps.astro";
+import HeroPhoto from "@components/ui/HeroPhoto.astro";
+import { photoForService } from "@lib/photos";
 
 interface Props {
   service: ServiceItem;
@@ -49,6 +51,9 @@ const CLOSERS: Record<ServiceCategory, { title: string; body: string }> = {
   },
 };
 const closer = CLOSERS[flavor];
+
+// Photographic ground behind the hero copy — per-service image from the registry.
+const heroPhoto = photoForService(service.slug);
 ---
 <BaseLayout
   title={title}
@@ -68,6 +73,7 @@ const closer = CLOSERS[flavor];
   <article class={`pillar pillar--${flavor}`}>
     {flavor === "trailer" && (
       <header class="pillar__hero pillar__hero--blueprint section-tight on-dark" data-reveal>
+        <HeroPhoto photo={heroPhoto} tone="dark" grid />
         <span class="watermark pillar__watermark" aria-hidden="true">{watermarkWord}</span>
         <div class="container-content pillar__hero-inner">
           <nav aria-label="Breadcrumb" class="pillar__crumbs mono">
@@ -101,6 +107,7 @@ const closer = CLOSERS[flavor];
 
     {flavor === "facility" && (
       <header class="pillar__hero pillar__hero--ledger section-tight section-bar" data-reveal>
+        <HeroPhoto photo={heroPhoto} tone="light" />
         <span class="watermark pillar__watermark" aria-hidden="true">{watermarkWord}</span>
         <div class="container-content pillar__hero-inner">
           <nav aria-label="Breadcrumb" class="pillar__crumbs mono">
@@ -141,6 +148,7 @@ const closer = CLOSERS[flavor];
 
     {flavor === "managed" && (
       <header class="pillar__hero pillar__hero--editorial section-tight" data-reveal>
+        <HeroPhoto photo={heroPhoto} tone="light" wash="top" />
         <div class="container-content pillar__hero-inner">
           <nav aria-label="Breadcrumb" class="pillar__crumbs pillar__crumbs--center mono">
             <a href="/">Home</a>
@@ -416,6 +424,8 @@ const closer = CLOSERS[flavor];
     margin: clamp(var(--s-8), 4vw, var(--s-12)) auto 0;
   }
   .pillar__ticker {
+    position: relative;
+    z-index: 1;
     margin-top: clamp(var(--s-8), 4vw, var(--s-12));
     border-top: 1px solid var(--c-line);
     padding-block: var(--s-4);

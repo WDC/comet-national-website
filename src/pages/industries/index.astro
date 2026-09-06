@@ -4,12 +4,14 @@ import BaseLayout from "@layouts/BaseLayout.astro";
 import Button from "@components/ui/Button.astro";
 import { INDUSTRIES, getService } from "@lib/services";
 import { SITE } from "@lib/site";
+import HeroPhoto from "@components/ui/HeroPhoto.astro";
 ---
 <BaseLayout
   title={`Industries We Serve | ${SITE.name}`}
   description="Construction, manufacturing, building materials, and machinery & equipment. We recombine 12 freight services around how industrial buyers actually order."
 >
   <section class="industries-hero section-tight section-bar" data-reveal>
+    <HeroPhoto photo="industries-hub" tone="light" />
     <span class="watermark industries-hero__mark" aria-hidden="true">Buyers</span>
     <div class="container-content industries-hero__inner">
       <p class="eyebrow reveal" data-reveal>Industries overview</p>

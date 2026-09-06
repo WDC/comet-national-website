@@ -6,6 +6,8 @@ import { SITE } from "@lib/site";
 import { type IndustryItem, getService } from "@lib/services";
 import { itemListSchema } from "@lib/schema";
 import Caps from "@components/ui/Caps.astro";
+import HeroPhoto from "@components/ui/HeroPhoto.astro";
+import { photoForIndustry } from "@lib/photos";
 
 interface Props {
   industry: IndustryItem;
@@ -21,6 +23,7 @@ const url = `${SITE.url}/industries/${industry.slug}`;
 // and the services this industry buys render as a numbered route card rather
 // than another bordered grid.
 const initial = industry.title.charAt(0);
+const heroPhoto = photoForIndustry(industry.slug);
 
 // Structured data: the set of services this industry recombines, as an ItemList.
 const industryServices = industry.serviceSlugs
@@ -35,6 +38,7 @@ const listSchema = itemListSchema({
 <BaseLayout title={title} description={pageDescription} ogType="website" extraSchema={[listSchema]}>
   <article class="ind">
     <header class="ind__hero section-tight" data-reveal>
+      <HeroPhoto photo={heroPhoto} tone="light" wash="right" />
       <span class="watermark ind__watermark" aria-hidden="true">{initial}</span>
       <div class="container-content ind__hero-inner">
         <nav aria-label="Breadcrumb" class="ind__crumbs mono">

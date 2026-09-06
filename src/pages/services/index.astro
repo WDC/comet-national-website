@@ -4,6 +4,7 @@ import BaseLayout from "@layouts/BaseLayout.astro";
 import Button from "@components/ui/Button.astro";
 import { SERVICES, SERVICES_BY_CATEGORY, SERVICE_CATEGORY_LABEL, type ServiceCategory } from "@lib/services";
 import { SITE } from "@lib/site";
+import HeroPhoto from "@components/ui/HeroPhoto.astro";
 
 const groups: ServiceCategory[] = ["trailer", "facility", "managed"];
 ---
@@ -12,6 +13,7 @@ const groups: ServiceCategory[] = ["trailer", "facility", "managed"];
   description="Every freight mode under one roof — flatbed LTL, dry van, reefer, full truckload, transloading, warehousing, and brokerage. One Atlanta team since 1995."
 >
   <section class="services-hero section-tight on-dark" data-reveal>
+    <HeroPhoto photo="services-hub" tone="dark" grid />
     <span class="watermark services-hero__mark tnum" aria-hidden="true">12</span>
     <div class="container-content services-hero__inner reveal-stagger" data-reveal>
       <p class="eyebrow">Services overview</p>

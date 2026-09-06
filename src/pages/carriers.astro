@@ -3,6 +3,7 @@ export const prerender = true;
 import BaseLayout from "@layouts/BaseLayout.astro";
 import Button from "@components/ui/Button.astro";
 import { SITE } from "@lib/site";
+import HeroPhoto from "@components/ui/HeroPhoto.astro";
 
 const reasons = [
   {
@@ -31,6 +32,7 @@ const requirements = [
   description={`Owner-operators and carriers: run flatbed, reefer, van, and hotshot with Comet National out of Atlanta. Steady lanes, fair rates, dispatchers who answer.`}
 >
   <section class="car section section-bar" data-reveal>
+    <HeroPhoto photo="carriers" tone="light" />
     <span class="watermark car__mark tnum" aria-hidden="true">48</span>
     <div class="container-content car__inner">
       <div class="reveal-stagger" data-reveal>

@@ -40,6 +40,9 @@ Path aliases (tsconfig): `@/*`, `@components/*`, `@layouts/*`, `@lib/*`,
 ### Data singletons — change these, not the pages
 
 - `src/lib/site.ts` — NAP, phone, brand strings, `SITE.url`. One source of truth.
+  `SITE.url` is `https://www.cometnational.com` — **www is the canonical host**;
+  the apex 301s to it. `astro.config.mjs` mirrors the same string (config can't
+  import the TS singleton); `scripts/*` and `vercel.json` derive from `SITE.url`.
 - `src/lib/services.ts` — the service taxonomy. Feeds the service pages, the
   mega-menu (`src/lib/nav.ts`), and the OG card registry. Add a mode here first.
 - `src/lib/og/pages.ts` — per-page OG card registry rendered at `/og/<key>.png`.
@@ -59,7 +62,8 @@ fine, and is silently invisible to search. `pnpm prerender:verify` fails the
 build on that; keep it that way.
 
 Also site-wide: `trailingSlash: "never"` (canonical URLs have no trailing slash)
-and `build.format: "directory"`.
+and `build.format: "directory"`. `vercel.json` sets `trailingSlash: false` so
+Vercel 308s `/services/` → `/services` instead of serving both.
 
 ## Sitemap — keep this current as pages change
 
@@ -85,7 +89,7 @@ What ships, and what each URL is for:
 | `/sitemap-index.xml` | Same content, original name. Kept so old submissions keep resolving. |
 | `/sitemap-0.xml` | The URL set. A second file appears only past 45,000 URLs. |
 
-`public/robots.txt` points at `https://cometnational.com/sitemap.xml`. If
+`public/robots.txt` points at `https://www.cometnational.com/sitemap.xml`. If
 `SITE.url` ever changes, that absolute URL and `astro.config.mjs`'s `site` both
 have to move with it.
 
@@ -101,13 +105,38 @@ have to move with it.
 4. New top-level marketing page? It probably also wants an OG card entry in
    `src/lib/og/pages.ts` and a nav slot via `src/lib/services.ts` / `nav.ts`.
 
-No `lastmod` is emitted anywhere, on purpose: stamping every URL with the build
-time tells crawlers the whole site changed on every deploy. Don't add a global
-one. Per-URL `lastmod` from real post dates would be a legitimate improvement.
+No global `lastmod` is emitted, on purpose: stamping every URL with the build
+time tells crawlers the whole site changed on every deploy. Blog posts are the
+exception — `src/lib/sitemap-lastmod.ts` stamps each `/blog/<slug>` with the
+post's publish date (or `updatedDate` from frontmatter) via the sitemap
+`serialize` hook. Don't add a build-time one for marketing pages.
 
 `/404` is excluded automatically. Non-HTML endpoints (`/og/*.png`,
 `/blog/rss.xml`, `/api/quote`) are correctly absent — the sitemap is for
 indexable pages.
+
+## Photography
+
+Photos live in `src/assets/photos/` and are registered in `src/lib/photos.ts`
+(key → import, alt, credit, focus). Every image today is Unsplash stock
+(free for commercial use, credited in the registry) standing in for real fleet
+and dock photography — swap the file, update the entry, done. Two components
+render them through `astro:assets` so the Vercel image service serves
+responsive AVIF/WebP:
+
+- `<HeroPhoto photo tone wash grid />` — background layer for a hero. Goes in
+  as the **first child** of a `position: relative; overflow: hidden` hero and
+  sits at z-index 0 under the hero's `z-index: 1` content. `tone="dark"` for
+  pine heroes (`grid` re-draws the drafting grid), `tone="light"` for cream.
+  `wash` names the copy side (`left` default, `right` on industry pages, `top`
+  for the centered "managed" service hero).
+- `<PhotoBand photo caption />` — full-bleed editorial band (homepage).
+
+`widths` on those `<Image>`s must come from the Vercel adapter's
+`imagesConfig.sizes` (640 · 750 · 828 · 1080 · 1200 · 1920 · 2048 · 3840);
+other values are silently dropped from the srcset. Keep sources ≤ 2000px on
+the long edge and re-encode at q80 (see `scripts/` history) so the repo stays
+lean.
 
 ## Blog posts
 
@@ -129,8 +158,13 @@ em dashes in `.astro` copy.
 ## Deploy notes
 
 - `vercel.json` holds legacy-host redirects (flatbedltl.com, transload911.com,
-  www → apex) and security/cache headers. Edit `migration/redirects.csv` and run
-  `pnpm redirects:build` rather than hand-editing the redirects block.
+  apex → www), `trailingSlash: false`, security/cache headers, and an
+  `X-Robots-Tag: noindex` header for the staging hosts (`comet.delcoe.com`,
+  `*.vercel.app`). Edit `migration/redirects.csv` and run `pnpm redirects:build`
+  rather than hand-editing — the generator expands each legacy host into
+  apex + www twins and each literal path into slash/no-slash twins.
+- Domain cutover steps (Vercel domains, Search Console, DNS) live in
+  `docs/cutover-runbook.md`.
 - The quote form posts to `POST /api/quote` and sends via AWS SES. Credentials
   use `SES_*` names because Vercel reserves `AWS_*`. See `README.md` and
   `.env.example`.

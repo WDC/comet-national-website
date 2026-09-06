@@ -17,11 +17,12 @@
  */
 import { readFileSync, readdirSync, existsSync, statSync } from "node:fs";
 import { resolve, join, relative } from "node:path";
+import { SITE as SITE_CONFIG } from "../src/lib/site";
 
 const ROOT = resolve(import.meta.dirname, "..");
 const CLIENT = resolve(ROOT, "dist/client");
 const DEPLOYED = resolve(ROOT, ".vercel/output/static");
-const SITE = "https://cometnational.com";
+const SITE = SITE_CONFIG.url;
 
 const errors: string[] = [];
 

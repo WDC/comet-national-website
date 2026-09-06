@@ -5,6 +5,7 @@ import Button from "@components/ui/Button.astro";
 import { SITE } from "@lib/site";
 import { localBusinessSchema } from "@lib/schema";
 import { SERVICES_BY_CATEGORY } from "@lib/services";
+import HeroPhoto from "@components/ui/HeroPhoto.astro";
 
 const hoursLabel = "Mon–Fri · 8a–5p ET";
 const dockServices = [...SERVICES_BY_CATEGORY.facility, ...SERVICES_BY_CATEGORY.managed];
@@ -19,6 +20,7 @@ const directionsUrl = `https://www.google.com/maps/search/?api=1&query=${mapsQue
   extraSchema={[localBusinessSchema()]}
 >
   <section class="loc section section-bar" data-reveal>
+    <HeroPhoto photo="locations-atlanta" tone="light" />
     <span class="watermark loc__mark" aria-hidden="true">I-85</span>
     <div class="container-content loc__inner">
       <div class="reveal-stagger" data-reveal>

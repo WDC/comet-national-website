@@ -6,7 +6,7 @@
  */
 
 export const SITE = {
-  url: "https://cometnational.com",
+  url: "https://www.cometnational.com",
   name: "Comet National",
   legalName: "Comet National Shipping Company",
   tagline: "We ship anything to anywhere.",

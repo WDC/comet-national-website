@@ -1,0 +1,234 @@
+---
+/**
+ * Photographic background layer for a hero.
+ *
+ * Drops into any positioned, overflow-hidden hero as its FIRST child and sits
+ * at z-index 0, under the hero's `z-index: 1` content and under any
+ * `.watermark`. Two tones:
+ *
+ *   dark  — pine-deep heroes (service "blueprint", services hub). The photo is
+ *           desaturated and knocked back under a pine gradient that stays
+ *           near-opaque on the copy side; `grid` re-draws the drafting grid on
+ *           top so the blueprint read survives.
+ *   light — cream heroes. A cream gradient keeps the copy column fully
+ *           legible and lets the photo emerge on the art side.
+ *
+ * A faint SVG-noise grain (~3%) keeps stock photography from reading as stock
+ * (BUILD_PLAN §4). Decorative: `alt=""` and aria-hidden — the page's copy is
+ * the content; the photo is atmosphere.
+ *
+ * Images go through astro:assets so the Vercel image service serves responsive
+ * AVIF/WebP. The widths must come from the adapter's `imagesConfig.sizes` list
+ * (640 · 750 · 828 · 1080 · 1200 · 1920 · 2048 · 3840) — anything else is
+ * silently dropped from the srcset. Heroes are the LCP element, so they load
+ * eagerly at high priority; quality sits low because the wash hides artefacts.
+ */
+import { Image } from "astro:assets";
+import { PHOTOS, type PhotoKey } from "@lib/photos";
+
+interface Props {
+  photo: PhotoKey;
+  tone?: "dark" | "light";
+  /** Overlay the blueprint drafting grid (dark tone only). */
+  grid?: boolean;
+  /**
+   * Which side the copy sits on, so the wash stays opaque there:
+   *   left  — copy left, art right (default)
+   *   right — copy right, art left (industry pages)
+   *   top   — centered copy over the art (editorial service hero)
+   */
+  wash?: "left" | "right" | "top";
+  /** Load eagerly at high fetch priority — true for above-the-fold heroes. */
+  priority?: boolean;
+  class?: string;
+}
+const { photo, tone = "light", grid = false, wash = "left", priority = true, class: className } = Astro.props;
+const p = PHOTOS[photo];
+const classes = ["hero-photo", `hero-photo--${tone}`, `hero-photo--wash-${wash}`, grid ? "hero-photo--grid" : null, className]
+  .filter(Boolean)
+  .join(" ");
+---
+<div class={classes} aria-hidden="true" data-focus={p.focus ?? "center"}>
+  <Image
+    src={p.src}
+    alt=""
+    widths={[640, 1080, 1920, 2048]}
+    quality={72}
+    sizes="100vw"
+    loading={priority ? "eager" : "lazy"}
+    fetchpriority={priority ? "high" : "auto"}
+    decoding="async"
+    class="hero-photo__img"
+  />
+  <span class="hero-photo__tone"></span>
+  <span class="hero-photo__grain"></span>
+</div>
+
+<style>
+  .hero-photo {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+    pointer-events: none;
+  }
+  .hero-photo__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    /* Slight desaturation so the brass accent stays the only saturated colour. */
+    filter: saturate(0.72) contrast(1.04);
+  }
+  .hero-photo[data-focus="right"] .hero-photo__img { object-position: 70% center; }
+  .hero-photo[data-focus="left"] .hero-photo__img { object-position: 30% center; }
+  .hero-photo[data-focus="bottom"] .hero-photo__img { object-position: center 80%; }
+
+  .hero-photo__tone,
+  .hero-photo__grain {
+    position: absolute;
+    inset: 0;
+  }
+
+  /* Dark: pine wash, near-opaque on the copy side. */
+  .hero-photo--dark .hero-photo__img {
+    opacity: 0.55;
+    filter: saturate(0.5) contrast(1.06) brightness(0.85);
+  }
+  .hero-photo--dark .hero-photo__tone {
+    background:
+      linear-gradient(
+        100deg,
+        color-mix(in srgb, var(--c-pine-deep) 96%, transparent) 0%,
+        color-mix(in srgb, var(--c-pine-deep) 88%, transparent) 42%,
+        color-mix(in srgb, var(--c-pine) 55%, transparent) 72%,
+        color-mix(in srgb, var(--c-pine) 35%, transparent) 100%
+      );
+  }
+  .hero-photo--grid .hero-photo__tone {
+    background:
+      repeating-linear-gradient(0deg, transparent 0 47px, rgba(255, 255, 255, 0.045) 47px 48px),
+      repeating-linear-gradient(90deg, transparent 0 47px, rgba(255, 255, 255, 0.045) 47px 48px),
+      linear-gradient(
+        100deg,
+        color-mix(in srgb, var(--c-pine-deep) 96%, transparent) 0%,
+        color-mix(in srgb, var(--c-pine-deep) 88%, transparent) 42%,
+        color-mix(in srgb, var(--c-pine) 55%, transparent) 72%,
+        color-mix(in srgb, var(--c-pine) 35%, transparent) 100%
+      );
+  }
+
+  /* Light: cream wash that holds the copy column, opens up on the art side. */
+  .hero-photo--light .hero-photo__img {
+    opacity: 0.9;
+    filter: saturate(0.6) contrast(1.02);
+  }
+  .hero-photo--light .hero-photo__tone {
+    background:
+      linear-gradient(
+        100deg,
+        var(--c-bg-elevated) 0%,
+        var(--c-bg-elevated) 44%,
+        color-mix(in srgb, var(--c-bg-elevated) 82%, transparent) 64%,
+        color-mix(in srgb, var(--c-bg-elevated) 55%, transparent) 100%
+      );
+  }
+
+  /* Mirrored / vertical washes for the other copy positions. */
+  .hero-photo--wash-right.hero-photo--dark .hero-photo__tone,
+  .hero-photo--wash-right.hero-photo--grid .hero-photo__tone {
+    background:
+      linear-gradient(
+        260deg,
+        color-mix(in srgb, var(--c-pine-deep) 96%, transparent) 0%,
+        color-mix(in srgb, var(--c-pine-deep) 88%, transparent) 42%,
+        color-mix(in srgb, var(--c-pine) 55%, transparent) 72%,
+        color-mix(in srgb, var(--c-pine) 35%, transparent) 100%
+      );
+  }
+  .hero-photo--wash-right.hero-photo--grid .hero-photo__tone {
+    background:
+      repeating-linear-gradient(0deg, transparent 0 47px, rgba(255, 255, 255, 0.045) 47px 48px),
+      repeating-linear-gradient(90deg, transparent 0 47px, rgba(255, 255, 255, 0.045) 47px 48px),
+      linear-gradient(
+        260deg,
+        color-mix(in srgb, var(--c-pine-deep) 96%, transparent) 0%,
+        color-mix(in srgb, var(--c-pine-deep) 88%, transparent) 42%,
+        color-mix(in srgb, var(--c-pine) 55%, transparent) 72%,
+        color-mix(in srgb, var(--c-pine) 35%, transparent) 100%
+      );
+  }
+  .hero-photo--wash-right.hero-photo--light .hero-photo__tone {
+    background:
+      linear-gradient(
+        260deg,
+        var(--c-bg-elevated) 0%,
+        var(--c-bg-elevated) 44%,
+        color-mix(in srgb, var(--c-bg-elevated) 82%, transparent) 64%,
+        color-mix(in srgb, var(--c-bg-elevated) 55%, transparent) 100%
+      );
+  }
+  .hero-photo--wash-top.hero-photo--light .hero-photo__tone {
+    background:
+      linear-gradient(
+        180deg,
+        var(--c-bg-elevated) 0%,
+        var(--c-bg-elevated) 46%,
+        color-mix(in srgb, var(--c-bg-elevated) 84%, transparent) 70%,
+        color-mix(in srgb, var(--c-bg-elevated) 62%, transparent) 100%
+      );
+  }
+  .hero-photo--wash-top.hero-photo--dark .hero-photo__tone {
+    background:
+      linear-gradient(
+        180deg,
+        color-mix(in srgb, var(--c-pine-deep) 96%, transparent) 0%,
+        color-mix(in srgb, var(--c-pine-deep) 88%, transparent) 50%,
+        color-mix(in srgb, var(--c-pine) 50%, transparent) 100%
+      );
+  }
+  .hero-photo--wash-top .hero-photo__img { object-position: center 70%; }
+
+  /* Film grain: tiled SVG turbulence at ~3% so the photograph stops reading as
+     a clean stock render. */
+  .hero-photo__grain {
+    opacity: 0.035;
+    mix-blend-mode: multiply;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size: 160px 160px;
+  }
+  .hero-photo--dark .hero-photo__grain {
+    opacity: 0.06;
+    mix-blend-mode: overlay;
+  }
+
+  /* Stacked layouts put the copy across the full width, so the wash has to
+     hold everywhere; the photo shows through at the foot of the hero. */
+  @media (max-width: 880px) {
+    .hero-photo.hero-photo--light .hero-photo__tone {
+      background:
+        linear-gradient(
+          180deg,
+          var(--c-bg-elevated) 0%,
+          var(--c-bg-elevated) 58%,
+          color-mix(in srgb, var(--c-bg-elevated) 82%, transparent) 78%,
+          color-mix(in srgb, var(--c-bg-elevated) 60%, transparent) 100%
+        );
+    }
+    .hero-photo.hero-photo--dark .hero-photo__tone,
+    .hero-photo.hero-photo--grid .hero-photo__tone {
+      background:
+        linear-gradient(
+          180deg,
+          color-mix(in srgb, var(--c-pine-deep) 96%, transparent) 0%,
+          color-mix(in srgb, var(--c-pine-deep) 90%, transparent) 60%,
+          color-mix(in srgb, var(--c-pine) 60%, transparent) 100%
+        );
+    }
+    .hero-photo[data-focus="right"] .hero-photo__img { object-position: center 60%; }
+  }
+
+  @media (prefers-reduced-transparency: reduce) {
+    .hero-photo { display: none; }
+  }
+</style>
