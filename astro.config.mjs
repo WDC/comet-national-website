@@ -7,8 +7,11 @@ import tailwindcss from "@tailwindcss/vite";
 import remarkSmartypants from "remark-smartypants";
 import { rehypeSmallCaps } from "./src/lib/rehype-smallcaps";
 import { sitemapAlias } from "./src/lib/sitemap-alias";
+import { blogLastmod } from "./src/lib/sitemap-lastmod";
 
-const SITE = "https://cometnational.com";
+// Canonical host. Mirrors SITE.url in src/lib/site.ts — keep both in step
+// (astro.config can't import the TS singleton at config-load time).
+const SITE = "https://www.cometnational.com";
 
 export default defineConfig({
   site: SITE,
@@ -33,10 +36,10 @@ export default defineConfig({
   integrations: [
     mdx(),
     // No global lastmod: stamping every URL with the build time would signal
-    // "everything changed" on each deploy.
+    // "everything changed" on each deploy. Blog posts carry a real lastmod
+    // from their frontmatter dates (see src/lib/sitemap-lastmod.ts).
     sitemap({
-      changefreq: "weekly",
-      priority: 0.7,
+      serialize: blogLastmod,
     }),
     // Serves the generated index at /sitemap.xml too — must stay after sitemap().
     sitemapAlias(),

@@ -4,6 +4,7 @@ import BaseLayout from "@layouts/BaseLayout.astro";
 import Button from "@components/ui/Button.astro";
 import AnswerRelay from "@components/animations/AnswerRelay.astro";
 import { SITE } from "@lib/site";
+import HeroPhoto from "@components/ui/HeroPhoto.astro";
 
 const values = [
   {
@@ -57,6 +58,7 @@ const differentiators = [
 
   <!-- ─── Hero ─── -->
   <section class="why-hero section section-bar" data-reveal>
+    <HeroPhoto photo="why-comet" tone="light" />
     <span class="watermark why-hero__mark tnum" aria-hidden="true">1995</span>
     <div class="container-content why-hero__inner">
       <div class="reveal-stagger why-hero__copy" data-reveal>

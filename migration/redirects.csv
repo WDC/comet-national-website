@@ -1,22 +1,53 @@
 legacy_host,legacy_path,new_path,status,notes
 # Source of truth for legacy → new URL mapping. scripts/build-redirects.ts reads this to generate vercel.json.
-# Path is the path on legacy_host. new_path is on cometnational.com.
-# status: 301 (permanent). Future per-post blog rows get appended after the Phase 0 crawl.
+# legacy_path is the path on legacy_host; new_path is on the canonical host (SITE.url = https://www.cometnational.com).
+# The generator also emits a www.<host> twin for every non-primary legacy host and a trailing-slash twin
+# for every literal path, so legacy WordPress/Webflow URLs match with or without the slash.
+# Order matters: Vercel takes the first matching rule, so per-host catch-alls (/(.*)) stay LAST.
+# Inventory sources: legacy sitemaps (transload911.com/sitemap.xml) and indexed URLs (cometnational.com is behind a
+# SiteGround challenge page, so its paths were recovered from the search index).
+#
+# --- flatbedltl.com (Webflow, canonicaled to www) ---------------------------------------------------------------
 flatbedltl.com,/,/services/flatbed-ltl,301,Root → primary service
-flatbedltl.com,/what-we-do,/services/flatbed-ltl,301,Per PLAN.md §1
-flatbedltl.com,/how-everybody-wins,/services/volume-ltl,301,everyone-wins page not shipping Phase 1 → volume-ltl
-flatbedltl.com,/blog/:slug,/blog/:slug,301,Blog catch-all — blog ships at /blog
-flatbedltl.com,/services,/services,301,
+flatbedltl.com,/what-we-do,/services/flatbed-ltl,301,Service page
+flatbedltl.com,/how-everybody-wins,/services/flatbed-ltl,301,Pay-for-the-space pitch lives on the Flatbed LTL pillar
+flatbedltl.com,/everyone-wins,/services/flatbed-ltl,301,Same pitch; second URL
+flatbedltl.com,/who-we-are,/why-comet,301,About
+flatbedltl.com,/get-a-quote,/get-a-quote,301,
+flatbedltl.com,/contact-us,/contact,301,
 flatbedltl.com,/contact,/contact,301,
+flatbedltl.com,/blog/what-is-flatbed-ltl,/blog/2026-05-10-when-you-dont-need-a-whole-truck-partial-flatbed-explained,301,1:1 topical match
+flatbedltl.com,/blog/it-pays-to-be-partial-to-partials,/blog/2026-04-23-what-partial-really-means-and-how-shared-trailer-space-saves-you-money,301,1:1 topical match
+flatbedltl.com,/blog/:slug,/blog,301,Remaining legacy posts were not migrated — land on the index not a 404
+flatbedltl.com,/blog,/blog,301,
 flatbedltl.com,/(.*),/services/flatbed-ltl,301,Unmapped catch-all
+#
+# --- transload911.com (Webflow template; service slugs are the template's) --------------------------------------
 transload911.com,/,/services/transloading,301,Root → primary service
-transload911.com,/services,/services,301,Per PLAN.md §1
-transload911.com,/transloading,/services/transloading,301,
-transload911.com,/cross-docking,/services/cross-docking,301,
-transload911.com,/distressed-load-recovery,/services/distressed-load-recovery,301,
-transload911.com,/warehousing,/services/warehousing-fulfillment,301,
-transload911.com,/blog/:slug,/blog/:slug,301,Blog catch-all — blog ships at /blog
+transload911.com,/about,/why-comet,301,
+transload911.com,/services,/services,301,
+transload911.com,/service/ocean-shipping,/services/transloading,301,Template slug — page was titled Transloading
+transload911.com,/service/air-transport,/services/cross-docking,301,Template slug — page was titled Cross-Docking
+transload911.com,/faq,/services/transloading,301,FAQ now lives on the service page
 transload911.com,/contact,/contact,301,
+transload911.com,/blog,/blog,301,
+transload911.com,/blog/:slug,/blog,301,No legacy posts migrated
+transload911.com,/search,/services,301,
 transload911.com,/(.*),/services/transloading,301,Unmapped catch-all
-cometnational.com,/old-services,/services,301,Legacy URL on primary domain (example — replace after crawl)
-www.cometnational.com,/(.*),/$1,301,WWW → apex (handled at the domain level too)
+#
+# --- cometnational.com apex (legacy WordPress paths) → www ---------------------------------------------------------
+# Same-path URLs (/contact, /blog, …) need no row: the apex catch-all below carries them to www unchanged.
+cometnational.com,/shipping-services,/services,301,WP services page
+cometnational.com,/about,/why-comet,301,WP about page
+cometnational.com,/carrier-services,/carriers,301,WP carrier page
+cometnational.com,/contact-agents,/contact,301,Sales-agent contact page — no equivalent; nearest is Contact
+cometnational.com,/2021/03/10/early-2021-flatbed-rates-are-anything-but-flat,/blog/2026-06-24-freights-capacity-crunches-produce-season-q4-and-the-dot-blitz,301,1:1 topical match (flatbed capacity)
+cometnational.com,/2021/03/26/forward-thinking-with-forward-deployed-inventory,/services/warehousing-fulfillment,301,Regional warehousing pitch → warehousing pillar
+cometnational.com,/2021/04/03/detention-tension,/blog/2026-04-24-demurrage-and-detention-how-port-fees-pile-up-and-how-to-stop-the-clock,301,1:1 topical match
+cometnational.com,/2021/04/23/it-pays-to-be-partial-to-partials,/blog/2026-04-23-what-partial-really-means-and-how-shared-trailer-space-saves-you-money,301,1:1 topical match
+cometnational.com,/:year(\d{4})/:month(\d{2})/:day(\d{2})/:slug,/blog,301,Any other dated WP post → blog index
+cometnational.com,/author/:slug,/blog,301,WP author archives
+cometnational.com,/category/:slug,/blog,301,WP category archives
+cometnational.com,/tag/:slug,/blog,301,WP tag archives
+cometnational.com,/feed,/blog/rss.xml,301,WP RSS
+cometnational.com,/(.*),/$1,301,Apex → www with the path intact (Vercel domain-level redirect does this too; belt and braces)
