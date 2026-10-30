@@ -3,6 +3,7 @@ import BaseHead from "@components/layout/BaseHead.astro";
 import Header from "@components/layout/Header.astro";
 import Footer from "@components/layout/Footer.astro";
 import StickyMobileCallBar from "@components/layout/StickyMobileCallBar.astro";
+import GoogleTag from "@components/seo/GoogleTag.astro";
 import type { PageSeo } from "@lib/seo";
 
 interface Props extends PageSeo {
@@ -25,6 +26,7 @@ const bodyClass2 = [bodyClass, showCallBar ? "has-call-bar" : null]
 <html lang="en">
   <head>
     <BaseHead {...rest} />
+    <GoogleTag />
   </head>
   <body class={bodyClass2}>
     <a href="#main" class="skip-link">Skip to content</a>

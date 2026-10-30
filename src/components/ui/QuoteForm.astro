@@ -4,6 +4,12 @@ import { SERVICES } from "@lib/services";
 
 const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY ?? "";
 
+// Google Ads conversion target ("AW-123456789/AbC-dEfGhIjK"). Empty until both
+// halves are set; the dataLayer event below fires either way.
+const adsId = import.meta.env.PUBLIC_GOOGLE_ADS_ID ?? "";
+const adsQuoteLabel = import.meta.env.PUBLIC_GOOGLE_ADS_QUOTE_LABEL ?? "";
+const adsSendTo = adsId && adsQuoteLabel ? `${adsId}/${adsQuoteLabel}` : "";
+
 // Freight-type options derive from the service registry so a new service can't
 // silently go missing here. Overrides add buyer-facing clarifiers.
 const freightLabelOverrides: Record<string, string> = {
@@ -16,7 +22,7 @@ const freightOptions = [
   "Not sure — recommend",
 ];
 ---
-<form class="quote-form reveal-stagger" data-reveal action="/api/quote" method="POST" novalidate data-quote-form>
+<form class="quote-form reveal-stagger" data-reveal action="/api/quote" method="POST" novalidate data-quote-form data-ads-send-to={adsSendTo || undefined}>
   <fieldset class="quote-form__group">
     <legend class="eyebrow">Company &amp; contact</legend>
     <div class="quote-form__row">
@@ -102,6 +108,23 @@ const freightOptions = [
 )}
 
 <script>
+  type Gtag = (...args: unknown[]) => void;
+  declare global {
+    interface Window { dataLayer?: unknown[]; gtag?: Gtag }
+  }
+
+  // Counts a quote request only once /api/quote has accepted it — never on page
+  // view, button click, or a failed send. `quote_submitted` lands in dataLayer
+  // for GTM/GA4; the Google Ads conversion fires when the tag is configured.
+  function trackQuoteConversion(form: HTMLFormElement, freightType: string) {
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({ event: "quote_submitted", freight_type: freightType });
+    const sendTo = form.dataset.adsSendTo;
+    if (sendTo && typeof window.gtag === "function") {
+      window.gtag("event", "conversion", { send_to: sendTo });
+    }
+  }
+
   const form = document.querySelector<HTMLFormElement>("[data-quote-form]");
   const status = document.querySelector<HTMLOutputElement>("[data-quote-status]");
   const submitBtn = form?.querySelector<HTMLButtonElement>('button[type="submit"]');
@@ -133,8 +156,10 @@ const freightOptions = [
         });
         const data = await res.json().catch(() => ({}));
         if (res.ok) {
-          status.textContent = "Got it. Dispatch will typically be in touch within one business hour.";
+          status.textContent = "Thank you! We’ve received your quote request. Our team will be in touch shortly.";
           status.className = "quote-form__status is-ok";
+          // `dev` means SES isn't configured and nothing was emailed.
+          if (!data?.dev) trackQuoteConversion(form, payload.freightType ?? "");
           form.reset();
         } else {
           status.textContent = data?.error ?? "Couldn’t send. Try calling us — fastest path.";
