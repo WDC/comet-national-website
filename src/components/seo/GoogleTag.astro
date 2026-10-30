@@ -1,0 +1,22 @@
+---
+// Google tag (gtag.js) for Google Ads conversion tracking. Renders nothing
+// until PUBLIC_GOOGLE_ADS_ID is set, so dev and staging builds stay tag-free.
+// It loads site-wide on purpose: the ad click lands on whatever page the ad
+// points at, and the tag has to be there to keep the click ID that the later
+// quote conversion is credited back to.
+//
+// The conversion itself fires from QuoteForm, only after /api/quote confirms
+// the send — see the `quote_submitted` handler there.
+const adsId = import.meta.env.PUBLIC_GOOGLE_ADS_ID ?? "";
+---
+{adsId && (
+  <>
+    <script async src={`https://www.googletagmanager.com/gtag/js?id=${adsId}`}></script>
+    <script define:vars={{ adsId }}>
+      window.dataLayer = window.dataLayer || [];
+      window.gtag = function gtag() { window.dataLayer.push(arguments); };
+      window.gtag("js", new Date());
+      window.gtag("config", adsId);
+    </script>
+  </>
+)}
